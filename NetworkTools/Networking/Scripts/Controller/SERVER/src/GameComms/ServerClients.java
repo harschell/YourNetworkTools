@@ -103,7 +103,7 @@ public class ServerClients extends Thread {
 	
 	public void AddNewClient(Socket _newClient) throws Exception
 	{
-		if (ServerGame.BASIC_MESSAGES)
+		if (ServerGame.EnableLogMessages)
 		{
 			System.out.println("ServerClients::AddNewClient");	
 		}		
@@ -120,7 +120,7 @@ public class ServerClients extends Thread {
 			clientConnection.SendEvent(packet);
 			m_nextFreeRoom++;
 			m_nextFreeRoom = m_nextFreeRoom % TOTAL_FREE_ROOM_COUNTER;
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("New client");	
 			}        	
@@ -130,7 +130,7 @@ public class ServerClients extends Thread {
     	}
         else
         {
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("Existing client");	
 			}        	
@@ -146,7 +146,7 @@ public class ServerClients extends Thread {
 				ClientConnection clientConnection = m_listClients.elementAt(i);
 				clientConnection.SendEvent(_message);
 			}
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("BroadCastMessage::message="+_message);	
 			}			
@@ -175,7 +175,7 @@ public class ServerClients extends Thread {
 				}				
 			} catch (Exception err)
 			{
-				if (ServerGame.BASIC_MESSAGES)
+				if (ServerGame.EnableLogMessages)
 				{
 					System.out.println("ServerClient::ReadMessage:Exception="+err.getMessage());	
 				}				
@@ -204,7 +204,7 @@ public class ServerClients extends Thread {
 			}
         }		
 		
-		if (ServerGame.BASIC_MESSAGES) System.out.println("+++++++++++++++++++ServerClients::PackAndSendAllRooms::invitations["+invitations+"]");		
+		if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++ServerClients::PackAndSendAllRooms::invitations["+invitations+"]");		
 		
 		String packet = EVENT_CLIENT_TCP_LIST_OF_GAME_ROOMS + ServerGame.TOKEN_SEPARATOR_EVENTS
 						+ "-1" + ServerGame.TOKEN_SEPARATOR_EVENTS
@@ -226,7 +226,7 @@ public class ServerClients extends Thread {
 					if (DeleteClient(clientSocket))
 					{
 						i--;
-						if (ServerGame.BASIC_MESSAGES) System.out.println("*****************************DELETING CLIENT["+i+"]");
+						if (ServerGame.EnableLogMessages) System.out.println("*****************************DELETING CLIENT["+i+"]");
 					}
 				}
 			}
@@ -237,7 +237,7 @@ public class ServerClients extends Thread {
 	{
 		String[] dataConnection = _message.split(ServerGame.TOKEN_SEPARATOR_EVENTS);
 
-		if (ServerGame.BASIC_MESSAGES) System.out.println("ProcessMessage::MESSAGE="+_message);
+		if (ServerGame.EnableLogMessages) System.out.println("ProcessMessage::MESSAGE="+_message);
 		if (_message.indexOf(EVENT_CLIENT_TCP_PLAYER_UID) != -1)
 		{
 			String facebookID = dataConnection[4];
@@ -263,7 +263,7 @@ public class ServerClients extends Thread {
 				serverRoom = new ServerRoom(isRoomLobby, roomNumber, roomName, friendsIDs, hostRoomID, extraData, this);	
 				serverRoom.start();
 				m_listRooms.add(serverRoom);
-				if (ServerGame.BASIC_MESSAGES)
+				if (ServerGame.EnableLogMessages)
 				{
 					System.out.println("ProcessMessage::EVENT_CLIENT_TCP_ROOM_ID:CREATE ROOM");
 					System.out.println("++++++++++++++++++roomNumber["+roomNumber +"]");
@@ -275,7 +275,7 @@ public class ServerClients extends Thread {
 			}
 			else
 			{
-				if (ServerGame.BASIC_MESSAGES) System.out.println("+++++++++++++++++++++++++++++JOINING ROOM["+roomNumber+"]");
+				if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++++++++++++JOINING ROOM["+roomNumber+"]");
 			}
 			serverRoom.AddNewClient(m_currentConnection.GetSocket());
 			DeleteClient(m_currentConnection);

@@ -76,7 +76,7 @@ public class ServerRoom extends Thread {
 				NameRoom = PlayersIDs[0];
 			}
 		}
-		if (ServerGame.BASIC_MESSAGES) System.out.println("+++++++++++++++++++ServerRoom::WAITING FOR PLAYERS["+m_totalPlayers+"]="+_playersIDs);		
+		if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++ServerRoom::WAITING FOR PLAYERS["+m_totalPlayers+"]="+_playersIDs);		
 		m_parent = _parent;		
     }
     
@@ -125,16 +125,16 @@ public class ServerRoom extends Thread {
 
     public boolean ExistPlayersID(String _facebookID)
 	{
-		if (ServerGame.BASIC_MESSAGES) System.out.println("+++++++++++++++++++ServerRoom::ExistFacebookID["+_facebookID+"]");		
+		if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++ServerRoom::ExistFacebookID["+_facebookID+"]");		
 		for (int i = 0; i < PlayersIDs.length; i++)
         {
 			if (PlayersIDs[i].equals(_facebookID))
 			{
-				if (ServerGame.BASIC_MESSAGES) System.out.println("+++++++++++++++++++ServerRoom::FOUND INVITATION!!!!");		
+				if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++ServerRoom::FOUND INVITATION!!!!");		
 				return true;
 			}				
         }
-		if (ServerGame.BASIC_MESSAGES) System.out.println("+++++++++++++++++++ServerRoom::NOT FOUND INVITATION");		
+		if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++ServerRoom::NOT FOUND INVITATION");		
 		return false;
 	}
 	
@@ -210,7 +210,7 @@ public class ServerRoom extends Thread {
 	
 	public void AddNewClient(Socket _newClient) throws Exception
 	{
-		if (ServerGame.BASIC_MESSAGES) System.out.println("ServerRoom::AddNewClient");
+		if (ServerGame.EnableLogMessages) System.out.println("ServerRoom::AddNewClient");
 		if ((IdRoom == -1) || (!ExistClient(_newClient)))
     	{			
 			ClientConnection clientConnection = new ClientConnection(m_listClients.size(), _newClient);
@@ -232,12 +232,12 @@ public class ServerRoom extends Thread {
 							+ clientConnection.GetNetworkID() + ServerGame.TOKEN_SEPARATOR_EVENTS 
 							+ "1" + ServerGame.TOKEN_SEPARATOR_EVENTS
 							+ m_totalPlayers);
-        	if (ServerGame.BASIC_MESSAGES) System.out.println("++++++New client in room::clientConnection.NetworkID="+clientConnection.GetNetworkID());
+        	if (ServerGame.EnableLogMessages) System.out.println("++++++New client in room::clientConnection.NetworkID="+clientConnection.GetNetworkID());
 			m_isInited = true;
     	}
         else
         {
-        	if (ServerGame.BASIC_MESSAGES) System.out.println("Existing client in room");
+        	if (ServerGame.EnableLogMessages) System.out.println("Existing client in room");
         }
 	}
 
@@ -322,7 +322,7 @@ public class ServerRoom extends Thread {
 				}				
 			} catch (Exception err)
 			{
-				if (ServerGame.BASIC_MESSAGES) System.out.println("ServerRoom::ReadMessage:Exception="+err.getMessage());
+				if (ServerGame.EnableLogMessages) System.out.println("ServerRoom::ReadMessage:Exception="+err.getMessage());
 			}
 		}
 	}
@@ -344,7 +344,7 @@ public class ServerRoom extends Thread {
                 sb.append(line);
                 sb.append("\n");
             }
-			if (ServerGame.BASIC_MESSAGES)  System.out.println("HTTP RESPONSE="+line);
+			if (ServerGame.EnableLogMessages)  System.out.println("HTTP RESPONSE="+line);
 		} catch (Exception err) {};
 	}
 	
@@ -352,11 +352,11 @@ public class ServerRoom extends Thread {
 	{
 		if (m_parent.DeleteRoom(this))
 		{
-			if (ServerGame.BASIC_MESSAGES) System.out.println("ServerRoom::run:DELETE ROOM SUCCESS!!!!!!");
+			if (ServerGame.EnableLogMessages) System.out.println("ServerRoom::run:DELETE ROOM SUCCESS!!!!!!");
 		}
 		else
 		{
-			if (ServerGame.BASIC_MESSAGES) System.out.println("ServerRoom::run:DELETE ROOM FAILURE!!!!!!");
+			if (ServerGame.EnableLogMessages) System.out.println("ServerRoom::run:DELETE ROOM FAILURE!!!!!!");
 		}				
 	}
 
@@ -379,7 +379,7 @@ public class ServerRoom extends Thread {
                 sb.append(line);
                 sb.append("\n");
             }
-			if (ServerGame.BASIC_MESSAGES)  System.out.println("HTTP RESPONSE="+line);
+			if (ServerGame.EnableLogMessages)  System.out.println("HTTP RESPONSE="+line);
 		} catch (Exception err) {};
 	}
 	

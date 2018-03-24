@@ -11,8 +11,6 @@ import GameComms.*;
 
 public class ServerGame extends Thread {
 
-	public static final Boolean BASIC_MESSAGES    = false; 
-
 	public static final String TOKEN_SEPARATOR_EVENTS    		= "%"; 
 	public static final String TOKEN_SEPARATOR_PARTY    		= "@"; 
 	public static final String TOKEN_SEPARATOR_PLAYERS_IDS		= ","; 
@@ -27,12 +25,14 @@ public class ServerGame extends Thread {
 	
 	private static String IpAddress;
 	private static int PortAddress;
+	public static Boolean EnableLogMessages = false;
 	
-	public void StartServerGame(String _ipAddress, int _portAddress) throws Exception 
+	public void StartServerGame(String _ipAddress, int _portAddress, Boolean _enableLogMessages) throws Exception 
     {	
 	    // int port = 8745;
 		IpAddress = _ipAddress;
 		PortAddress = _portAddress;
+		EnableLogMessages = _enableLogMessages;
 	    m_serverSocket = new ServerSocket(PortAddress);
 	    System.out.println("+++++++++++++++++++Started Gamer Server(Version "+ Server.SERVER_VERSION + ") on port " + PortAddress + "!");
 	
@@ -66,7 +66,7 @@ public class ServerGame extends Thread {
 	            {
 	            	err.printStackTrace();
 	            }
-	            if (ServerGame.BASIC_MESSAGES)
+	            if (ServerGame.EnableLogMessages)
 	            {
 	            	System.out.println("Accepted connection from client");	
 	            }	            

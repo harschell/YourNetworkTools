@@ -203,7 +203,7 @@ public class ClientConnection  {
 			m_counterDisconnect++;
 			if (m_counterDisconnect >= TIMES_TO_DISCONNECT)
 			{
-				if (ServerGame.BASIC_MESSAGES) System.out.println("THE CONNECTION HAS TIMED OUT!!!!!!!!!!!11");
+				if (ServerGame.EnableLogMessages) System.out.println("THE CONNECTION HAS TIMED OUT!!!!!!!!!!!11");
 				return false;
 			}
 		}			

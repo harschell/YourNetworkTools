@@ -24,6 +24,7 @@ public class Server
 	private static String m_ipAddress;
 	private static int m_portAddress;
 	private static boolean m_graphicInterface;
+	private static boolean m_enableLogMessages;	
 	
 	// --------------------------------------------
 	/*
@@ -34,7 +35,7 @@ public class Server
     	if (m_serverGame != null) return;
     	
         m_serverGame = new ServerGame();
-        m_serverGame.StartServerGame(m_ipAddress, m_portAddress);
+        m_serverGame.StartServerGame(m_ipAddress, m_portAddress, m_enableLogMessages);
         m_serverGame.start();
     }
     
@@ -54,13 +55,15 @@ public class Server
 		System.out.println("IP ADDRESS[0]="+args[0]);
 		System.out.println("PORT[1]="+args[1]);
 		System.out.println("GRAPHIC INTERFACE[2]="+args[2]);
+		System.out.println("ENABLE LOG MESSAGE[3]="+args[3]);
 		m_ipAddress = args[0];
 		m_portAddress = Integer.parseInt(args[1]);
 		m_graphicInterface = Boolean.parseBoolean(args[2]);
+		m_enableLogMessages = Boolean.parseBoolean(args[3]);
 				
     	if (m_graphicInterface)
     	{
-    		ServerFrame.RunFrame(m_ipAddress, m_portAddress);
+    		ServerFrame.RunFrame(m_ipAddress, m_portAddress, m_enableLogMessages);
     	}
     	else
     	{

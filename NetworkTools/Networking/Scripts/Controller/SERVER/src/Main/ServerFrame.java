@@ -48,15 +48,16 @@ public class ServerFrame extends Thread {
 	
 	private String m_serverIP;
 	private int m_serverPort;
+	private Boolean m_enableLogMessages;
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void RunFrame(String _serverIP, int _port) {
+	public static void RunFrame(String _serverIP, int _port, Boolean _enableLogMessages) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ServerFrame window = new ServerFrame(_serverIP, _port);
+					ServerFrame window = new ServerFrame(_serverIP, _port, _enableLogMessages);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -68,9 +69,10 @@ public class ServerFrame extends Thread {
 	/**
 	 * Create the application.
 	 */
-	public ServerFrame(String _serverIP, int _port) {
+	public ServerFrame(String _serverIP, int _port, Boolean _enableLogMessages) {
 		m_serverIP = _serverIP;
 		m_serverPort = _port;
+		m_enableLogMessages = _enableLogMessages;
 		initialize();
 	}
 
@@ -295,7 +297,7 @@ public class ServerFrame extends Thread {
 	 */
 	public void OnBasicEvent(BasicEvent _event)
 	{
-		if (ServerGame.BASIC_MESSAGES)
+		if (ServerGame.EnableLogMessages)
 		{
 			System.out.println("ServerFrame::OnBasicEvent::_event["+_event.GetType()+"]");
 			for (int i = 0; i < _event.GetParams().length; i++)
@@ -306,7 +308,7 @@ public class ServerFrame extends Thread {
 		if (_event.GetType().equals(ServerClients.EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID))
 		{
 			int idNewUser = (int)_event.GetParams()[0];
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("\t\t NEW PLAYER["+idNewUser+"] CONNECTED!!!");
 			}
@@ -323,7 +325,7 @@ public class ServerFrame extends Thread {
 			SlotData sRoomSlot = GetRoomById(roomNumber);
 			if (sRoomSlot == null)
 			{
-				if (ServerGame.BASIC_MESSAGES)
+				if (ServerGame.EnableLogMessages)
 				{
 					System.out.println("\t\t NEW ROOM[" + roomNumber + "-" + roomName + "]");
 				}
@@ -331,7 +333,7 @@ public class ServerFrame extends Thread {
 				m_listLocalModelRooms.addElement(sRoomSlot);
 			}
 			sRoomSlot.SetConnectedPlayers(sRoomSlot.GetConnectedPlayers() + 1);
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("\t\t USER["+idUser+"] CONNECTED TO ROOM[" + roomName + "]::PLAYERS CONNECTED["+sRoomSlot.GetConnectedPlayers()+"]");
 			}
@@ -343,7 +345,7 @@ public class ServerFrame extends Thread {
 		{
 			int idUser = (int)_event.GetParams()[0];
 			RemovePlayerById(idUser);
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("\t\t ServerClients.EVENT_SERVERCLIENTS_DELETE_CLIENT["+idUser+"]");
 			}
@@ -352,7 +354,7 @@ public class ServerFrame extends Thread {
 		{
 			int idRoom = (int)_event.GetParams()[0];
 			RemoveRoomById(idRoom);
-			if (ServerGame.BASIC_MESSAGES)
+			if (ServerGame.EnableLogMessages)
 			{
 				System.out.println("\t\t ROOM["+idRoom+"] DESTROYED");
 			}
