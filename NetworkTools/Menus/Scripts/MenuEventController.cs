@@ -261,6 +261,10 @@ namespace YourNetworkingTools
 		 */
 		public void MenuController_InitialitzationSocket(int _numberRoom, int _idMachineHost)
 		{
+#if !ENABLE_BALANCE_LOADER
+			MultiplayerConfiguration.SaveIPAddressServer(MultiplayerConfiguration.SOCKET_SERVER_ADDRESS);
+			MultiplayerConfiguration.SavePortServer(MultiplayerConfiguration.PORT_SERVER_ADDRESS);
+#endif
 			ClientTCPEventsController.Instance.Initialitzation(MultiplayerConfiguration.LoadIPAddressServer(), MultiplayerConfiguration.LoadPortServer(), MultiplayerConfiguration.LoadRoomNumberInServer(_numberRoom), MultiplayerConfiguration.LoadMachineIDServer(_idMachineHost));
 		}
 
