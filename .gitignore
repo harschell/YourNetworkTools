@@ -9,3 +9,7 @@ NetworkTools/Networking/Scripts/Controller/SERVER/makeJar8Bricks.bat
 NetworkTools/Networking/Scripts/Controller/SERVER/makeJar8Bricks.bat.meta
 NetworkTools/Networking/Scripts/Controller/SERVER/run_with_gui_8Bricks.bat.meta
 NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_8Bricks.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_8Bricks_debug.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_debug.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_debug.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_8Bricks_debug.bat.meta
