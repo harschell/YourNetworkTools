@@ -30,10 +30,20 @@ public class ExampleNetworkEvent : MonoBehaviour
 
 	// -------------------------------------------
 	/* 
+	* Clear the player prefs when you run this example scene 
+	* to start always with UNET connection
+	*/
+	void Awake()
+	{
+		PlayerPrefs.DeleteAll();
+	}
+
+	// -------------------------------------------
+	/* 
 	* Initialitzation
 	*/
 	void Start()
-	{
+	{		
 		NetworkEventController.Instance.NetworkEvent += new NetworkEventHandler(OnNetworkEvent);
 	}
 
