@@ -1,2 +1,2 @@
-java -cp bin Main.Server localhost 8745 true
+java -cp ServerYourNetworkTools.jar Main.Server localhost 8745 true
 pause

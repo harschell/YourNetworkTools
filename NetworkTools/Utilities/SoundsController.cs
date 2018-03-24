@@ -96,7 +96,6 @@ namespace YourNetworkingTools
 			m_audio2 = aSources[1];
 
 			m_enabled = (PlayerPrefs.GetInt(SOUND_COOCKIE, 1) == 1);
-			m_enabled = false;
 		}
 
 		// -------------------------------------------
