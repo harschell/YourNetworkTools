@@ -34,7 +34,7 @@ public class ServerGame extends Thread {
 		IpAddress = _ipAddress;
 		PortAddress = _portAddress;
 	    m_serverSocket = new ServerSocket(PortAddress);
-	    System.out.println("+++++++++++++++++++Started Gamer Server(Version "+ Server.SERVER_VERSION + ") on port " + PortAddress + "!!!!!!!!!!!!!!!!!!!!!!!!!");
+	    System.out.println("+++++++++++++++++++Started Gamer Server(Version "+ Server.SERVER_VERSION + ") on port " + PortAddress + "!");
 	
 	    m_serverClients = new ServerClients();
         m_serverClients.start();

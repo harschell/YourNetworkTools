@@ -17,7 +17,7 @@ import GameComms.*;
 public class Server 
 {
 	public static final boolean ACTIVATE_FRAME_INTERFACE =  true;
-	public static final String SERVER_VERSION =  "0.94";
+	public static final String SERVER_VERSION =  "1.00";
 	
 	private static ServerGame m_serverGame;
 	
