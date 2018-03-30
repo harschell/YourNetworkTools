@@ -3,7 +3,7 @@
 	header('Content-type: text/html; charset=utf-8');
 		 
 	// Connecting, selecting database
-    $LINK_DATABASE = mysqli_connect("mysql.yourvrexperience.com", "esteban_ynt", "PutAMierdA2018")
+    $LINK_DATABASE = mysqli_connect("mysql.yourvrexperience.com", "your_database_username", "your_password")
        or die("Could not connect");
     // print "Connected successfully<p>";
     mysqli_select_db($LINK_DATABASE, "yournettools_db") or die("Database Error::Could not select database)");
