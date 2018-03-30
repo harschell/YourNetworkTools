@@ -9,3 +9,17 @@ NetworkTools/Networking/Scripts/Controller/SERVER/makeJar8Bricks.bat
 NetworkTools/Networking/Scripts/Controller/SERVER/makeJar8Bricks.bat.meta
 NetworkTools/Networking/Scripts/Controller/SERVER/run_with_gui_8Bricks.bat.meta
 NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_8Bricks.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_8Bricks_debug.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_debug.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_debug.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_8Bricks_debug.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_SeeNoEvil_debug.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_SeeNoEvil.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_SeeNoEvil.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/run_with_gui_SeeNoEvil.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/run_with_gui_SeeNoEvil.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/makeJar_SeeNoEvil.bat.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/makeJar_SeeNoEvil.bat
+NetworkTools/Networking/Scripts/Controller/SERVER/ServerSeeNoEvilHearNoEvil.jar.meta
+NetworkTools/Networking/Scripts/Controller/SERVER/ServerSeeNoEvilHearNoEvil.jar
+NetworkTools/Networking/Scripts/Controller/SERVER/run_without_gui_SeeNoEvil_debug.bat.meta

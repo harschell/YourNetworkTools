@@ -17,7 +17,7 @@ public class ClientConnection  {
 	public static final int MESSAGE_TRANSFORM		= 1;
 	
 	public static int TIMEOUT_PING = (2000 * 1000000);
-	public static int TIMES_TO_DISCONNECT = 4;
+	public static int TIMES_TO_DISCONNECT = 8;
 	
 	public static int BYTES_SIZE				= 4;
 	public static int BYTES_ID_OWNER			= 4;
