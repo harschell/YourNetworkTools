@@ -138,34 +138,35 @@ namespace YourNetworkingTools
 			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE)
 			{
-				string nameVariable = (string)_list[0];
-				string valueVariable = (string)_list[1];
-				string typeVariable = (string)_list[2];
+				int ownerVariable = int.Parse((string)_list[0]);
+				string nameVariable = (string)_list[1];
+				string valueVariable = (string)_list[2];
+				string typeVariable = (string)_list[3];
 				if (GetNetworkVariable(nameVariable) == null)
 				{
 					INetworkVariable networkVariable = null;
 					if (NetworkVector3.GetTypeVector3() == typeVariable)
 					{
 						NetworkVector3 networkVector3 = new NetworkVector3();
-						networkVector3.InitLocal(nameVariable, valueVariable);
+						networkVector3.InitLocal(ownerVariable, nameVariable, valueVariable);
 						networkVariable = networkVector3;
 					}
 					else if (NetworkInteger.GetTypeInteger().ToString() == typeVariable)
 					{
 						NetworkInteger networkInteger = new NetworkInteger();
-						networkInteger.InitLocal(nameVariable, int.Parse(valueVariable));
+						networkInteger.InitLocal(ownerVariable, nameVariable, int.Parse(valueVariable));
 						networkVariable = networkInteger;
 					}
 					else if (NetworkString.GetTypeString().ToString() == typeVariable)
 					{
 						NetworkString networkString = new NetworkString();
-						networkString.InitLocal(nameVariable, valueVariable);
+						networkString.InitLocal(ownerVariable, nameVariable, valueVariable);
 						networkVariable = networkString;
 					}
 					else if (NetworkFloat.GetTypeFloat().ToString() == typeVariable)
 					{
 						NetworkFloat networkFloat = new NetworkFloat();
-						networkFloat.InitLocal(nameVariable, valueVariable);
+						networkFloat.InitLocal(ownerVariable, nameVariable, valueVariable);
 						networkVariable = networkFloat;
 					}
 

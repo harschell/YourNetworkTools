@@ -30,12 +30,17 @@ namespace YourNetworkingTools
 		// -----------------------------------------
 		// PRIVATE VARIABLES
 		// -----------------------------------------
+		protected int m_owner;
 		protected string m_name;
 		protected bool m_hasBeenDestroyed = false;
 
 		// -----------------------------------------
 		// GETTERS/SETTERS
 		// -----------------------------------------
+		public int Owner
+		{
+			get { return m_owner; }
+		}
 		public string Name
 		{
 			get { return m_name; }
@@ -47,18 +52,23 @@ namespace YourNetworkingTools
 		*/
 		public virtual void InitRemote(params object[] _list)
 		{
-			if (_list.Length != 2)
+			if (_list.Length != 3)
 			{
-				throw new Exception("NetworkVariable::YOU SHOULD SET 2 VALUES FOR THE VARIABLE, NAME+VALUE");
+				throw new Exception("NetworkVariable::YOU SHOULD SET 3 VALUES FOR THE VARIABLE, OWNER+NAME+VALUE");
 			}
-			if (_list[0].GetType() != Type.GetType("System.String"))
+			if (_list[0].GetType() != Type.GetType("System.Int32"))
 			{
-				throw new Exception("NetworkVariable::YOU SHOULD SET UP THE NAME OF THE VARIABLE");
+				throw new Exception("NetworkVariable::YOU SHOULD SET UP THE NAME OF THE VARIABLE AS AN INTEGER");
 			}
-			m_name = (string)_list[0];
-			UpdateValue(_list[1]);
+			if (_list[1].GetType() != Type.GetType("System.String"))
+			{
+				throw new Exception("NetworkVariable::YOU SHOULD SET UP THE NAME OF THE VARIABLE AS A STRING");
+			}
+			m_owner = (int)_list[0];
+			m_name = (string)_list[1];
+			UpdateValue(_list[2]);
 			NetworkEventController.Instance.NetworkEvent += OnNetworkEvent;
-			NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE, m_name, GetValue().ToString(), GetTypeValueInString());
+			NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE, m_owner.ToString(), m_name, GetValue().ToString(), GetTypeValueInString());
 		}
 
 		// -------------------------------------------
@@ -67,16 +77,21 @@ namespace YourNetworkingTools
 		*/
 		public virtual void InitLocal(params object[] _list)
 		{
-			if (_list.Length != 2)
+			if (_list.Length != 3)
 			{
-				throw new Exception("NetworkVariable::YOU SHOULD SET 2 VALUES FOR THE VARIABLE, NAME+VALUE");
+				throw new Exception("NetworkVariable::YOU SHOULD SET 3 VALUES FOR THE VARIABLE, OWNER+NAME+VALUE");
 			}
-			if (_list[0].GetType() != Type.GetType("System.String"))
+			if (_list[0].GetType() != Type.GetType("System.Int32"))
 			{
-				throw new Exception("NetworkVariable::YOU SHOULD SET UP THE NAME OF THE VARIABLE");
+				throw new Exception("NetworkVariable::YOU SHOULD SET UP THE OWNER OF THE VARIABLE AS AN INTEGER");
 			}
-			m_name = (string)_list[0];
-			UpdateValue(_list[1]);
+			if (_list[1].GetType() != Type.GetType("System.String"))
+			{
+				throw new Exception("NetworkVariable::YOU SHOULD SET UP THE NAME OF THE VARIABLE AS A STRING");
+			}
+			m_owner = (int)_list[0];
+			m_name = (string)_list[1];
+			UpdateValue(_list[2]);
 			NetworkEventController.Instance.NetworkEvent += OnNetworkEvent;
 			NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_LOCAL, this);
 		}

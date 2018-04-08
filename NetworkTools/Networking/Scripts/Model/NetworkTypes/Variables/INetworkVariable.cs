@@ -20,6 +20,7 @@ namespace YourNetworkingTools
 		// GETTERS/SETTERS
 		event NetworkVariableEventHandler NetworkVariableEvent;
 		string Name { get; }
+		int Owner { get; }
 
 		// FUNCTIONS
 		void InitRemote(params object[] _list);
