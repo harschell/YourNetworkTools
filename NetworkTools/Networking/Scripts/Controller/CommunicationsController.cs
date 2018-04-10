@@ -652,6 +652,10 @@ namespace YourNetworkingTools
 			{
 				m_visualInterfaceActivated = true;
 			}
+			if (_nameEvent == UIEventController.EVENT_SCREENMAINCOMMANDCENTER_REQUEST_LIST_USERS)
+			{
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMAINCOMMANDCENTER_LIST_USERS, m_playersConnections);
+			}			
 		}
 
 

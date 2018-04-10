@@ -128,7 +128,7 @@ namespace YourNetworkingTools
 
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED)
 			{
-				NetworkEventController.Instance.DelayNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE, 2, m_name, GetValue().ToString(), GetTypeValueInString());
+				NetworkEventController.Instance.DelayNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE, 2, m_owner.ToString(), m_name, GetValue().ToString(), GetTypeValueInString());
 			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_VARIABLE_SET)
 			{
