@@ -145,6 +145,7 @@ namespace YourNetworkingTools
 				m_binReader = new BinaryReader(m_theStream);
 
 				NetworkEventController.Instance.NetworkEvent += new NetworkEventHandler(OnNetworkEvent);
+				UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
 				m_socketConnected = true;
 			}
@@ -169,6 +170,7 @@ namespace YourNetworkingTools
 
 			NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_DESTROY_NETWORK_COMMUNICATIONS);
 			NetworkEventController.Instance.NetworkEvent -= OnNetworkEvent;
+			UIEventController.Instance.UIEvent -= OnUIEvent;
 			CloseSocket(true);
 			DestroyObject(_instance.gameObject);
 			_instance = null;
@@ -360,6 +362,19 @@ namespace YourNetworkingTools
 #endif
 					NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, otherNetworkID);
 				}
+			}
+		}
+
+
+		// -------------------------------------------
+		/* 
+		 * Manager of ui events
+		 */
+		private void OnUIEvent(string _nameEvent, params object[] _list)
+		{
+			if (_nameEvent == UIEventController.EVENT_SCREENMAINCOMMANDCENTER_REQUEST_LIST_USERS)
+			{
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMAINCOMMANDCENTER_LIST_USERS, m_playersConnections);
 			}
 		}
 

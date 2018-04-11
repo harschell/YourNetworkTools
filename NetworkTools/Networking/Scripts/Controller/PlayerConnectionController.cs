@@ -59,10 +59,7 @@ namespace YourNetworkingTools
 			else
 			{
 				// Adds the new connections to the list of connected clients in the server
-				if (CommunicationsController.Instance.IsServer)
-				{
-					CommunicationsController.Instance.ClientNewConnection((int)this.netId.Value, this.gameObject);
-				}
+				CommunicationsController.Instance.ClientNewConnection((int)this.netId.Value, this.gameObject);
 				Debug.Log("PlayerController::Start::REMOTE PLAYER");
 			}
 
