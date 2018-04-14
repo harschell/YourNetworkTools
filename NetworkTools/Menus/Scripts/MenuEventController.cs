@@ -169,10 +169,19 @@ namespace YourNetworkingTools
 				DispatchMenuEvent(ACTION_BUTTON_DOWN);
 			}
 #else
-        if (Input.GetKeyDown("Fire1"))
-        {
-            DispatchMenuEvent(ACTION_BUTTON_DOWN);
-        }
+	try {
+			if (Input.GetMouseButton(0))
+			{
+				DispatchMenuEvent(ACTION_BUTTON_DOWN);
+			}
+			else
+			{
+				if (Input.GetButtonDown("Fire1"))
+				{
+					DispatchMenuEvent(ACTION_BUTTON_DOWN);
+				}
+			}
+	} catch (Exception err) {}
 #endif
 		}
 
