@@ -72,7 +72,7 @@ namespace YourNetworkingTools
 			}
 			else
 			{
-				NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, (int)this.netId.Value);
+				NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, ((int)this.netId.Value).ToString());
 			}
 		}
 

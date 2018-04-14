@@ -84,7 +84,7 @@ public class ExampleNetworkEvent : MonoBehaviour
 	{
 		if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED)
 		{
-			DisplayLogMessage("OnNetworkEvent::NEW CONNECTION[" + (int)_list[0] + "]");
+			DisplayLogMessage("OnNetworkEvent::NEW CONNECTION[" + (string)_list[0] + "]");
 			m_timeOutToClean = 6;
 		}
 		if (_nameEvent == EVENT_HELLOWORLD_MESSAGE)
