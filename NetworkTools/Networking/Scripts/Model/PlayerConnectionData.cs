@@ -14,7 +14,7 @@ namespace YourNetworkingTools
 	 * 
 	 * @author Esteban Gallardo
 	 */
-	public class PlayerConnectionData : IEqualityComparer<PlayerConnectionData>
+	public class PlayerConnectionData : IEquatable<PlayerConnectionData>
 	{
 		// ----------------------------------------------
 		// PRIVATE VARIABLES
@@ -104,20 +104,20 @@ namespace YourNetworkingTools
 
 		// -------------------------------------------
 		/* 
-		 * Equals
-		 */
-		public bool Equals(PlayerConnectionData _x, PlayerConnectionData _y)
-		{
-			return _x.Id == _y.Id;
-		}
-
-		// -------------------------------------------
-		/* 
 		 * GetHashCode
 		 */
 		public int GetHashCode(PlayerConnectionData obj)
 		{
 			return obj.Id;
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Equals
+		 */
+		public bool Equals(PlayerConnectionData _other)
+		{
+			return Id == _other.Id;
 		}
 	}
 }

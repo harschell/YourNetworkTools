@@ -335,8 +335,14 @@ namespace YourNetworkingTools
 			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED)
 			{
-				int networkIDPlayer = (int)_list[0];
-				ClientNewConnection(networkIDPlayer);
+				int networkIDPlayer = int.Parse((string)_list[0]);
+				if (networkIDPlayer != m_uniqueNetworkID)
+				{
+					if (ClientNewConnection(networkIDPlayer))
+					{
+						NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, m_uniqueNetworkID.ToString());
+					}
+				}
 			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_PLAYER_HAS_BEEN_DESTROYED)
 			{
@@ -360,7 +366,7 @@ namespace YourNetworkingTools
 #if DEBUG_MODE_DISPLAY_LOG
 					Debug.LogError("EVENT_CLIENT_TCP_CONNECTED_ROOM::ASSIGNED OTHER CLIENT NUMBER[" + otherNetworkID + "] IN THE ROOM[" + m_room + "] WHERE THE SERVER IS[" + m_idNetworkServer + "]------------");
 #endif
-					NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, otherNetworkID);
+					NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, otherNetworkID.ToString());
 				}
 			}
 		}
@@ -675,7 +681,7 @@ namespace YourNetworkingTools
 		/* 
 		* New client has been connected
 		*/
-		public void ClientNewConnection(int _idConnection)
+		public bool ClientNewConnection(int _idConnection)
 		{
 			PlayerConnectionData newPlayerConnection = new PlayerConnectionData(_idConnection, null);
 			if (!m_playersConnections.Contains(newPlayerConnection))
@@ -685,6 +691,11 @@ namespace YourNetworkingTools
 				Debug.Log(eventConnected);
 				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMAINCOMMANDCENTER_LIST_USERS, m_playersConnections);
 				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMAINCOMMANDCENTER_REGISTER_LOG, eventConnected);
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 

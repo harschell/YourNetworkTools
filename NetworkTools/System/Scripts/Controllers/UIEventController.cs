@@ -61,6 +61,7 @@ namespace YourNetworkingTools
 					if (!instance)
 					{
 						GameObject container = new GameObject();
+						DontDestroyOnLoad(container);
 						container.name = "UIEventController";
 						instance = container.AddComponent(typeof(UIEventController)) as UIEventController;
 					}
