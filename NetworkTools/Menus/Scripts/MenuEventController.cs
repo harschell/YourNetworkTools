@@ -176,7 +176,7 @@ namespace YourNetworkingTools
 			}
 			else
 			{
-				if (Input.GetKeyDown("Fire1"))
+				if (Input.GetButtonDown("Fire1"))
 				{
 					DispatchMenuEvent(ACTION_BUTTON_DOWN);
 				}
