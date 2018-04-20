@@ -74,6 +74,8 @@ namespace YourNetworkingTools
 		 */
 		private void ConfirmNumberPlayers()
 		{
+			SoundsController.Instance.PlayFxSelection();
+
 			string numberOfPlayers = m_container.Find("PlayerValue").GetComponent<InputField>().text;
 
 			// NUMBER OF PLAYERS

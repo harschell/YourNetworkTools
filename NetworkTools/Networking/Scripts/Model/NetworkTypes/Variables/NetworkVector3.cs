@@ -58,10 +58,12 @@ namespace YourNetworkingTools
 			try
 			{
 				Vector3 finalValue = Vector3.zero;
-				if (_value is String)
+				if (_value is string)
 				{
 					float valueEvaluated = -1;
-					string[] valuesVector = ((string)_value).Split(TOKEN_SEPARATOR);
+					string valueTmp = ((string)_value).TrimStart('(');
+					valueTmp = valueTmp.TrimEnd(')');
+					string[] valuesVector = valueTmp.Split(TOKEN_SEPARATOR);
 					if (float.TryParse(valuesVector[0], out valueEvaluated))
 					{
 						finalValue.x = valueEvaluated;

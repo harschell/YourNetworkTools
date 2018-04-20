@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;
+#if ENABLE_FACEBOOK
 using Facebook.Unity;
+#endif
 
 namespace YourNetworkingTools
 {
@@ -127,6 +129,7 @@ namespace YourNetworkingTools
 		 */
 		public void Initialitzation()
 		{
+#if ENABLE_FACEBOOK
 			if (!FB.IsInitialized)
 			{
 				if (!m_isInited)
@@ -148,6 +151,7 @@ namespace YourNetworkingTools
 				FB.ActivateApp();
 				OnInitComplete();
 			}
+#endif
 		}
 
 		// -------------------------------------------
@@ -156,6 +160,7 @@ namespace YourNetworkingTools
 		 */
 		private void OnInitComplete()
 		{
+#if ENABLE_FACEBOOK
 			MenuEventController.Instance.DispatchMenuEvent(EVENT_FACEBOOK_REQUEST_INITIALITZATION);
 			Debug.Log("Success - Check log for details");
 			Debug.Log("Success Response: OnInitComplete Called");
@@ -165,6 +170,7 @@ namespace YourNetworkingTools
 				Debug.Log(AccessToken.CurrentAccessToken.ToString());
 			}
 			LogInWithPermissions();
+#endif
 		}
 
 		// -------------------------------------------
@@ -184,13 +190,16 @@ namespace YourNetworkingTools
 		 */
 		private void LogInWithPermissions()
 		{
+#if ENABLE_FACEBOOK
 			FB.LogInWithReadPermissions(new List<string>() { "public_profile", "email", "user_friends" }, LoggedWithPermissions);
+#endif
 		}
 
 		// -------------------------------------------
 		/* 
 		 * LoggedWithPermissions
 		 */
+#if ENABLE_FACEBOOK
 		private void LoggedWithPermissions(IResult _result)
 		{
 			if (_result == null)
@@ -202,11 +211,13 @@ namespace YourNetworkingTools
 			// if (ScreenController.Instance.DebugMode) Debug.Log("FacebookController::LoggedWithPermissions::result.RawResult=" + _result.RawResult);
 			FB.API("/me?fields=id,name,email", HttpMethod.GET, HandleMyInformation);
 		}
+#endif
 
 		// -------------------------------------------
 		/* 
 		 * HandleMyInformation
 		 */
+#if ENABLE_FACEBOOK
 		private void HandleMyInformation(IResult _result)
 		{
 			if (_result == null)
@@ -228,11 +239,13 @@ namespace YourNetworkingTools
 			// if (ScreenController.Instance.DebugMode) Debug.Log("FacebookController::HandleMyInformation::result.RawResult=" + _result.RawResult);
 			FB.API("/me/friends", HttpMethod.GET, HandleListOfFriends);
 		}
+#endif
 
 		// -------------------------------------------
 		/* 
 		 * HandleListOfFriends
 		 */
+#if ENABLE_FACEBOOK
 		private void HandleListOfFriends(IResult _result)
 		{
 			if (_result == null)
@@ -259,6 +272,7 @@ namespace YourNetworkingTools
 			// INIT PAYMENT METHOD
 			RegisterConnectionFacebookID(true);
 		}
+#endif
 
 		// -------------------------------------------
 		/* 
