@@ -40,13 +40,17 @@ namespace YourNetworkingTools
 
 			m_container.Find("Title").GetComponent<Text>().text = LanguageController.Instance.GetText("message.game.title");
 
-			GameObject createGame = m_container.Find("Button_Friends").gameObject;
-			createGame.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.remote.mode.friends.mode");
-			createGame.GetComponent<Button>().onClick.AddListener(PlayWithFriends);
+			GameObject socialFriendsMode = m_container.Find("Button_Friends").gameObject;
+			socialFriendsMode.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.remote.mode.friends.mode");
+			socialFriendsMode.GetComponent<Button>().onClick.AddListener(PlayWithFriends);
 
-			GameObject joinGame = m_container.Find("Button_Lobby").gameObject;
-			joinGame.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.remote.mode.lobby.mode");
-			joinGame.GetComponent<Button>().onClick.AddListener(GoToLobby);
+			GameObject lobbyMode = m_container.Find("Button_Lobby").gameObject;
+			lobbyMode.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.remote.mode.lobby.mode");
+			lobbyMode.GetComponent<Button>().onClick.AddListener(GoToLobby);
+
+#if !ENABLE_FACEBOOK
+			socialFriendsMode.gameObject.SetActive(false);
+#endif
 
 			m_container.Find("Button_Back").GetComponent<Button>().onClick.AddListener(BackPressed);
 
