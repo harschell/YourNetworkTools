@@ -22,6 +22,7 @@ namespace YourNetworkingTools
 	{
 		public const int MESSAGE_EVENT = 0;
 		public const int MESSAGE_TRANSFORM = 1;
+		public const int MESSAGE_DATA = 2;
 
 		// EVENTS
 		public const string EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID = "EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID";
@@ -92,6 +93,7 @@ namespace YourNetworkingTools
 		private int m_hostRoomID = -1;
 		private List<string> m_events = new List<string>();
 		private List<byte[]> m_transforms = new List<byte[]>();
+		private List<byte[]> m_datas = new List<byte[]>();
 		private List<ItemMultiTextEntry> m_roomsInvited = new List<ItemMultiTextEntry>();
 		private List<ItemMultiTextEntry> m_roomsLobby = new List<ItemMultiTextEntry>();
 
@@ -267,15 +269,21 @@ namespace YourNetworkingTools
 			{
 				int firstByte = (int)m_binReader.ReadByte();
 				int sizeData = (int)m_binReader.ReadInt32();
-				if (firstByte == MESSAGE_EVENT)
+				switch (firstByte)
 				{
-					byte[] eventData = m_binReader.ReadBytes(sizeData);
-					string message = System.Text.Encoding.UTF8.GetString(eventData);
-					UnPackEventAndDispatch(message);
-				}
-				else
-				{
-					ReadTransformAndDispatch();
+					case MESSAGE_EVENT:
+						byte[] eventData = m_binReader.ReadBytes(sizeData);
+						string message = System.Text.Encoding.UTF8.GetString(eventData);
+						UnPackEventAndDispatch(message);
+						break;
+
+					case MESSAGE_TRANSFORM:
+						ReadTransformAndDispatch();
+						break;
+
+					case MESSAGE_DATA:
+						ReadDataAndDispatch();
+						break;
 				}
 			}
 			if (m_events.Count > 0)
@@ -288,11 +296,22 @@ namespace YourNetworkingTools
 			}
 			else
 			{
-				for (int i = 0; i < m_transforms.Count; i++)
+				if (m_transforms.Count > 0)
 				{
-					WriteSocket(m_transforms[i]);
+					for (int i = 0; i < m_transforms.Count; i++)
+					{
+						WriteSocket(m_transforms[i]);
+					}
+					m_transforms.Clear();
 				}
-				m_transforms.Clear();
+				else
+				{
+					for (int i = 0; i < m_datas.Count; i++)
+					{
+						WriteSocket(m_datas[i]);
+					}
+					m_datas.Clear();
+				}
 			}
 			return true;
 		}
@@ -368,6 +387,10 @@ namespace YourNetworkingTools
 #endif
 					NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, otherNetworkID.ToString());
 				}
+			}
+			if (_nameEvent == NetworkEventController.EVENT_BINARY_SEND_DATA_MESSAGE)
+			{
+				SendBinaryData(m_uniqueNetworkID, (byte[])_list[0]);
 			}
 		}
 
@@ -552,6 +575,53 @@ namespace YourNetworkingTools
 			float scaleZ = (float)m_binReader.ReadDouble();
 
 			NetworkEventController.Instance.DispatchLocalEvent(EVENT_CLIENT_TCP_TRANSFORM_DATA, netID, uID, indexPrefab, new Vector3(posX, posY, posZ), new Vector3(fwdX, fwdY, fwdZ), new Vector3(scaleX, scaleY, scaleZ));
+		}
+
+		// -------------------------------------------
+		/* 
+		 * SendBinaryData
+		 */
+		public void SendBinaryData(int _netID, byte[] _data)
+		{
+			int counter = 0;
+			int totalSizePacket = 4 + _data.Length;
+			byte[] message = new byte[1 + totalSizePacket];
+			message[0] = (byte)MESSAGE_DATA;
+			Array.Copy(BitConverter.GetBytes(_netID), 0, message, counter, 4);
+			counter += 4;
+			Array.Copy(_data, 0, message, counter, _data.Length);
+
+			m_datas.Add(message);
+		}
+
+		// -------------------------------------------
+		/* 
+		* ReadDataAndDispatch
+		*/
+		private void ReadDataAndDispatch()
+		{
+			int netID = m_binReader.ReadInt32();
+			int sizeData = m_binReader.ReadInt32();
+
+			byte[] binaryData = m_binReader.ReadBytes(sizeData);
+
+			// GET NAME EVENT
+			int counter = 0;
+			int sizeNameEvent = BitConverter.ToInt32(binaryData, counter);
+			counter += 4;
+			byte[] binaryNameEvent = new byte[sizeNameEvent];
+			Array.Copy(binaryData, counter, binaryNameEvent, 0, sizeNameEvent);
+			counter += sizeNameEvent;
+			string nameEvent = Encoding.ASCII.GetString(binaryNameEvent);
+
+			// GET DATA CONTENT
+			int sizeContentEvent = BitConverter.ToInt32(binaryData, counter);
+			counter += 4;
+			byte[] binaryContentEvent = new byte[sizeContentEvent];
+			Array.Copy(binaryData, counter, binaryContentEvent, 0, sizeContentEvent);
+
+			// DISPATCH LOCAL EVENT
+			NetworkEventController.Instance.DispatchLocalEvent(nameEvent, netID, binaryContentEvent);
 		}
 
 		// -------------------------------------------

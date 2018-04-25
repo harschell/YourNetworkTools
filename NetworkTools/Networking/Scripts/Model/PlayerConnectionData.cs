@@ -23,7 +23,7 @@ namespace YourNetworkingTools
 		private string m_networkAddress;
 		private GameObject m_referenceObject;
 		private List<Dictionary<string, object>> m_messages = new List<Dictionary<string, object>>();
-		private byte[] m_textureData;
+		private byte[] m_binaryData;
 
 		// ----------------------------------------------
 		// GETTERS/SETTERS
@@ -81,13 +81,27 @@ namespace YourNetworkingTools
 
 		// -------------------------------------------
 		/* 
-		 * SetTexture
+		 * SetBinaryData
 		 */
-		public void SetTexture(int _texWidth, int _textHeight, byte[] _textureData)
+		public void SetBinaryData(byte[] _binaryData)
 		{
-			m_textureData = new byte[_textureData.Length];
-			Array.Copy(_textureData, m_textureData, m_textureData.Length);
-			UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMAINCOMMANDCENTER_TEXTURE_REMOTE_STREAMING_DATA, m_id, _texWidth, _textHeight, m_textureData);
+			// GET NAME EVENT
+			int counter = 0;
+			int sizeNameEvent = BitConverter.ToInt32(_binaryData, counter);
+			counter += 4;
+			byte[] binaryNameEvent = new byte[sizeNameEvent];
+			Array.Copy(_binaryData, counter, binaryNameEvent, 0, sizeNameEvent);
+			counter += sizeNameEvent;
+			string nameEvent = Encoding.ASCII.GetString(binaryNameEvent);
+
+			// GET DATA CONTENT
+			int sizeContentEvent = BitConverter.ToInt32(_binaryData, counter);
+			counter += 4;
+			m_binaryData = new byte[sizeContentEvent];
+			Array.Copy(_binaryData, counter, m_binaryData, 0, sizeContentEvent);
+
+			// DISPATCH LOCAL EVENT
+			NetworkEventController.Instance.DispatchLocalEvent(nameEvent, m_id, m_binaryData);
 		}
 
 		// -------------------------------------------

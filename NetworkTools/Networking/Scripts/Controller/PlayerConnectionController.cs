@@ -146,7 +146,7 @@ namespace YourNetworkingTools
 				newNetworkObject.GetComponent<INetworkObject>().PreserveTransform = _preservePosition;
 				newNetworkObject.GetComponent<INetworkObject>().AssignedName = _assignedName;
 				newNetworkObject.GetComponent<INetworkObject>().AllowServerChange = _allowServerChange;
-				newNetworkObject.GetComponent<INetworkObject>().AllowClientChange = _allowClientChange;				
+				newNetworkObject.GetComponent<INetworkObject>().AllowClientChange = _allowClientChange;
 
 				NetworkServer.Spawn(newNetworkObject);
 			}
@@ -264,9 +264,9 @@ namespace YourNetworkingTools
 		 * Send the texture data to the server
 		 */
 		[Command]
-		private void CmdTextureFromClientsToServer(int _playerConnectionID, int texWidth, int textHeight, byte[] _textureData)
+		private void CmdBinaryDataFromClientsToServer(int _playerConnectionID, byte[] _textureData)
 		{
-			CommunicationsController.Instance.SetTextureFromClientsToServer(_playerConnectionID, texWidth, textHeight, _textureData);
+			CommunicationsController.Instance.SetBinaryDataFromClientsToServer(_playerConnectionID, _textureData);
 		}
 
 
@@ -340,9 +340,9 @@ namespace YourNetworkingTools
 				{
 					RpcMessageFromServerToClients((int)_list[0], (int)_list[1], (string)_list[2]);
 				}
-				if (_nameEvent == NetworkEventController.EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_TEXTURE)
+				if (_nameEvent == NetworkEventController.EVENT_BINARY_SEND_DATA_MESSAGE)
 				{
-					CmdTextureFromClientsToServer((int)this.netId.Value, (int)_list[0], (int)_list[1], (byte[])_list[2]);
+					CmdBinaryDataFromClientsToServer((int)this.netId.Value, (byte[])_list[0]);
 				}
 			}
 		}
