@@ -95,7 +95,8 @@ namespace YourNetworkingTools
 					m_webcamTexture = null;
 				}
 			}
-			catch (Exception err) {
+			catch (Exception err)
+			{
 				m_webcamTexture = null;
 			};
 		}
@@ -147,7 +148,12 @@ namespace YourNetworkingTools
 					{
 						m_imageTexture2D.SetPixels32(m_webcamTexture.GetPixels32());
 						byte[] dataStream = m_imageTexture2D.EncodeToJPG(75);
-						NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_TEXTURE, m_webcamTexture.width, m_webcamTexture.height, dataStream);
+
+						// MAKE BINARY DATA PACKET WITH IMAGE
+						NetworkEventController.Instance.DispatchBinaryDataEvent(ScreenGenericServerManagerView.EVENT_SCREENGENERIC_IMAGE_DATA,
+																				BitConverter.GetBytes(m_webcamTexture.width),
+																				BitConverter.GetBytes(m_webcamTexture.height),
+																				dataStream);
 					}
 				}
 			}

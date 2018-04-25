@@ -351,14 +351,14 @@ namespace YourNetworkingTools
 
 		// -------------------------------------------
 		/* 
-		 * Set the texture from a client
+		 * Set a binary data from a client
 		 */
-		public void SetTextureFromClientsToServer(int _idConnection, int _textureWidth, int _textureHeight, byte[] _textureData)
+		public void SetBinaryDataFromClientsToServer(int _idConnection, byte[] _binaryData)
 		{
 			PlayerConnectionData playerConnection = GetConnection((int)_idConnection);
 			if (playerConnection != null)
 			{
-				playerConnection.SetTexture(_textureWidth, _textureHeight, _textureData);
+				playerConnection.SetBinaryData(_binaryData);
 			}
 		}
 
@@ -655,7 +655,7 @@ namespace YourNetworkingTools
 			if (_nameEvent == UIEventController.EVENT_SCREENMAINCOMMANDCENTER_REQUEST_LIST_USERS)
 			{
 				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMAINCOMMANDCENTER_LIST_USERS, m_playersConnections);
-			}			
+			}
 		}
 
 
