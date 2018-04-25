@@ -276,6 +276,23 @@ public class ServerRoom extends Thread {
 		} catch (Exception err) {};
 	}
 
+	private void BroadCastData(byte[] _data)
+	{
+		try 
+		{
+			if (_data != null)
+			{
+				for (int i = 0; i < m_listClients.size(); i++)
+				{
+					ClientConnection clientConnection = m_listClients.elementAt(i);
+					if (m_currentConnection != clientConnection)
+					{
+						clientConnection.SendData(_data);	
+					}					
+				}
+			}
+		} catch (Exception err) {};
+	}
 	
 	private void ProcessEvent(String _event) throws Exception
 	{
@@ -318,6 +335,12 @@ public class ServerRoom extends Thread {
 								BroadCastTransform(packetTransform);	
 							}							
 							break;
+							
+						case ClientConnection.MESSAGE_DATA:
+							byte[] packetData = packet.toByteArray();
+							m_currentConnection = clientConnection;
+							BroadCastData(packetData);	
+							break;						
 					}
 				}				
 			} catch (Exception err)

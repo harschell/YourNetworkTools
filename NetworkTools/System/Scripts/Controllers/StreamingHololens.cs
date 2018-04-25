@@ -121,7 +121,13 @@ namespace YourNetworkingTools
 				photoCaptureFrame.UploadImageDataToTexture(imageTexture2D);
 				byte[] dataStream = imageTexture2D.EncodeToJPG(75);
 				Debug.Log("DIMENSIONS[" + imageTexture2D.width + "," + imageTexture2D.height + "]::dataStream=" + dataStream.Length);
-				NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_TEXTURE, imageTexture2D.width, imageTexture2D.height, dataStream);
+
+				// MAKE BINARY DATA PACKET WITH IMAGE
+				NetworkEventController.Instance.DispatchBinaryDataEvent(ScreenGenericServerManagerView.EVENT_SCREENGENERIC_IMAGE_DATA,
+																		BitConverter.GetBytes(imageTexture2D.width),
+																		BitConverter.GetBytes(imageTexture2D.height),
+																		dataStream);
+
 				m_photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
 			}
 			else

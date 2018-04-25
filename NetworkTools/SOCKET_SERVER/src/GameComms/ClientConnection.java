@@ -15,6 +15,7 @@ public class ClientConnection  {
 	// ----------------------------------------------	
 	public static final int MESSAGE_EVENT			= 0;
 	public static final int MESSAGE_TRANSFORM		= 1;
+	public static final int MESSAGE_DATA			= 2;
 	
 	public static int TIMEOUT_PING = (2000 * 1000000);
 	public static int TIMES_TO_DISCONNECT = 8;
@@ -174,6 +175,17 @@ public class ClientConnection  {
 		bObj.write((byte)MESSAGE_TRANSFORM);
 		bObj.write(IntegerToBytesLE(_tranform.length));
 		bObj.write(_tranform);
+		m_dout.write(bObj.toByteArray());
+		m_dout.flush();
+	}
+
+	public void SendData(byte[] _data) throws Exception
+	{
+		ByteArrayOutputStream bObj = new ByteArrayOutputStream();
+		bObj.reset();
+		bObj.write((byte)MESSAGE_DATA);
+		bObj.write(IntegerToBytesLE(_data.length));
+		bObj.write(_data);
 		m_dout.write(bObj.toByteArray());
 		m_dout.flush();
 	}

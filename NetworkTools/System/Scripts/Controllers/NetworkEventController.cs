@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;
+using System.Text;
 
 namespace YourNetworkingTools
 {
@@ -52,7 +53,6 @@ namespace YourNetworkingTools
 		public const string EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_UPDATE_PROPERTY = "EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_UPDATE_PROPERTY";
 		public const string EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_MESSAGE = "EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_MESSAGE";
 		public const string EVENT_PLAYERCONNECTIONCONTROLLER_RPC_MESSAGE = "EVENT_PLAYERCONNECTIONCONTROLLER_RPC_MESSAGE";
-		public const string EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_TEXTURE = "EVENT_PLAYERCONNECTIONCONTROLLER_COMMAND_TEXTURE";
 		public const string EVENT_PLAYERCONNECTIONCONTROLLER_REGISTER_VARIABLE_COMPLETED = "EVENT_PLAYERCONNECTIONCONTROLLER_REGISTER_VARIABLE_COMPLETED";
 		public const string EVENT_PLAYERCONNECTIONCONTROLLER_KICK_OUT_PLAYER = "EVENT_PLAYERCONNECTIONCONTROLLER_KICK_OUT_PLAYER";
 		public const string EVENT_PLAYERCONNECTIONCONTROLLER_CONFIRMATION_KICKED_OUT_PLAYER = "EVENT_PLAYERCONNECTIONCONTROLLER_CONFIRMATION_KICKED_OUT_PLAYER";
@@ -75,6 +75,7 @@ namespace YourNetworkingTools
 
 		// GENERIC EVENTS
 		public const string EVENT_SIMPLE_TEXT_MESSAGE = "EVENT_SIMPLE_TEXT_MESSAGE";
+		public const string EVENT_BINARY_SEND_DATA_MESSAGE = "EVENT_BINARY_SEND_DATA_MESSAGE";
 
 		// REGISTER PREFAB TYPES
 		public const string REGISTER_PREFABS_OBJECTS = "WorldObjects";
@@ -205,6 +206,38 @@ namespace YourNetworkingTools
 		public void DelayNetworkEvent(string _nameEvent, float _time, params string[] _list)
 		{
 			listEvents.Add(new AppEventData(_nameEvent, AppEventData.CONFIGURATION_INTERNAL_EVENT, false, YourNetworkTools.Instance.GetUniversalNetworkID(), _time, _list));
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will dispatch a binary event
+		 */
+		public void DispatchBinaryDataEvent(string _nameEvent, params object[] _list)
+		{
+			int totalSizePacket = 4 + _nameEvent.Length + 4;
+			int subTotalSize = 0;
+			for (int i = 0; i < _list.Length; i++)
+			{
+				totalSizePacket += ((byte[])_list[i]).Length;
+				subTotalSize += ((byte[])_list[i]).Length;
+			}
+
+			int counter = 0;
+			byte[] message = new byte[totalSizePacket];
+			Array.Copy(BitConverter.GetBytes(_nameEvent.Length), 0, message, counter, 4);
+			counter += 4;
+			Array.Copy(Encoding.ASCII.GetBytes(_nameEvent), 0, message, counter, _nameEvent.Length);
+			counter += _nameEvent.Length;
+			Array.Copy(BitConverter.GetBytes(subTotalSize), 0, message, counter, 4);
+			counter += 4;
+			for (int i = 0; i < _list.Length; i++)
+			{
+				byte[] item = (byte[])_list[i];
+				totalSizePacket += item.Length;
+				Array.Copy(item, 0, message, counter, item.Length);
+				counter += item.Length;
+			}
+			if (NetworkEvent != null) NetworkEvent(EVENT_BINARY_SEND_DATA_MESSAGE, true, -99, -99, message);
 		}
 
 		// -------------------------------------------
