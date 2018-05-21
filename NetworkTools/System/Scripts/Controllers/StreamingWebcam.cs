@@ -19,6 +19,11 @@ namespace YourNetworkingTools
 	public class StreamingWebcam : MonoBehaviour
 	{
 		// ----------------------------------------------
+		// EVENTS
+		// ----------------------------------------------	
+		public const string EVENT_STREAMINGWEBCAM_IMAGE_DATA = "EVENT_STREAMINGWEBCAM_IMAGE_DATA";
+
+		// ----------------------------------------------
 		// SINGLETON
 		// ----------------------------------------------	
 		private static StreamingWebcam instance;
@@ -150,7 +155,7 @@ namespace YourNetworkingTools
 						byte[] dataStream = m_imageTexture2D.EncodeToJPG(75);
 
 						// MAKE BINARY DATA PACKET WITH IMAGE
-						NetworkEventController.Instance.DispatchBinaryDataEvent(ScreenGenericServerManagerView.EVENT_SCREENGENERIC_IMAGE_DATA,
+						NetworkEventController.Instance.DispatchBinaryDataEvent(EVENT_STREAMINGWEBCAM_IMAGE_DATA,
 																				BitConverter.GetBytes(m_webcamTexture.width),
 																				BitConverter.GetBytes(m_webcamTexture.height),
 																				dataStream);
