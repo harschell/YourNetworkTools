@@ -212,7 +212,7 @@ namespace YourNetworkingTools
 		/* 
 		 * Will dispatch a binary event
 		 */
-		public void DispatchBinaryDataEvent(string _nameEvent, params object[] _list)
+		public void DispatchNetworkBinaryDataEvent(string _nameEvent, params object[] _list)
 		{
 			int totalSizePacket = 4 + _nameEvent.Length + 4;
 			int subTotalSize = 0;

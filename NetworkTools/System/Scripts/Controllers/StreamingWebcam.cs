@@ -82,17 +82,17 @@ namespace YourNetworkingTools
 					for (int i = 0; i < devices.Length; i++)
 					{
 						Debug.Log("DEVICE[" + i + "]=" + devices[i].name + "************************");
-					}
-					if (devices[0].name.Length > 0)
-					{
-						m_webcamTexture.deviceName = devices[0].name;
-						m_webcamTexture = null;
-						m_webcamTexture.Play();
-						m_imageTexture2D = new Texture2D(m_webcamTexture.width, m_webcamTexture.height);
-					}
-					else
-					{
-						m_webcamTexture = null;
+						if (devices[i].name.Length > 0)
+						{
+							m_webcamTexture.deviceName = devices[i].name;
+							m_webcamTexture.Play();
+							m_imageTexture2D = new Texture2D(m_webcamTexture.width, m_webcamTexture.height);
+							return;
+						}
+						else
+						{
+							m_webcamTexture = null;
+						}
 					}
 				}
 				else
@@ -155,7 +155,7 @@ namespace YourNetworkingTools
 						byte[] dataStream = m_imageTexture2D.EncodeToJPG(75);
 
 						// MAKE BINARY DATA PACKET WITH IMAGE
-						NetworkEventController.Instance.DispatchBinaryDataEvent(EVENT_STREAMINGWEBCAM_IMAGE_DATA,
+						NetworkEventController.Instance.DispatchNetworkBinaryDataEvent(EVENT_STREAMINGWEBCAM_IMAGE_DATA,
 																				BitConverter.GetBytes(m_webcamTexture.width),
 																				BitConverter.GetBytes(m_webcamTexture.height),
 																				dataStream);

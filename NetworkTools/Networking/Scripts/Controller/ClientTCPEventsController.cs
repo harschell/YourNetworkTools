@@ -282,7 +282,7 @@ namespace YourNetworkingTools
 						break;
 
 					case MESSAGE_DATA:
-						ReadDataAndDispatch();
+						ReadDataAndDispatch(sizeData);
 						break;
 				}
 			}
@@ -389,7 +389,7 @@ namespace YourNetworkingTools
 				}
 			}
 			if (_nameEvent == NetworkEventController.EVENT_BINARY_SEND_DATA_MESSAGE)
-			{
+			{				
 				SendBinaryData(m_uniqueNetworkID, (byte[])_list[0]);
 			}
 		}
@@ -585,8 +585,11 @@ namespace YourNetworkingTools
 		{
 			int counter = 0;
 			int totalSizePacket = 4 + _data.Length;
-			byte[] message = new byte[1 + totalSizePacket];
+			byte[] message = new byte[1 + 4 + totalSizePacket];
 			message[0] = (byte)MESSAGE_DATA;
+			counter++;
+			Array.Copy(BitConverter.GetBytes(totalSizePacket), 0, message, counter, 4);
+			counter += 4;
 			Array.Copy(BitConverter.GetBytes(_netID), 0, message, counter, 4);
 			counter += 4;
 			Array.Copy(_data, 0, message, counter, _data.Length);
@@ -598,12 +601,11 @@ namespace YourNetworkingTools
 		/* 
 		* ReadDataAndDispatch
 		*/
-		private void ReadDataAndDispatch()
+		private void ReadDataAndDispatch(int _sizeData)
 		{
 			int netID = m_binReader.ReadInt32();
-			int sizeData = m_binReader.ReadInt32();
 
-			byte[] binaryData = m_binReader.ReadBytes(sizeData);
+			byte[] binaryData = m_binReader.ReadBytes((_sizeData - 4));
 
 			// GET NAME EVENT
 			int counter = 0;

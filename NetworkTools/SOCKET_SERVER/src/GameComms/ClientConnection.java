@@ -86,10 +86,16 @@ public class ClientConnection  {
 		return (m_socket.getInputStream().available());
 	}
 	
-	public void ClearAllData() throws Exception
+	public void ClearAllData()
 	{
-		byte[] imgDataBa = new byte[1024 * 1024];
-		m_din.readFully(imgDataBa);
+		try 
+		{
+			byte[] imgDataBa = new byte[1024 * 1024];
+			m_din.readFully(imgDataBa);
+		}
+		catch (Exception err)
+		{
+		}
 	}
 	
 	public int ReadPacket(ByteArrayOutputStream _packet)
@@ -221,7 +227,7 @@ public class ClientConnection  {
 		}			
 		return true;
 	}
-	
+		
 	public void CloseChannels()
 	{
 		try 
