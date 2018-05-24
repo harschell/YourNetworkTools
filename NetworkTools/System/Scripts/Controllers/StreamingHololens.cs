@@ -128,7 +128,7 @@ namespace YourNetworkingTools
 				Debug.Log("DIMENSIONS[" + imageTexture2D.width + "," + imageTexture2D.height + "]::dataStream=" + dataStream.Length);
 
 				// MAKE BINARY DATA PACKET WITH IMAGE
-				NetworkEventController.Instance.DispatchBinaryDataEvent(EVENT_STREAMINGHOLOLENS_IMAGE_DATA,
+				NetworkEventController.Instance.DispatchNetworkBinaryDataEvent(EVENT_STREAMINGHOLOLENS_IMAGE_DATA,
 																		BitConverter.GetBytes(imageTexture2D.width),
 																		BitConverter.GetBytes(imageTexture2D.height),
 																		dataStream);
