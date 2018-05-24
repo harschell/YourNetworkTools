@@ -340,11 +340,16 @@ public class ServerRoom extends Thread {
 							byte[] packetData = packet.toByteArray();
 							m_currentConnection = clientConnection;
 							BroadCastData(packetData);	
-							break;						
+							break;		
+
+						default:
+							clientConnection.ClearAllData();
+							break;
 					}
 				}				
 			} catch (Exception err)
 			{
+				clientConnection.ClearAllData();
 				if (ServerGame.EnableLogMessages) System.out.println("ServerRoom::ReadMessage:Exception="+err.getMessage());
 			}
 		}
