@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Text;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -174,7 +175,7 @@ namespace YourNetworkingTools
 			NetworkEventController.Instance.NetworkEvent -= OnNetworkEvent;
 			UIEventController.Instance.UIEvent -= OnUIEvent;
 			CloseSocket(true);
-			DestroyObject(_instance.gameObject);
+			Destroy(_instance.gameObject);
 			_instance = null;
 		}
 

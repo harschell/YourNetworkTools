@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -85,7 +86,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -94,7 +95,7 @@ namespace YourNetworkingTools
 		 */
 		private void OnCreateInvitationPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenFacebookCreateInvitationView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -104,7 +105,7 @@ namespace YourNetworkingTools
 		 */
 		private void OnAcceptInvitationPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenFacebookInvitationListView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -114,7 +115,7 @@ namespace YourNetworkingTools
 		 */
 		private void BackPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			ClientTCPEventsController.Instance.Destroy();
 			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}

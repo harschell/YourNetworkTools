@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using UnityEngine.SceneManagement;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -72,28 +73,28 @@ namespace YourNetworkingTools
 						switch ((string)sEvent.ListParameters[j])
 						{
 							case PARAMETER_INT:
-								if (!UtilitiesNetwork.IsStringInteger((string)_list[j]))
+								if (!Utilities.IsStringInteger((string)_list[j]))
 								{
 									return null;
 								}
 								break;
 
 							case PARAMETER_FLOAT:
-								if (!UtilitiesNetwork.IsStringFloat((string)_list[j]))
+								if (!Utilities.IsStringFloat((string)_list[j]))
 								{
 									return null;
 								}
 								break;
 
 							case PARAMETER_DOUBLE:
-								if (!UtilitiesNetwork.IsStringDouble((string)_list[j]))
+								if (!Utilities.IsStringDouble((string)_list[j]))
 								{
 									return null;
 								}
 								break;
 
 							case PARAMETER_VECTOR3:
-								if (!UtilitiesNetwork.IsStringVector3((string)_list[j]))
+								if (!Utilities.IsStringVector3((string)_list[j]))
 								{
 									return null;
 								}

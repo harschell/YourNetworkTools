@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -65,7 +66,7 @@ namespace YourNetworkingTools
 		 */
 		public void Destroy()
 		{
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -74,7 +75,7 @@ namespace YourNetworkingTools
 		 */
 		private void ConfirmNumberPlayers()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 
 			string numberOfPlayers = m_container.Find("PlayerValue").GetComponent<InputField>().text;
 

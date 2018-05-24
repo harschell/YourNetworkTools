@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -126,11 +127,11 @@ namespace YourNetworkingTools
 				// INSTANTIATE LOCAL NETWORK PREFAB MANAGERS
 				for (int j = 0; j < LocalNetworkPrefabManagers.Length; j++)
 				{
-					UtilitiesNetwork.AddChild(transform, LocalNetworkPrefabManagers[j]);
+					Utilities.AddChild(transform, LocalNetworkPrefabManagers[j]);
 				}
 
 				// NETWORK VARIABLES MANAGER
-				UtilitiesNetwork.AddChild(transform, NetworkVariablesManager);
+				Utilities.AddChild(transform, NetworkVariablesManager);
 
 				// ASSIGN THE GAME OBJECTS TO THE CONTROLLER
 				WorldObjectController worldObjectController = GameObject.FindObjectOfType<WorldObjectController>();
@@ -166,7 +167,7 @@ namespace YourNetworkingTools
 				ClientTCPEventsController.Instance.Initialitzation(MultiplayerConfiguration.LoadIPAddressServer(), MultiplayerConfiguration.LoadPortServer(), MultiplayerConfiguration.LoadRoomNumberInServer(0), MultiplayerConfiguration.LoadMachineIDServer(0));
 
 				// NETWORK VARIABLES MANAGER
-				UtilitiesNetwork.AddChild(transform, NetworkVariablesManager);
+				Utilities.AddChild(transform, NetworkVariablesManager);
 
 				// ADD NETWORK IDENTIFICATION TO THE GAME OBJECTS
 				for (int i = 0; i < GameObjects.Length; i++)
@@ -308,7 +309,7 @@ namespace YourNetworkingTools
 			}
 			else
 			{
-				GameObject networkGameObject = UtilitiesNetwork.AddChild(this.gameObject.transform, GetPrefabByName(_prefabName));
+				GameObject networkGameObject = Utilities.AddChild(this.gameObject.transform, GetPrefabByName(_prefabName));
 				networkGameObject.GetComponent<NetworkID>().NetID = GetUniversalNetworkID();
 				networkGameObject.GetComponent<NetworkID>().UID = m_uidCounter;
 				m_uidCounter++;
@@ -555,7 +556,7 @@ namespace YourNetworkingTools
 				if (networkObject == null)
 				{
 					m_networkIDReceived = NetID;
-					networkGameObject = UtilitiesNetwork.AddChild(this.gameObject.transform, GetPrefabByName(GameObjects[prefabIndex].name));
+					networkGameObject = Utilities.AddChild(this.gameObject.transform, GetPrefabByName(GameObjects[prefabIndex].name));
 					networkGameObject.GetComponent<NetworkID>().IndexPrefab = GetPrefabIndexOfName(GameObjects[prefabIndex].name);
 					networkGameObject.GetComponent<NetworkID>().NetID = NetID;
 					networkGameObject.GetComponent<NetworkID>().UID = UID;

@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -67,7 +68,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -76,7 +77,7 @@ namespace YourNetworkingTools
 		 */
 		private void CreateRoom()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			string roomName = m_container.Find("RoomName").GetComponent<InputField>().text;
 			if (roomName.Length < 5)
 			{
@@ -102,7 +103,7 @@ namespace YourNetworkingTools
 		 */
 		private void BackPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenMainLobbyView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
