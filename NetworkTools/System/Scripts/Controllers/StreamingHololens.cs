@@ -20,6 +20,11 @@ namespace YourNetworkingTools
 	public class StreamingHololens : MonoBehaviour
 	{
 		// ----------------------------------------------
+		// EVENTS
+		// ----------------------------------------------	
+		public const string EVENT_STREAMINGHOLOLENS_IMAGE_DATA = "EVENT_STREAMINGHOLOLENS_IMAGE_DATA";
+
+		// ----------------------------------------------
 		// SINGLETON
 		// ----------------------------------------------	
 		private static StreamingHololens instance;
@@ -123,7 +128,7 @@ namespace YourNetworkingTools
 				Debug.Log("DIMENSIONS[" + imageTexture2D.width + "," + imageTexture2D.height + "]::dataStream=" + dataStream.Length);
 
 				// MAKE BINARY DATA PACKET WITH IMAGE
-				NetworkEventController.Instance.DispatchBinaryDataEvent(ScreenGenericServerManagerView.EVENT_SCREENGENERIC_IMAGE_DATA,
+				NetworkEventController.Instance.DispatchBinaryDataEvent(EVENT_STREAMINGHOLOLENS_IMAGE_DATA,
 																		BitConverter.GetBytes(imageTexture2D.width),
 																		BitConverter.GetBytes(imageTexture2D.height),
 																		dataStream);

@@ -105,6 +105,10 @@ namespace YourNetworkingTools
 		 */
 		void Start()
 		{
+			System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+			customCulture.NumberFormat.NumberDecimalSeparator = ".";
+			System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
 			NetworkEventController.Instance.NetworkEvent += new NetworkEventHandler(OnNetworkEvent);
 
 			int isLocalGame = PlayerPrefs.GetInt(COOCKIE_IS_LOCAL_GAME, -1);
