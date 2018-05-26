@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -20,10 +21,10 @@ namespace YourNetworkingTools
 	 */
 	public class ScreenMenuInformationView : ScreenBaseView, IBasicView
 	{
-		public const string SCREEN_LOADING = "SCREEN_LOADING";
-		public const string SCREEN_INFORMATION = "SCREEN_INFORMATION";
+		public const string SCREEN_LOADING			= "SCREEN_LOADING";
+		public const string SCREEN_INFORMATION		= "SCREEN_INFORMATION";
 		public const string SCREEN_INFORMATION_IMAGE = "SCREEN_INFORMATION_IMAGE";
-		public const string SCREEN_CONFIRMATION = "SCREEN_CONFIRMATION";
+		public const string SCREEN_CONFIRMATION		= "SCREEN_CONFIRMATION";
 
 		// ----------------------------------------------
 		// PRIVATE MEMBERS
@@ -136,7 +137,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -145,7 +146,7 @@ namespace YourNetworkingTools
 		 */
 		private void OkPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 
 			if (m_currentPage + 1 < m_pagesInfo.Count)
 			{
@@ -163,7 +164,7 @@ namespace YourNetworkingTools
 		 */
 		private void CancelPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 
 			MenuEventController.Instance.DispatchMenuEvent(MenuScreenController.EVENT_MENU_CONFIRMATION_POPUP, this.gameObject, false, m_pagesInfo[m_currentPage].EventData);
 			MenuEventController.Instance.DispatchMenuEvent(MenuScreenController.EVENT_MENU_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
@@ -184,7 +185,7 @@ namespace YourNetworkingTools
 		 */
 		private void NextPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			ChangePage(1);
 		}
 
@@ -194,7 +195,7 @@ namespace YourNetworkingTools
 		 */
 		private void PreviousPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			ChangePage(-1);
 		}
 

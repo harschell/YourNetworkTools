@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Text;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -161,7 +162,7 @@ namespace YourNetworkingTools
 		 */
 		public void Destroy()
 		{
-			DestroyObject(_instance.gameObject);
+			Destroy(_instance.gameObject);
 			_instance = null;
 		}
 

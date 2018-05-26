@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -89,9 +90,9 @@ namespace YourNetworkingTools
 			{
 				for (int i = 0; i < listParameters.Length; i++)
 				{
-					if (UtilitiesNetwork.IsNumber(listParameters[i]))
+					if (Utilities.IsNumber(listParameters[i]))
 					{
-						parameters += (float)UtilitiesNetwork.GetDouble(listParameters[i]);
+						parameters += (float)Utilities.GetDouble(listParameters[i]);
 					}
 					else
 					{

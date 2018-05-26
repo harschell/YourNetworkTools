@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -65,7 +66,7 @@ namespace YourNetworkingTools
 			for (int i = 0; i < FacebookController.Instance.Friends.Count; i++)
 			{
 				ItemMultiTextEntry sfriend = FacebookController.Instance.Friends[i];
-				GameObject instance = UtilitiesNetwork.AddChild(m_grid.transform, FacebookFriendItemPrefab);
+				GameObject instance = Utilities.AddChild(m_grid.transform, FacebookFriendItemPrefab);
 				instance.GetComponent<ItemFriendView>().Initialization(sfriend.Items[0], sfriend.Items[1]);
 				m_friends.Add(instance.GetComponent<ItemFriendView>());
 			}
@@ -89,7 +90,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -98,7 +99,7 @@ namespace YourNetworkingTools
 		 */
 		private void BackPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 

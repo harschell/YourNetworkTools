@@ -119,7 +119,7 @@ namespace YourNetworkingTools
 				if (m_clientInstalledApps != null) m_clientInstalledApps.Destroy();
 				NetworkEventController.Instance.NetworkEvent -= OnNetworkEvent;
 				UIEventController.Instance.UIEvent -= OnUIEvent;
-				DestroyObject(_instance);
+				Destroy(_instance);
 				_instance = null;
 			}
 		}
