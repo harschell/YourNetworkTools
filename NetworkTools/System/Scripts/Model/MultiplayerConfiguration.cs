@@ -34,7 +34,6 @@ namespace YourNetworkingTools
 		public const string NAME_ROOM_LOOBY_COOCKIE = "NAME_ROOM_LOOBY_COOCKIE";
 		public const string IS_ROOM_LOOBY_COOCKIE = "IS_ROOM_LOOBY_COOCKIE";
 
-		public const string CARDBOARD_ENABLE_COOCKIE = "CARDBOARD_ENABLE_COOCKIE";
 		public const string EXTRA_DATA_COOCKIE = "EXTRA_DATA_COOCKIE";
 
 		// -------------------------------------------
@@ -180,24 +179,6 @@ namespace YourNetworkingTools
 		public static int LoadMachineIDServer(int _idMachineHostRoom)
 		{
 			return PlayerPrefs.GetInt(MACHINE_ID_HOST_ROOM_COOCKIE, _idMachineHostRoom);
-		}
-
-		// -------------------------------------------
-		/* 
-		* Save a flag to report if we need to use or not the Google VR
-		*/
-		public static void SaveEnableCardboard(bool _enabledCardboard)
-		{
-			PlayerPrefs.SetInt(CARDBOARD_ENABLE_COOCKIE, (_enabledCardboard ? 1 : 0));
-		}
-
-		// -------------------------------------------
-		/* 
-		 * Get the if we need to use or not the Google VR
-		 */
-		public static bool LoadEnableCardboard()
-		{
-			return (PlayerPrefs.GetInt(CARDBOARD_ENABLE_COOCKIE, 0) == 1);
 		}
 
 		// -------------------------------------------
