@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -69,7 +70,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -78,7 +79,7 @@ namespace YourNetworkingTools
 		 */
 		private void CreateRoom()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenCreateRoomView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -88,7 +89,7 @@ namespace YourNetworkingTools
 		 */
 		private void ListOfRooms()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenListRoomsView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -98,7 +99,7 @@ namespace YourNetworkingTools
 		 */
 		private void BackPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			ClientTCPEventsController.Instance.Destroy();
 			MenuScreenController.Instance.CreateNewScreen(ScreenRemoteModeView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}

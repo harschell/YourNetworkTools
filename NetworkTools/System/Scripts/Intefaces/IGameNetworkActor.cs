@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -14,7 +15,7 @@ namespace YourNetworkingTools
 	 * 
 	 * @author Esteban Gallardo
 	 */
-	public interface IGameNetworkActor
+	public interface IGameNetworkActor : IGameActor
 	{
 		// GETTERS
 		void Awake();
@@ -23,10 +24,5 @@ namespace YourNetworkingTools
 		bool IsMine();
 		NetworkID NetworkID { get; }
 		string EventNameObjectCreated { set; }
-
-		// FUNCTIONS
-		void Initialize(params object[] _list);
-		void Destroy();
-		GameObject GetGameObject();
 	}
 }

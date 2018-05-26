@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -85,7 +86,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -97,7 +98,7 @@ namespace YourNetworkingTools
 			for (int i = 0; i < _rooms.Count; i++)
 			{
 				ItemMultiTextEntry room = _rooms[i];
-				GameObject instance = UtilitiesNetwork.AddChild(m_grid.transform, RoomLobbyItemPrefab);
+				GameObject instance = Utilities.AddChild(m_grid.transform, RoomLobbyItemPrefab);
 				// JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
 				instance.GetComponent<ItemLobbyRoomView>().Initialization(int.Parse(room.Items[0]), room.Items[1], room.Items[2], int.Parse(room.Items[3]));
@@ -114,7 +115,7 @@ namespace YourNetworkingTools
 		 */
 		private void BackPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenMainLobbyView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -155,7 +156,7 @@ namespace YourNetworkingTools
 		 */
 		private void JoinGamePressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuEventController.Instance.MenuController_SaveNumberOfPlayers(MultiplayerConfiguration.VALUE_FOR_JOINING);
 			MenuScreenController.Instance.CreateOrJoinRoomInServer(true);
 		}

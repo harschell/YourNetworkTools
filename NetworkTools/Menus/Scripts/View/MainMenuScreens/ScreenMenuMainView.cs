@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -62,7 +63,7 @@ namespace YourNetworkingTools
 
 			m_container.Find("Button_Exit").GetComponent<Button>().onClick.AddListener(ExitPressed);
 
-			SoundsController.Instance.PlayMainMenu();
+			SoundsController.Instance.PlayLoopSound(SoundsConfiguration.SOUND_MAIN_MENU);
 
 			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
 		}
@@ -83,7 +84,7 @@ namespace YourNetworkingTools
 		public void Destroy()
 		{
 			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			GameObject.Destroy(this.gameObject);
 		}
 
 		// -------------------------------------------
@@ -93,7 +94,7 @@ namespace YourNetworkingTools
 		private void OnLocalPartyGame()
 		{
 			MenuEventController.Instance.MenuController_SetLocalGame(true);
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLocalGameView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -104,7 +105,7 @@ namespace YourNetworkingTools
 		private void OnRemotePartyGame()
 		{
 			MenuEventController.Instance.MenuController_SetLocalGame(false);
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenRemoteModeView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -114,7 +115,7 @@ namespace YourNetworkingTools
 		 */
 		private void InstructionsGamePressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			List<PageInformationData> pages = new List<PageInformationData>();
 			pages.Add(new PageInformationData(LanguageController.Instance.GetText("screen.instructions.title"), LanguageController.Instance.GetText("screen.instructions.page.1"), MenuScreenController.Instance.Instructions[0], ""));
 			pages.Add(new PageInformationData(LanguageController.Instance.GetText("screen.instructions.title"), LanguageController.Instance.GetText("screen.instructions.page.2"), MenuScreenController.Instance.Instructions[1], ""));
@@ -130,7 +131,7 @@ namespace YourNetworkingTools
 		 */
 		private void ExitPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewInformationScreen(ScreenMenuInformationView.SCREEN_CONFIRMATION, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.warning"), LanguageController.Instance.GetText("message.do.you.want.exit"), null, SUB_EVENT_SCREENMAIN_CONFIRMATION_EXIT_APP);
 		}
 
@@ -138,7 +139,7 @@ namespace YourNetworkingTools
 		/* 
 		* OnMenuBasicEvent
 		*/
-		private void OnMenuEvent(string _nameEvent, params object[] _list)
+		protected override void OnMenuEvent(string _nameEvent, params object[] _list)
 		{
 			if (_nameEvent == MenuEventController.EVENT_SYSTEM_ANDROID_BACK_BUTTON)
 			{

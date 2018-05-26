@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -48,7 +49,7 @@ namespace YourNetworkingTools
 				nodeImage.transform.SetParent(transform, false);
 				Rect rectBase = GetComponent<RectTransform>().rect;
 				Rect mySpriteRect = new Rect(0, 0, MenuScreenController.Instance.SelectorGraphic.rect.width, MenuScreenController.Instance.SelectorGraphic.rect.height);
-				UtilitiesNetwork.AddSprite(nodeImage, MenuScreenController.Instance.SelectorGraphic, mySpriteRect, rectBase, new Vector2(0.5f, 0.5f));
+				Utilities.AddSprite(nodeImage, MenuScreenController.Instance.SelectorGraphic, mySpriteRect, rectBase, new Vector2(0.5f, 0.5f));
 				nodeImage.name = SELECTOR_COMPONENT_NAME;
 				nodeImage.transform.SetAsFirstSibling();
 				m_selector = transform.Find(SELECTOR_COMPONENT_NAME).gameObject;

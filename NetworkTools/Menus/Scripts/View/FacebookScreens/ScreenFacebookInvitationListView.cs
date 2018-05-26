@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -97,7 +98,7 @@ namespace YourNetworkingTools
 			for (int i = 0; i < _rooms.Count; i++)
 			{
 				ItemMultiTextEntry friends = _rooms[i];
-				GameObject instance = UtilitiesNetwork.AddChild(m_grid.transform, RoomFriendItemPrefab);
+				GameObject instance = Utilities.AddChild(m_grid.transform, RoomFriendItemPrefab);
 				// JOIN ROOM IN FACEBOOK
 #if ENABLE_BALANCE_LOADER
 				instance.GetComponent<ItemRoomView>().Initialization(int.Parse(friends.Items[0]), friends.Items[1], friends.Items[2], int.Parse(friends.Items[3]));
@@ -115,7 +116,7 @@ namespace YourNetworkingTools
 		 */
 		private void BackPressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
 		}
 
@@ -157,7 +158,7 @@ namespace YourNetworkingTools
 		 */
 		private void JoinGamePressed()
 		{
-			SoundsController.Instance.PlayFxSelection();
+			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuEventController.Instance.MenuController_SaveNumberOfPlayers(MultiplayerConfiguration.VALUE_FOR_JOINING);
 			MenuScreenController.Instance.CreateOrJoinRoomInServer(true);
 		}
