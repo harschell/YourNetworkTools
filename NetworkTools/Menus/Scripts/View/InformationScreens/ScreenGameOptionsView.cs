@@ -77,7 +77,7 @@ namespace YourNetworkingTools
 		private void PlayInVRPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MultiplayerConfiguration.SaveEnableCardboard(true);
+			CardboardLoaderVR.SaveEnableCardboard(true);
 			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLoadingView.SCREEN_NAME, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, null);
 			MenuEventController.Instance.MenuController_LoadGameScene();
 		}
@@ -89,7 +89,7 @@ namespace YourNetworkingTools
 		private void PlayWithGyroscopePressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MultiplayerConfiguration.SaveEnableCardboard(false);
+			CardboardLoaderVR.SaveEnableCardboard(false);
 			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLoadingView.SCREEN_NAME, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, null);
 			MenuEventController.Instance.MenuController_LoadGameScene();
 		}

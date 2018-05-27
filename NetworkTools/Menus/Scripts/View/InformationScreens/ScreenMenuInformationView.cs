@@ -41,7 +41,7 @@ namespace YourNetworkingTools
 		private Image m_imageContent;
 
 		private int m_currentPage = 0;
-		private List<PageInformationData> m_pagesInfo = new List<PageInformationData>();
+		private List<PageInformation> m_pagesInfo = new List<PageInformation>();
 		private bool m_forceLastPage = false;
 		private bool m_lastPageVisited = false;
 
@@ -62,7 +62,7 @@ namespace YourNetworkingTools
 		{
 			base.Initialize(_list);
 
-			List<PageInformationData> listPages = (List<PageInformationData>)_list[0];
+			List<PageInformation> listPages = (List<PageInformation>)_list[0];
 
 			m_root = this.gameObject;
 			m_container = m_root.transform.Find("Content");
@@ -111,7 +111,7 @@ namespace YourNetworkingTools
 			{
 				for (int i = 0; i < listPages.Count; i++)
 				{
-					m_pagesInfo.Add(((PageInformationData)listPages[i]).Clone());
+					m_pagesInfo.Add(((PageInformation)listPages[i]).Clone());
 				}
 			}
 
