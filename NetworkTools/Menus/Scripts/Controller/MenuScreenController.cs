@@ -172,8 +172,8 @@ namespace YourNetworkingTools
 		 */
 		public void CreateNewInformationScreen(string _nameScreen, ScreenTypePreviousActionEnum _previousAction, string _title, string _description, Sprite _image, string _eventData)
 		{
-			List<PageInformationData> pages = new List<PageInformationData>();
-			pages.Add(new PageInformationData(_title, _description, _image, _eventData));
+			List<PageInformation> pages = new List<PageInformation>();
+			pages.Add(new PageInformation(_title, _description, _image, _eventData));
 
 			CreateNewScreen(_nameScreen, _previousAction, false, pages);
 		}
@@ -373,8 +373,8 @@ namespace YourNetworkingTools
 				string description = (string)_list[4];
 				Sprite image = (Sprite)_list[5];
 				string eventData = (string)_list[6];
-				List<PageInformationData> pages = new List<PageInformationData>();
-				pages.Add(new PageInformationData(title, description, image, eventData));
+				List<PageInformation> pages = new List<PageInformation>();
+				pages.Add(new PageInformation(title, description, image, eventData));
 				CreateNewScreen(nameScreen, previousAction, false, pages);
 			}
 			if (_nameEvent == EVENT_MENU_SCREENMANAGER_DESTROY_SCREEN)
