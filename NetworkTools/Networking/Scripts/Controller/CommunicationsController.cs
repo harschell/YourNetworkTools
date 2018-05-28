@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using UnityEngine.Networking;
 using UnityEngine.VR;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {

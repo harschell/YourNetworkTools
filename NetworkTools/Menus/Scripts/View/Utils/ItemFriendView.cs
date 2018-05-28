@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -79,7 +80,7 @@ namespace YourNetworkingTools
 		 */
 		public void ButtonPressed()
 		{
-			MenuEventController.Instance.DispatchMenuEvent(EVENT_ITEM_FRIEND_SELECTED, this);
+			UIEventController.Instance.DispatchUIEvent(EVENT_ITEM_FRIEND_SELECTED, this);
 		}
 	}
 }

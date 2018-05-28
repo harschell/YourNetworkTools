@@ -110,7 +110,7 @@ namespace YourNetworkingTools
 		 */
 		public void InitListener()
 		{
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);
 		}
 
 		// -------------------------------------------
@@ -119,8 +119,8 @@ namespace YourNetworkingTools
 		 */
 		public void Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			DestroyObject(_instance.gameObject);
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
+			Destroy(_instance.gameObject);
 			_instance = null;
 		}
 
@@ -162,7 +162,7 @@ namespace YourNetworkingTools
 		private void OnInitComplete()
 		{
 #if ENABLE_FACEBOOK
-			MenuEventController.Instance.DispatchMenuEvent(EVENT_FACEBOOK_REQUEST_INITIALITZATION);
+			UIEventController.Instance.DispatchUIEvent(EVENT_FACEBOOK_REQUEST_INITIALITZATION);
 			Debug.Log("Success - Check log for details");
 			Debug.Log("Success Response: OnInitComplete Called");
 			Debug.Log("OnInitCompleteCalled IsLoggedIn='{" + FB.IsLoggedIn + "}' IsInitialized='{" + FB.IsInitialized + "}'");
@@ -235,7 +235,7 @@ namespace YourNetworkingTools
 
 			// if (ScreenController.Instance.DebugMode) Debug.Log("CURRENT PLAYER NAME=" + m_nameHuman + ";ID=" + m_id);
 
-			MenuEventController.Instance.DispatchMenuEvent(EVENT_FACEBOOK_MY_INFO_LOADED);
+			UIEventController.Instance.DispatchUIEvent(EVENT_FACEBOOK_MY_INFO_LOADED);
 
 			// if (ScreenController.Instance.DebugMode) Debug.Log("FacebookController::HandleMyInformation::result.RawResult=" + _result.RawResult);
 			FB.API("/me/friends", HttpMethod.GET, HandleListOfFriends);
@@ -268,7 +268,7 @@ namespace YourNetworkingTools
 				Debug.Log("   NAME=" + nameFriend + ";ID=" + idFriend);
 			}
 
-			MenuEventController.Instance.DispatchMenuEvent(EVENT_FACEBOOK_FRIENDS_LOADED);
+			UIEventController.Instance.DispatchUIEvent(EVENT_FACEBOOK_FRIENDS_LOADED);
 
 			// INIT PAYMENT METHOD
 			RegisterConnectionFacebookID(true);
@@ -292,7 +292,7 @@ namespace YourNetworkingTools
 			}
 			if (_dispatchCompletedFacebookInit)
 			{
-				MenuEventController.Instance.DispatchMenuEvent(EVENT_FACEBOOK_COMPLETE_INITIALITZATION, m_id, m_nameHuman, m_email);
+				UIEventController.Instance.DispatchUIEvent(EVENT_FACEBOOK_COMPLETE_INITIALITZATION, m_id, m_nameHuman, m_email);
 			}
 		}
 
