@@ -12,7 +12,7 @@ namespace YourNetworkingTools
 	{
 		public const string EVENT_CLIENT_HTTP_NEW_ROOM_CREATED = "EVENT_CLIENT_HTTP_NEW_ROOM_CREATED";
 
-		private string m_urlRequest = URL_BASE + "CreateNewRoomHTTP.php";
+		private string m_urlRequest = "https://www.yourvrexperience.com/yournetworkingtools/CreateNewRoomHTTP.php";
 
 		public string UrlRequest
 		{
@@ -32,7 +32,7 @@ namespace YourNetworkingTools
 				return;
 			}
 
-			string[] data = m_jsonResponse.Split(new string[] { HTTPController.TOKEN_SEPARATOR_EVENTS }, StringSplitOptions.None);
+			string[] data = m_jsonResponse.Split(new string[] { CommController.TOKEN_SEPARATOR_EVENTS }, StringSplitOptions.None);
 			if (bool.Parse(data[0]))
 			{
 				int room = int.Parse(data[1]);

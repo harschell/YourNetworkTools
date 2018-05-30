@@ -62,7 +62,7 @@ namespace YourNetworkingTools
 			// JOIN ROOM IN FACEBOOK
 #if ENABLE_BALANCE_LOADER
 			UIEventController.Instance.DelayUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE, 0.1f);
-			HTTPController.Instance.GetListRooms(false, FacebookController.Instance.Id);
+			CommsHTTPConfiguration.GetListRooms(false, FacebookController.Instance.Id);
 #else
 			LoadInvitations(ClientTCPEventsController.Instance.RoomsInvited);
 #endif
