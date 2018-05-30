@@ -261,7 +261,7 @@ namespace YourNetworkingTools
 				}
 				else
 				{
-					MenuScreenController.Instance.CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					MultiplayerConfiguration.SaveExtraData(m_extraData);
 					if (!YourNetworkTools.GetIsLocalGame())
 					{						
@@ -289,7 +289,7 @@ namespace YourNetworkingTools
 				else
 				{
 					MultiplayerConfiguration.SaveExtraData(m_extraData);
-					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
 				}
 			}

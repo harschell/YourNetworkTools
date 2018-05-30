@@ -99,6 +99,7 @@ namespace YourNetworkingTools
 					MenuScreenController.Instance.CreateNewScreen(ScreenMenuNumberPlayersView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 				}
 			}
+			Destroy();
 		}
 
 		// -------------------------------------------
