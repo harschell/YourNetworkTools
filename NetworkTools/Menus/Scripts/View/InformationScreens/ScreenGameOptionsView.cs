@@ -48,7 +48,7 @@ namespace YourNetworkingTools
 			playWithGyroscopeGame.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.play.with.gyroscope");
 			playWithGyroscopeGame.GetComponent<Button>().onClick.AddListener(PlayWithGyroscopePressed);
 
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);			
 		}
 
 		// -------------------------------------------
@@ -64,10 +64,12 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
+			if (base.Destroy()) return true;
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
 			GameObject.Destroy(this.gameObject);
+			return false;
 		}
 
 		// -------------------------------------------
@@ -78,8 +80,8 @@ namespace YourNetworkingTools
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			CardboardLoaderVR.SaveEnableCardboard(true);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLoadingView.SCREEN_NAME, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, null);
-			MenuEventController.Instance.MenuController_LoadGameScene();
+			MenuScreenController.Instance.CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+			NetworkEventController.Instance.MenuController_LoadGameScene(MenuScreenController.Instance.TargetGameScene);
 		}
 
 		// -------------------------------------------
@@ -90,8 +92,8 @@ namespace YourNetworkingTools
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			CardboardLoaderVR.SaveEnableCardboard(false);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLoadingView.SCREEN_NAME, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, null);
-			MenuEventController.Instance.MenuController_LoadGameScene();
+			MenuScreenController.Instance.CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+			NetworkEventController.Instance.MenuController_LoadGameScene(MenuScreenController.Instance.TargetGameScene);
 		}
 
 		// -------------------------------------------

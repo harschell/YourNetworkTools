@@ -65,7 +65,7 @@ namespace YourNetworkingTools
 
 			SoundsController.Instance.PlayLoopSound(SoundsConfiguration.SOUND_MAIN_MENU);
 
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);			
 		}
 
 		// -------------------------------------------
@@ -81,10 +81,12 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
+			if (base.Destroy()) return true;
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
 			GameObject.Destroy(this.gameObject);
+			return false;
 		}
 
 		// -------------------------------------------
@@ -93,9 +95,9 @@ namespace YourNetworkingTools
 		 */
 		private void OnLocalPartyGame()
 		{
-			MenuEventController.Instance.MenuController_SetLocalGame(true);
+			NetworkEventController.Instance.MenuController_SetLocalGame(true);
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLocalGameView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenMenuLocalGameView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -104,9 +106,9 @@ namespace YourNetworkingTools
 		 */
 		private void OnRemotePartyGame()
 		{
-			MenuEventController.Instance.MenuController_SetLocalGame(false);
+			NetworkEventController.Instance.MenuController_SetLocalGame(false);
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenRemoteModeView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenRemoteModeView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -121,7 +123,7 @@ namespace YourNetworkingTools
 			pages.Add(new PageInformation(LanguageController.Instance.GetText("screen.instructions.title"), LanguageController.Instance.GetText("screen.instructions.page.2"), MenuScreenController.Instance.Instructions[1], ""));
 			pages.Add(new PageInformation(LanguageController.Instance.GetText("screen.instructions.title"), LanguageController.Instance.GetText("screen.instructions.page.3"), MenuScreenController.Instance.Instructions[2], ""));
 			pages.Add(new PageInformation(LanguageController.Instance.GetText("screen.instructions.title"), LanguageController.Instance.GetText("screen.instructions.page.4"), MenuScreenController.Instance.Instructions[3], ""));
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuInformationView.SCREEN_INFORMATION_IMAGE, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, pages);
+			MenuScreenController.Instance.CreateNewScreen(ScreenInformationView.SCREEN_INFORMATION_IMAGE, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, pages);
 		}
 
 
@@ -132,7 +134,7 @@ namespace YourNetworkingTools
 		private void ExitPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewInformationScreen(ScreenMenuInformationView.SCREEN_CONFIRMATION, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.warning"), LanguageController.Instance.GetText("message.do.you.want.exit"), null, SUB_EVENT_SCREENMAIN_CONFIRMATION_EXIT_APP);
+			MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_CONFIRMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.warning"), LanguageController.Instance.GetText("message.do.you.want.exit"), null, SUB_EVENT_SCREENMAIN_CONFIRMATION_EXIT_APP);
 		}
 
 		// -------------------------------------------
@@ -141,11 +143,11 @@ namespace YourNetworkingTools
 		*/
 		protected override void OnMenuEvent(string _nameEvent, params object[] _list)
 		{
-			if (_nameEvent == MenuEventController.EVENT_SYSTEM_ANDROID_BACK_BUTTON)
+			if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_ANDROID_BACK_BUTTON)
 			{
 				ExitPressed();
 			}
-			if (_nameEvent == MenuScreenController.EVENT_MENU_CONFIRMATION_POPUP)
+			if (_nameEvent == MenuScreenController.EVENT_CONFIRMATION_POPUP)
 			{
 				string subEvent = (string)_list[2];
 				if (subEvent == SUB_EVENT_SCREENMAIN_CONFIRMATION_EXIT_APP)
@@ -158,7 +160,7 @@ namespace YourNetworkingTools
 			}
 			if (_nameEvent == ClientTCPEventsController.EVENT_CLIENT_TCP_CONNECTED_ROOM)
 			{
-				MenuEventController.Instance.MenuController_LoadGameScene();
+				NetworkEventController.Instance.MenuController_LoadGameScene(MenuScreenController.Instance.TargetGameScene);
 			}
 		}
 	}

@@ -460,7 +460,7 @@ namespace YourNetworkingTools
 
 					if (GameObject.FindObjectOfType<YourNetworkTools>() == null)
 					{
-						MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID, m_room);
+						UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID, m_room);
 					}
 					else
 					{
@@ -489,7 +489,7 @@ namespace YourNetworkingTools
 								}
 							}
 						}
-						MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_TCP_LIST_OF_GAME_ROOMS);
+						UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_TCP_LIST_OF_GAME_ROOMS);
 					}
 					else
 					{
@@ -499,7 +499,7 @@ namespace YourNetworkingTools
 							m_idNetworkServer = int.Parse(parameters[5]);
 							int totalNumberPlayers = int.Parse(parameters[6]);
 							NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_LOCAL_COMPLETED, m_uniqueNetworkID);
-							MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_TCP_CONNECTED_ROOM, totalNumberPlayers);
+							UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_TCP_CONNECTED_ROOM, totalNumberPlayers);
 #if DEBUG_MODE_DISPLAY_LOG
 							Debug.LogError("EVENT_CLIENT_TCP_CONNECTED_ROOM::ASSIGNED LOCAL CLIENT NUMBER[" + m_uniqueNetworkID + "] IN THE ROOM[" + m_room + "] WHERE THE SERVER IS[" + m_idNetworkServer + "]++++++++++");
 #endif

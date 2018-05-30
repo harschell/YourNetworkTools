@@ -30,7 +30,7 @@ namespace YourNetworkingTools
 		{
 			if (!ResponseCode(_response))
 			{
-				MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS);
+				UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS);
 				return;
 			}
 
@@ -49,7 +49,7 @@ namespace YourNetworkingTools
 					roomsAvailable.Add(new ItemMultiTextEntry(idRoom, nameRoom, ipMachine, portMachine, extraData));
 				}
 			}
-			MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS, roomsAvailable);
+			UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS, roomsAvailable);
 		}
 	}
 }
