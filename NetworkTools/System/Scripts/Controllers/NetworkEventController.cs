@@ -314,7 +314,7 @@ namespace YourNetworkingTools
 			MultiplayerConfiguration.SaveNameRoomLobby(_nameLobby);
 #if ENABLE_BALANCE_LOADER
 			UIEventController.Instance.DispatchUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE);
-			HTTPController.Instance.CreateNewRoom(true, _nameLobby, ClientTCPEventsController.GetPlayersString(_finalNumberOfPlayers), _extraData);
+			CommsHTTPConfiguration.CreateNewRoom(true, _nameLobby, ClientTCPEventsController.GetPlayersString(_finalNumberOfPlayers), _extraData);
 #else
 			MenuController_CreateRoomForLobby(_nameLobby, _finalNumberOfPlayers, _extraData);
 #endif
@@ -331,7 +331,7 @@ namespace YourNetworkingTools
 			UIEventController.Instance.DispatchUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE);
 			MultiplayerConfiguration.SaveFriendsGame(_friends);
 			MultiplayerConfiguration.SaveNumberOfPlayers(_friends.Split(',').Length);
-			HTTPController.Instance.CreateNewRoom(false, FacebookController.Instance.NameHuman, _friends, _extraData);
+			CommsHTTPConfiguration.CreateNewRoom(false, FacebookController.Instance.NameHuman, _friends, _extraData);
 #else
 			ClientTCPEventsController.Instance.CreateRoomForFriends(_friendsIDs.ToArray(), _extraData);
 #endif

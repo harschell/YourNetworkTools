@@ -58,7 +58,7 @@ namespace YourNetworkingTools
 			// JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
 			UIEventController.Instance.DelayUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE, 0.1f);
-			HTTPController.Instance.GetListRooms(true, "PLAYER_LOBBY");
+			CommsHTTPConfiguration.GetListRooms(true, "PLAYER_LOBBY");
 #else
 			LoadRooms(ClientTCPEventsController.Instance.RoomsLobby);
 #endif
