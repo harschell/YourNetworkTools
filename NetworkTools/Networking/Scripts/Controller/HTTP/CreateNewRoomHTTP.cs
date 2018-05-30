@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -27,7 +28,7 @@ namespace YourNetworkingTools
 		{
 			if (!ResponseCode(_response))
 			{
-				MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_HTTP_NEW_ROOM_CREATED);
+				UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_HTTP_NEW_ROOM_CREATED);
 				return;
 			}
 
@@ -38,11 +39,11 @@ namespace YourNetworkingTools
 				string ip = (string)data[2];
 				int port = int.Parse(data[3]);
 				int machineID = int.Parse(data[4]);
-				MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_HTTP_NEW_ROOM_CREATED, room, ip, port, machineID);
+				UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_HTTP_NEW_ROOM_CREATED, room, ip, port, machineID);
 			}
 			else
 			{
-				MenuEventController.Instance.DispatchMenuEvent(EVENT_CLIENT_HTTP_NEW_ROOM_CREATED);
+				UIEventController.Instance.DispatchUIEvent(EVENT_CLIENT_HTTP_NEW_ROOM_CREATED);
 			}
 		}
 	}

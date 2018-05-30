@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 223908598932306644}
   - component: {fileID: 114058170565619326}
   - component: {fileID: 114229126816248696}
-  - component: {fileID: 114814586117234052}
+  - component: {fileID: 114292920798149440}
   m_Layer: 5
   m_Name: SCREEN_GAME_OPTIONS
   m_TagString: Untagged
@@ -337,6 +337,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114292920798149440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1277936312230108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc7b3f33de044fe4fa1e8f9079860509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectorGraphic: {fileID: 0}
 --- !u!114 &114317611021826550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -543,17 +555,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: create game
---- !u!114 &114814586117234052
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1277936312230108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d0ed8ae3c0dcca488e06cebb56815be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114989853772170324
 MonoBehaviour:
   m_ObjectHideFlags: 1

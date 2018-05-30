@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -38,16 +34,7 @@ namespace YourNetworkingTools
 		IEnumerator ShowSplashDelay()
 		{
 			yield return new WaitForSeconds(5);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, true);
-		}
-
-		// -------------------------------------------
-		/* 
-		 * Destroy
-		 */
-		public void Destroy()
-		{
-
+			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
 		}
 
 		// -------------------------------------------

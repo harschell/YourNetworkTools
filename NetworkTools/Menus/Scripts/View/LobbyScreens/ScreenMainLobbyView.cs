@@ -51,7 +51,7 @@ namespace YourNetworkingTools
 
 			m_container.Find("Button_Back").GetComponent<Button>().onClick.AddListener(BackPressed);
 
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);			
 		}
 
 		// -------------------------------------------
@@ -67,10 +67,14 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
+			if (base.Destroy()) return true;
+
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
 			GameObject.Destroy(this.gameObject);
+
+			return false;
 		}
 
 		// -------------------------------------------
@@ -80,7 +84,7 @@ namespace YourNetworkingTools
 		private void CreateRoom()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenCreateRoomView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenCreateRoomView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -90,7 +94,7 @@ namespace YourNetworkingTools
 		private void ListOfRooms()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenListRoomsView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenListRoomsView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -101,7 +105,7 @@ namespace YourNetworkingTools
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			ClientTCPEventsController.Instance.Destroy();
-			MenuScreenController.Instance.CreateNewScreen(ScreenRemoteModeView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenRemoteModeView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -112,7 +116,7 @@ namespace YourNetworkingTools
 		{
 			base.OnMenuEvent(_nameEvent, _list);
 
-			if (_nameEvent == MenuEventController.EVENT_SYSTEM_ANDROID_BACK_BUTTON)
+			if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_ANDROID_BACK_BUTTON)
 			{
 				BackPressed();
 			}

@@ -61,8 +61,8 @@ namespace YourNetworkingTools
 			m_buttonBack = m_container.Find("Button_Back").GetComponent<Button>();
 			m_buttonBack.onClick.AddListener(BackPressed);
 
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
-
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);
+			
 			AutoLogin();
 		}
 
@@ -79,10 +79,12 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
-			GameObject.DestroyObject(this.gameObject);
+			if (base.Destroy()) return true;
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
+			GameObject.Destroy(this.gameObject);
+			return false;
 		}
 
 
@@ -109,7 +111,7 @@ namespace YourNetworkingTools
 			m_buttonBack.gameObject.SetActive(false);
 			m_connectionFacebookButton.SetActive(false);
 			m_textDescription.text = LanguageController.Instance.GetText("message.facebook.connecting.wait");
-			MenuEventController.Instance.MenuController_SetLobbyMode(false);
+			NetworkEventController.Instance.MenuController_SetLobbyMode(false);
 			FacebookController.Instance.Initialitzation();
 		}
 
@@ -120,7 +122,7 @@ namespace YourNetworkingTools
 		private void BackPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -138,10 +140,10 @@ namespace YourNetworkingTools
 					PlayerPrefs.SetInt(USER_FACEBOOK_CONNECTED_COOCKIE, 1);
 					// NO CONNECT TCP, GO TO MAIN FACEBOOK
 #if ENABLE_BALANCE_LOADER
-					MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+					MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 #else
 					m_textDescription.text = LanguageController.Instance.GetText("message.facebook.connecting.to.server");
-					MenuEventController.Instance.MenuController_InitialitzationSocket(-1, 0);
+					NetworkEventController.Instance.MenuController_InitialitzationSocket(-1, 0);
 #endif
 
 				}
@@ -150,14 +152,14 @@ namespace YourNetworkingTools
 					m_textDescription.text = LanguageController.Instance.GetText("message.facebook.description.connect.for.friends");
 					m_connectionFacebookButton.SetActive(true);
 					m_buttonBack.gameObject.SetActive(true);
-					MenuScreenController.Instance.CreateNewInformationScreen(ScreenMenuInformationView.SCREEN_INFORMATION, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.facebook.connection.error"), null, "");
+					MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.facebook.connection.error"), null, "");
 				}
 			}
 			if (_nameEvent == ClientTCPEventsController.EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID)
 			{
-				MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+				MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 			}
-			if (_nameEvent == MenuEventController.EVENT_SYSTEM_ANDROID_BACK_BUTTON)
+			if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_ANDROID_BACK_BUTTON)
 			{
 				BackPressed();
 			}

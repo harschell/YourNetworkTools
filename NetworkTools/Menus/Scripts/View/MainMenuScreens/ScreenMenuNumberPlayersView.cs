@@ -64,9 +64,11 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
+			if (base.Destroy()) return true;
 			GameObject.Destroy(this.gameObject);
+			return false;
 		}
 
 		// -------------------------------------------

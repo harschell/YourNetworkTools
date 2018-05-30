@@ -57,9 +57,9 @@ GameObject:
   - component: {fileID: 223644774425406122}
   - component: {fileID: 114182219096503550}
   - component: {fileID: 114021667771670080}
-  - component: {fileID: 114419274565541826}
+  - component: {fileID: 114891697677418134}
   m_Layer: 5
-  m_Name: SCREEN_LOADING
+  m_Name: SCREEN_LOAD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,17 +152,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Loading...
---- !u!114 &114419274565541826
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1849170701855520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04c9211a84dbcb543a7223629fd1eb3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114476288270811256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -217,6 +206,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114891697677418134
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1849170701855520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52753e4893ed32e45a29d790547f4b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectorGraphic: {fileID: 0}
 --- !u!222 &222370213812314172
 CanvasRenderer:
   m_ObjectHideFlags: 1

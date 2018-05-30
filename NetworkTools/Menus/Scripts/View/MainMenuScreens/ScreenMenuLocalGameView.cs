@@ -36,8 +36,8 @@ namespace YourNetworkingTools
 		{
 			base.Initialize(_list);
 
-			MenuEventController.Instance.MenuController_SetLobbyMode(false);
-			MenuEventController.Instance.MenuController_SetNameRoomLobby("");
+			NetworkEventController.Instance.MenuController_SetLobbyMode(false);
+			NetworkEventController.Instance.MenuController_SetNameRoomLobby("");
 
 			m_root = this.gameObject;
 			m_container = m_root.transform.Find("Content");
@@ -54,7 +54,7 @@ namespace YourNetworkingTools
 
 			m_container.Find("Button_Back").GetComponent<Button>().onClick.AddListener(BackPressed);
 
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);			
 		}
 
 		// -------------------------------------------
@@ -70,10 +70,12 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
+			if (base.Destroy()) return true;
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
 			GameObject.Destroy(this.gameObject);
+			return false;
 		}
 
 		// -------------------------------------------
@@ -89,7 +91,7 @@ namespace YourNetworkingTools
 			}
 			else
 			{
-				MenuScreenController.Instance.CreateNewScreen(ScreenMenuNumberPlayersView.SCREEN_NAME, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, null);
+				MenuScreenController.Instance.CreateNewScreen(ScreenMenuNumberPlayersView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 			}
 		}
 
@@ -100,7 +102,7 @@ namespace YourNetworkingTools
 		private void JoinGamePressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuEventController.Instance.MenuController_SaveNumberOfPlayers(MultiplayerConfiguration.VALUE_FOR_JOINING);
+			NetworkEventController.Instance.MenuController_SaveNumberOfPlayers(MultiplayerConfiguration.VALUE_FOR_JOINING);
 			MenuScreenController.Instance.CreateOrJoinRoomInServer(true);
 		}
 
@@ -111,7 +113,7 @@ namespace YourNetworkingTools
 		private void BackPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -122,7 +124,7 @@ namespace YourNetworkingTools
 		{
 			base.OnMenuEvent(_nameEvent, _list);
 
-			if (_nameEvent == MenuEventController.EVENT_SYSTEM_ANDROID_BACK_BUTTON)
+			if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_ANDROID_BACK_BUTTON)
 			{
 				BackPressed();
 			}

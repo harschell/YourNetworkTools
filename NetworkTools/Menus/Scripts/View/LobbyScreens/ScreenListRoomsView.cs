@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YourCommonTools;
 
@@ -61,13 +57,13 @@ namespace YourNetworkingTools
 
 			// JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
-			MenuEventController.Instance.DelayMenuEvent(MenuEventController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE, 0.1f);
+			UIEventController.Instance.DelayUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE, 0.1f);
 			HTTPController.Instance.GetListRooms(true, "PLAYER_LOBBY");
 #else
 			LoadRooms(ClientTCPEventsController.Instance.RoomsLobby);
 #endif
 
-			MenuEventController.Instance.MenuEvent += new MenuEventHandler(OnMenuEvent);
+			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);			
 		}
 
 		// -------------------------------------------
@@ -83,10 +79,12 @@ namespace YourNetworkingTools
 		/* 
 		 * Destroy
 		 */
-		public void Destroy()
+		public override bool Destroy()
 		{
-			MenuEventController.Instance.MenuEvent -= OnMenuEvent;
+			if (base.Destroy()) return true;
+			UIEventController.Instance.UIEvent -= OnMenuEvent;
 			GameObject.Destroy(this.gameObject);
+			return false;
 		}
 
 		// -------------------------------------------
@@ -116,7 +114,7 @@ namespace YourNetworkingTools
 		private void BackPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMainLobbyView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, false, null);
+			MenuScreenController.Instance.CreateNewScreen(ScreenMainLobbyView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -136,17 +134,17 @@ namespace YourNetworkingTools
 
 			if (roomSelected != null)
 			{
-				MenuEventController.Instance.MenuController_SaveRoomNumberInServer(roomSelected.Room);
+				NetworkEventController.Instance.MenuController_SaveRoomNumberInServer(roomSelected.Room);
 				// JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
-				MenuEventController.Instance.MenuController_SaveIPAddressServer(roomSelected.IPAddress);
-				MenuEventController.Instance.MenuController_SavePortServer(roomSelected.Port);
+				NetworkEventController.Instance.MenuController_SaveIPAddressServer(roomSelected.IPAddress);
+				NetworkEventController.Instance.MenuController_SavePortServer(roomSelected.Port);
 #endif
 				JoinGamePressed();
 			}
 			else
 			{
-				MenuScreenController.Instance.CreateNewInformationScreen(ScreenMenuInformationView.SCREEN_INFORMATION, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.warning"), LanguageController.Instance.GetText("message.you.should.select.an.item"), null, "");
+				MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.warning"), LanguageController.Instance.GetText("message.you.should.select.an.item"), null, "");
 			}
 		}
 
@@ -157,7 +155,7 @@ namespace YourNetworkingTools
 		private void JoinGamePressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuEventController.Instance.MenuController_SaveNumberOfPlayers(MultiplayerConfiguration.VALUE_FOR_JOINING);
+			NetworkEventController.Instance.MenuController_SaveNumberOfPlayers(MultiplayerConfiguration.VALUE_FOR_JOINING);
 			MenuScreenController.Instance.CreateOrJoinRoomInServer(true);
 		}
 
@@ -188,21 +186,21 @@ namespace YourNetworkingTools
 			{
 				LoadRooms(ClientTCPEventsController.Instance.RoomsLobby);
 			}
-			if (_nameEvent == MenuEventController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE)
+			if (_nameEvent == MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE)
 			{
-				MenuScreenController.Instance.CreateNewScreen(ScreenMenuLoadingView.SCREEN_NAME, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, false, null);
+				MenuScreenController.Instance.CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 			}
 			if (_nameEvent == GetListRoomsHTTP.EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS)
 			{
-				MenuEventController.Instance.DispatchMenuEvent(MenuScreenController.EVENT_MENU_FORCE_DESTRUCTION_POPUP);
+				UIEventController.Instance.DispatchUIEvent(MenuScreenController.EVENT_FORCE_DESTRUCTION_POPUP);
 				if (_list.Length == 1)
 				{
 					LoadRooms((List<ItemMultiTextEntry>)_list[0]);
 				}
 				else
 				{
-					MenuEventController.Instance.DispatchMenuEvent(MenuScreenController.EVENT_MENU_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
-					MenuScreenController.Instance.CreateNewInformationScreen(ScreenMenuInformationView.SCREEN_INFORMATION, ScreenTypePreviousActionEnum.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.room.list.not.retrieved"), null, "");
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
+					MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.room.list.not.retrieved"), null, "");
 				}
 			}
 		}

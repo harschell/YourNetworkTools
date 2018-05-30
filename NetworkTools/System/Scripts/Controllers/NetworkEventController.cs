@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Text;
+using YourCommonTools;
+using UnityEngine.SceneManagement;
 
 namespace YourNetworkingTools
 {
@@ -120,6 +122,22 @@ namespace YourNetworkingTools
 		// ----------------------------------------------
 		private List<AppEventData> listEvents = new List<AppEventData>();
 
+		private string m_nameRoomLobby = "";
+		private bool m_isLobbyMode = false;
+		private string m_targetScene = "";
+
+		// ----------------------------------------------
+		// GETTERS/SETTERS
+		// ----------------------------------------------
+		public string NameRoomLobby
+		{
+			get { return m_nameRoomLobby; }
+		}
+		public bool IsLobbyMode
+		{
+			get { return m_isLobbyMode; }
+		}
+
 		// -------------------------------------------
 		/* 
 		 * Constructor
@@ -146,7 +164,7 @@ namespace YourNetworkingTools
 			if (instance != null)
 			{
 				DispatchLocalEvent(EVENT_SYSTEM_DESTROY_NETWORK_COMMUNICATIONS);
-				DestroyObject(instance.gameObject);
+				Destroy(instance.gameObject);
 				instance = null;
 			}
 		}
@@ -238,6 +256,181 @@ namespace YourNetworkingTools
 				counter += item.Length;
 			}
 			if (NetworkEvent != null) NetworkEvent(EVENT_BINARY_SEND_DATA_MESSAGE, true, -99, -99, message);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Set if we are going to go to the lobby
+		 */
+		public void MenuController_SetLobbyMode(bool _value)
+		{
+			m_isLobbyMode = _value;
+			MultiplayerConfiguration.SaveIsRoomLobby(m_isLobbyMode);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Set the name of the room lobby
+		 */
+		public void MenuController_SetNameRoomLobby(string _value)
+		{
+			m_nameRoomLobby = _value;
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Set if the connection is going to be local(UNET) or global(Sockets)
+		 */
+		public void MenuController_SetLocalGame(bool _value)
+		{
+			YourNetworkTools.SetLocalGame(_value);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will save the number of players
+		 */
+		public void MenuController_SaveNumberOfPlayers(int _value)
+		{
+			MultiplayerConfiguration.SaveNumberOfPlayers(_value);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will load the number of players
+		 */
+		public int MenuController_LoadNumberOfPlayers()
+		{
+			return MultiplayerConfiguration.LoadNumberOfPlayers();
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will create a new room for lobby
+		 */
+		public void MenuController_CreateNewLobbyRoom(string _nameLobby, int _finalNumberOfPlayers, string _extraData)
+		{
+			// CREATE ROOM IN LOBBY
+			MultiplayerConfiguration.SaveNameRoomLobby(_nameLobby);
+#if ENABLE_BALANCE_LOADER
+			UIEventController.Instance.DispatchUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE);
+			HTTPController.Instance.CreateNewRoom(true, _nameLobby, ClientTCPEventsController.GetPlayersString(_finalNumberOfPlayers), _extraData);
+#else
+			MenuController_CreateRoomForLobby(_nameLobby, _finalNumberOfPlayers, _extraData);
+#endif
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will create a new room for friends
+		 */
+		public void MenuController_CreateNewFacebookRoom(string _friends, List<string> _friendsIDs, string _extraData)
+		{
+			// CREATE ROOM IN FACEBOOK
+#if ENABLE_BALANCE_LOADER
+			UIEventController.Instance.DispatchUIEvent(MenuScreenController.EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE);
+			MultiplayerConfiguration.SaveFriendsGame(_friends);
+			MultiplayerConfiguration.SaveNumberOfPlayers(_friends.Split(',').Length);
+			HTTPController.Instance.CreateNewRoom(false, FacebookController.Instance.NameHuman, _friends, _extraData);
+#else
+			ClientTCPEventsController.Instance.CreateRoomForFriends(_friendsIDs.ToArray(), _extraData);
+#endif
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will create the socket connection
+		 */
+		public void MenuController_InitialitzationSocket(int _numberRoom, int _idMachineHost)
+		{
+#if !ENABLE_BALANCE_LOADER
+			MultiplayerConfiguration.SaveIPAddressServer(MultiplayerConfiguration.SOCKET_SERVER_ADDRESS);
+			MultiplayerConfiguration.SavePortServer(MultiplayerConfiguration.PORT_SERVER_ADDRESS);
+#endif
+			ClientTCPEventsController.Instance.Initialitzation(MultiplayerConfiguration.LoadIPAddressServer(), MultiplayerConfiguration.LoadPortServer(), MultiplayerConfiguration.LoadRoomNumberInServer(_numberRoom), MultiplayerConfiguration.LoadMachineIDServer(_idMachineHost));
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will connect the socket to create the lobby
+		 */
+		public void MenuController_CreateRoomForLobby(string _nameLobby, int _finalNumberOfPlayers, string _extraData)
+		{
+			ClientTCPEventsController.Instance.CreateRoomForLobby(_nameLobby, _finalNumberOfPlayers, _extraData);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will join to an existing room of friends
+		 */
+		public void MenuController_JoinRoomForFriends(int _room, string _players, string _extraData)
+		{
+			ClientTCPEventsController.Instance.JoinRoomForFriends(_room, _players, _extraData);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will join to an existing room of the lobby
+		 */
+		public void MenuController_JoinRoomOfLobby(int _room, string _players, string _extraData)
+		{
+			ClientTCPEventsController.Instance.JoinRoomOfLobby(_room, _players, _extraData);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will save the room number we should connect
+		 */
+		public void MenuController_SaveRoomNumberInServer(int _value)
+		{
+			MultiplayerConfiguration.SaveRoomNumberInServer(_value);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * We save the IP address we should connect
+		 */
+		public void MenuController_SaveIPAddressServer(string _value)
+		{
+			MultiplayerConfiguration.SaveIPAddressServer(_value);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will save the port number of the host
+		 */
+		public void MenuController_SavePortServer(int _value)
+		{
+			MultiplayerConfiguration.SavePortServer(_value);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will save the ID of the machine which is hosting the room
+		 */
+		public void MenuController_SaveMachineIDServer(int _value)
+		{
+			MultiplayerConfiguration.SaveMachineIDServer(_value);
+		}		
+
+		// -------------------------------------------
+		/* 
+		 * Will load the game scene after 1 second delay
+		 */
+		public void MenuController_LoadGameScene(string _targetScene)
+		{
+			m_targetScene = _targetScene;
+			StartCoroutine(LoadScene());
+		}
+
+		// -------------------------------------------
+		/* 
+		 * LoadGameScene
+		 */
+		IEnumerator LoadScene()
+		{
+			yield return new WaitForSeconds(0.1f);
+			SceneManager.LoadScene(m_targetScene);
 		}
 
 		// -------------------------------------------
