@@ -14,7 +14,7 @@ namespace YourNetworkingTools
 
 		public const string EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS = "EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS";
 
-		private string m_urlRequest = URL_BASE + "GetListRoomsHTTP.php";
+		private string m_urlRequest = "https://www.yourvrexperience.com/yournetworkingtools/GetListRoomsHTTP.php";
 
 		public string UrlRequest
 		{
@@ -35,10 +35,10 @@ namespace YourNetworkingTools
 			}
 
 			List<ItemMultiTextEntry> roomsAvailable = new List<ItemMultiTextEntry>();
-			string[] rooms = _response.Split(new string[] { HTTPController.TOKEN_SEPARATOR_LINES }, StringSplitOptions.None);
+			string[] rooms = _response.Split(new string[] { CommController.TOKEN_SEPARATOR_LINES }, StringSplitOptions.None);
 			for (int i = 0; i < rooms.Length; i++)
 			{
-				string[] room = rooms[i].Split(new string[] { HTTPController.TOKEN_SEPARATOR_EVENTS }, StringSplitOptions.None);
+				string[] room = rooms[i].Split(new string[] { CommController.TOKEN_SEPARATOR_EVENTS }, StringSplitOptions.None);
 				if (room.Length == 5)
 				{
 					string idRoom = room[0];
