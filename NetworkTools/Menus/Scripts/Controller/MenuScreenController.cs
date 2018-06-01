@@ -68,10 +68,6 @@ namespace YourNetworkingTools
 		// ----------------------------------------------
 		// PRIVATE MEMBERS
 		// ----------------------------------------------	
-		private List<GameObject> m_screensPool = new List<GameObject>();
-		private List<GameObject> m_screensOverlay = new List<GameObject>();
-		private bool m_enableScreens = true;
-
 		private bool m_isFriendsRoom = false;
 		private int m_numberOfPlayers = -1;
 		private string m_friends;
@@ -265,7 +261,7 @@ namespace YourNetworkingTools
 				}
 				else
 				{
-					MenuScreenController.Instance.CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					MultiplayerConfiguration.SaveExtraData(m_extraData);
 					if (!YourNetworkTools.GetIsLocalGame())
 					{						
@@ -293,7 +289,7 @@ namespace YourNetworkingTools
 				else
 				{
 					MultiplayerConfiguration.SaveExtraData(m_extraData);
-					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
 				}
 			}

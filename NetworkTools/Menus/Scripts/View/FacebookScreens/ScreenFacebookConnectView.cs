@@ -83,7 +83,7 @@ namespace YourNetworkingTools
 		{
 			if (base.Destroy()) return true;
 			UIEventController.Instance.UIEvent -= OnMenuEvent;
-			GameObject.Destroy(this.gameObject);
+			UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
 			return false;
 		}
 

@@ -60,6 +60,7 @@ namespace YourNetworkingTools
 		private int m_networkIDReceived = -1;
 
 		private int m_uidCounter = 0;
+		private bool m_hasBeenInitialized = false;
 
 		public bool IsServer
 		{
@@ -79,6 +80,10 @@ namespace YourNetworkingTools
 		{
 			get { return m_activateTransformUpdate; }
 			set { m_activateTransformUpdate = value; }
+		}
+		public bool HasBeenInitialized
+		{
+			get { return m_hasBeenInitialized; }
 		}
 
 		// -------------------------------------------
@@ -191,6 +196,8 @@ namespace YourNetworkingTools
 					}
 				}
 			}
+
+			m_hasBeenInitialized = true;
 		}
 
 		// -------------------------------------------
