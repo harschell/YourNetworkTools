@@ -67,7 +67,7 @@ namespace YourNetworkingTools
 		public override bool Destroy()
 		{
 			if (base.Destroy()) return true;
-			GameObject.Destroy(this.gameObject);
+			UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
 			return false;
 		}
 
