@@ -21,10 +21,35 @@ namespace YourNetworkingTools
 	public class NetworkVariablesController : WorldObjectController, INetworkResources
 	{
 		// ----------------------------------------------
+		// SINGLETON
+		// ----------------------------------------------	
+		private static NetworkVariablesController _instance;
+
+		public static NetworkVariablesController Instance
+		{
+			get
+			{
+				if (!_instance)
+				{
+					_instance = GameObject.FindObjectOfType(typeof(NetworkVariablesController)) as NetworkVariablesController;
+				}
+				return _instance;
+			}
+		}
+
+		// ----------------------------------------------
 		// PRIVATE MEMBERS
 		// ----------------------------------------------	
 		// A NETWORK INTEGER
 		protected List<INetworkVariable> m_networkVariables = new List<INetworkVariable>();
+
+		// ----------------------------------------------
+		// GETTERS/SETTERS
+		// ----------------------------------------------	
+		public List<INetworkVariable> NetworkVariables
+		{
+			get { return m_networkVariables; }
+		}
 
 		// -------------------------------------------
 		/* 
@@ -61,6 +86,8 @@ namespace YourNetworkingTools
 				}
 			}
 			m_networkVariables.Clear();
+
+			_instance = null;
 		}
 
 		// -------------------------------------------
