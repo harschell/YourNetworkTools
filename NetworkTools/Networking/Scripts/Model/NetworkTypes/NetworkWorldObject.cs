@@ -206,7 +206,7 @@ namespace YourNetworkingTools
 		{
 			if (AllowModification())
 			{
-				Debug.Log("SETTING NEW VALUE[" + _newValue.ToString() + "]");
+				// Debug.Log("SETTING NEW VALUE[" + _newValue.ToString() + "]");
 				m_networkObject.GetComponent<NetworkWorldObjectData>().SetScale(_newValue);
 			}
 			else

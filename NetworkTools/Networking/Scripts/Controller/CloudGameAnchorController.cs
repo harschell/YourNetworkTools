@@ -29,7 +29,9 @@ namespace YourNetworkingTools
 		public const string EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR = "EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR";
 		public const string EVENT_CLOUDGAMEANCHOR_UPDATE_CAMERA = "EVENT_CLOUDGAMEANCHOR_UPDATE_CAMERA";
 
-		public const bool ENABLE_CUBE_REFERENCE_ON_ANCHOR = false;
+		public const bool ENABLE_CUBE_REFERENCE_ON_ANCHOR	= true;
+		public const bool ENABLE_ARCORE_CLOUD_SHARED		= false;
+		public const bool ENABLE_ARCORE_START_GAME_WORLD	= true;
 
 		// ----------------------------------------------
 		// SINGLETON
@@ -51,11 +53,14 @@ namespace YourNetworkingTools
 		// ----------------------------------------------
 		// CONSTANTS
 		// ----------------------------------------------	
-		public const string NAME_CLOUD_ANCHOR_ID = "NAME_CLOUD_ANCHOR_ID";
+		public const string NAME_CLOUD_ANCHOR_ID		= "NAME_CLOUD_ANCHOR_ID";
+		public const string NAME_CLOUD_VECTOR_BASE		= "NAME_CLOUD_VECTOR_BASE";
+		public const string NAME_CLOUD_ANCHOR_POSITION = "NAME_CLOUD_ANCHOR_POSITION";
 
 		// ----------------------------------------------
 		// PUBLIC MEMBERS
 		// ----------------------------------------------
+		public GUISkin SkinCloud;
 		public GameObject FitToScanOverlay;
 		public Camera FirstPersonCamera;
 		public Camera GameCamera;
@@ -77,7 +82,11 @@ namespace YourNetworkingTools
 		private Component m_lastPlacedAnchor = null;
 		private XPAnchor m_lastResolvedAnchor = null;
 		private GameObject m_goReferenceAnchor;
+		private GameObject m_goReferencePose;
+		private Vector3 m_positionARCorePlayer;
 		private NetworkString m_networkCloudId;
+		private NetworkVector3 m_networkVectorBaseServer;
+		private NetworkVector3 m_networkAnchorBaseServer;
 		private bool m_enableSetUpAnchor = false;
 
 		// IMAGE DICTIONARY TRACKED IMAGES
@@ -85,7 +94,6 @@ namespace YourNetworkingTools
 
 		// PLAYER TRACKING
 		private bool m_trackingStarted = false;
-		private Vector3 m_playerInitialPosition = Vector3.zero;
 		private Vector3 m_prevARPosePosition = Vector3.zero;
 
 		// -------------------------------------------
@@ -94,6 +102,7 @@ namespace YourNetworkingTools
 		 */
 		void Awake()
 		{
+			Utilities.DebugLogError("CloudGameAnchorController::Awake");
 			NetworkEventController.Instance.NetworkEvent += new NetworkEventHandler(OnNetworkEvent);
 		}
 
@@ -120,6 +129,11 @@ namespace YourNetworkingTools
 				}
 			}
 
+			if (GameCamera.gameObject.GetComponent<Rigidbody>() != null)
+			{
+				GameCamera.gameObject.GetComponent<Rigidbody>().useGravity = false;
+				GameCamera.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+			}
 			GameCamera.enabled = false;
 
 			ResetStatus();
@@ -155,12 +169,7 @@ namespace YourNetworkingTools
 
 			if (m_lastPlacedAnchor != null)
 			{
-				if (ENABLE_CUBE_REFERENCE_ON_ANCHOR)
-				{
-					m_goReferenceAnchor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-					m_goReferenceAnchor.transform.position = m_lastPlacedAnchor.transform.position;
-					m_goReferenceAnchor.transform.parent = m_lastPlacedAnchor.transform;
-				}
+				PlaceCubeReferenceAnchor(m_lastPlacedAnchor.transform.position, m_lastPlacedAnchor.transform);
 
 				// (HOSTING) SAVE CLOUD ANCHOR
 				HostLastPlacedAnchor();
@@ -184,12 +193,7 @@ namespace YourNetworkingTools
 					Anchor anchor = image.CreateAnchor(image.CenterPose);
 					m_lastPlacedAnchor = anchor;
 
-					if (ENABLE_CUBE_REFERENCE_ON_ANCHOR)
-					{
-						m_goReferenceAnchor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-						m_goReferenceAnchor.transform.position = image.CenterPose.position;
-						m_goReferenceAnchor.transform.parent = anchor.transform;
-					}
+					PlaceCubeReferenceAnchor(image.CenterPose.position, anchor.transform);
 
 					// (HOSTING) SAVE CLOUD ANCHOR
 					HostLastPlacedAnchor();
@@ -203,21 +207,33 @@ namespace YourNetworkingTools
 		 */
 		private void HostLastPlacedAnchor()
 		{
-			var anchor = (Anchor)m_lastPlacedAnchor;
-			XPSession.CreateCloudAnchor(anchor).ThenAction(result =>
+			m_enableSetUpAnchor = false;
+			if (ENABLE_ARCORE_CLOUD_SHARED)
 			{
-				if (result.Response != CloudServiceResponse.Success)
+				var anchor = (Anchor)m_lastPlacedAnchor;
+				XPSession.CreateCloudAnchor(anchor).ThenAction(result =>
 				{
-					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, false);
-					return;
-				}
+					if (result.Response != CloudServiceResponse.Success)
+					{
+						BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, false);
+						return;
+					}
 
-				// NETWORK CLOUD ID
+					// NETWORK CLOUD ID		
+					m_hasBeenInitialized = true;
+					m_networkCloudId = new NetworkString();
+					m_networkCloudId.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_ANCHOR_ID, result.Anchor.CloudId);
+					m_networkVectorBaseServer = new NetworkVector3();
+					Vector3 vectorBase = Frame.Pose.position - result.Anchor.transform.position;
+					m_networkVectorBaseServer.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_VECTOR_BASE, vectorBase);
+					m_networkAnchorBaseServer = new NetworkVector3();
+					m_networkAnchorBaseServer.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_ANCHOR_POSITION, result.Anchor.transform.position);
+				});
+			}
+			else
+			{
 				m_hasBeenInitialized = true;
-				m_networkCloudId = new NetworkString();
-				m_networkCloudId.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_ANCHOR_ID, result.Anchor.CloudId);
-				BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
-			});
+			}
 		}
 
 		// -------------------------------------------
@@ -226,23 +242,51 @@ namespace YourNetworkingTools
 		 */
 		private void ResolveAnchorFromId(string _cloudAnchorId)
 		{
-			XPSession.ResolveCloudAnchor(_cloudAnchorId).ThenAction((System.Action<CloudAnchorResult>)(result =>
+			m_enableSetUpAnchor = false;
+			if (ENABLE_ARCORE_CLOUD_SHARED)
 			{
-				if (result.Response != CloudServiceResponse.Success)
+				XPSession.ResolveCloudAnchor(_cloudAnchorId).ThenAction((System.Action<CloudAnchorResult>)(result =>
 				{
-					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, false);
-					return;
-				}
+					if (result.Response != CloudServiceResponse.Success)
+					{
+						BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, false);
+						return;
+					}
 
+					if (!m_hasBeenInitialized)
+					{
+						m_hasBeenInitialized = true;
+						m_lastResolvedAnchor = result.Anchor;
+						PlaceCubeReferenceAnchor(m_lastResolvedAnchor.transform.position, m_lastResolvedAnchor.transform);
+					}
+				}));
+			}
+			else
+			{				
 				m_hasBeenInitialized = true;
-				m_lastResolvedAnchor = result.Anchor;
-				if (ENABLE_CUBE_REFERENCE_ON_ANCHOR)
+			}
+		}
+
+		// -------------------------------------------
+		/* 
+		 * PlaceCubeReferenceAnchor
+		 */
+		private void PlaceCubeReferenceAnchor(Vector3 _position, Transform _parent)
+		{
+			if (ENABLE_CUBE_REFERENCE_ON_ANCHOR)
+			{
+				if (m_goReferenceAnchor == null)
 				{
 					m_goReferenceAnchor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-					m_goReferenceAnchor.transform.parent = result.Anchor.transform;
+					m_goReferenceAnchor.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+					m_goReferenceAnchor.transform.position = _position;
+					m_goReferenceAnchor.transform.parent = _parent;
 				}
-				BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
-			}));
+			}
+
+			m_goReferencePose = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			m_goReferencePose.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+			m_goReferencePose.transform.parent = _parent;
 		}
 
 		// -------------------------------------------
@@ -273,7 +317,6 @@ namespace YourNetworkingTools
 		{
 			// Exit the app when the 'back' button is pressed.
 			var sleepTimeout = SleepTimeout.NeverSleep;
-
 			Screen.sleepTimeout = sleepTimeout;
 
 			if (m_IsQuitting)
@@ -283,12 +326,12 @@ namespace YourNetworkingTools
 
 			// Quit if ARCore was unable to connect and give Unity some time for the toast to appear.
 			if (Session.Status == SessionStatus.ErrorPermissionNotGranted)
-			{
+			{				
 				ShowAndroidToastMessage("Camera permission is needed to run this application.");
 				m_IsQuitting = true;
 			}
 			else if (Session.Status.IsError())
-			{
+			{				
 				ShowAndroidToastMessage("ARCore encountered a problem connecting.  Please start the app again.");
 				m_IsQuitting = true;
 			}
@@ -324,8 +367,57 @@ namespace YourNetworkingTools
 #if UNITY_EDITOR
 			return m_hasBeenInitialized;
 #else
-			return (m_lastPlacedAnchor != null) || (m_lastResolvedAnchor != null);
+			return m_hasBeenInitialized || (m_lastPlacedAnchor != null) || (m_lastResolvedAnchor != null);
 #endif
+		}
+
+		// -------------------------------------------
+		/* 
+		 * UpdatePositionGameWorld
+		 */
+		private void UpdatePositionGameWorld()
+		{
+#if UNITY_EDITOR
+			if (!m_trackingStarted)
+			{
+				m_trackingStarted = true;
+				FirstPersonCamera.enabled = false;
+				FitToScanOverlay.SetActive(false);
+				if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
+				{
+					GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
+				}
+				BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
+			}
+#else
+			CalculatePositionGameWorld();
+#endif
+		}
+
+		// -------------------------------------------
+		/* 
+		 * CalculatePositionGameWorld
+		 */
+		private void CalculatePositionGameWorld()
+		{
+			m_goReferencePose.transform.position = Frame.Pose.position;
+			m_positionARCorePlayer = m_goReferencePose.transform.localPosition;
+
+			if (!m_trackingStarted)
+			{
+				m_trackingStarted = true;
+				m_prevARPosePosition = Utilities.Clone(m_positionARCorePlayer);
+				if (ENABLE_ARCORE_START_GAME_WORLD)
+				{
+					FirstPersonCamera.enabled = false;
+					if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
+					{
+						GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
+					}
+					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
+				}
+				FitToScanOverlay.SetActive(false);
+			}
 		}
 
 		// -------------------------------------------
@@ -339,42 +431,11 @@ namespace YourNetworkingTools
 			if (IsAnchorSetUp())
 			{
 #if UNITY_EDITOR
-				if (!m_trackingStarted)
-				{
-					m_trackingStarted = true;
-					FirstPersonCamera.enabled = false;
-					FitToScanOverlay.SetActive(false);
-					if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
-					{
-						GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
-					}
-				}
+				UpdatePositionGameWorld();
 #else
-				Vector3 posPlayer = Vector3.zero;
-				if (m_lastPlacedAnchor != null)
-				{
-					posPlayer = m_lastPlacedAnchor.transform.position - Frame.Pose.position;
-				}
-				else
-				{
-					posPlayer = m_lastResolvedAnchor.transform.position - Frame.Pose.position;
-				}
+				UpdatePositionGameWorld();
 
-				if (!m_trackingStarted)
-				{
-					m_trackingStarted = true;
-					FirstPersonCamera.enabled = false;
-					FitToScanOverlay.SetActive(false);
-					m_prevARPosePosition = posPlayer;
-					m_playerInitialPosition = posPlayer;
-					if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
-					{
-						GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
-					}
-				}
-
-				// Remember the previous position so we can apply deltas
-				Vector3 posRealWorld = (m_playerInitialPosition - posPlayer);
+				Vector3 posRealWorld = m_positionARCorePlayer;
 				Vector3 posVRWorld = new Vector3(posRealWorld.x * ScaleVRWorldXZ,
 												posRealWorld.y * ScaleVRWorldY,
 												posRealWorld.z * ScaleVRWorldXZ);
@@ -386,31 +447,89 @@ namespace YourNetworkingTools
 
 		// -------------------------------------------
 		/* 
+		 * WaitForARCoreValid
+		 */
+		public void WaitForARCoreValid()
+		{
+			if (Session.Status.IsValid() && (Session.Status == SessionStatus.Tracking))
+			{
+				ResolveAnchorFromId((string)m_networkCloudId.GetValue());
+			}
+			else
+			{
+				Invoke("WaitForARCoreValid", 1);
+			}
+		}
+
+		// -------------------------------------------
+		/* 
 		 * OnNetworkEvent
 		 */
 		private void OnNetworkEvent(string _nameEvent, bool _isLocalEvent, int _networkOriginID, int _networkTargetID, object[] _list)
-		{
+		{			
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_LOCAL_COMPLETED)
 			{
-				if (YourNetworkTools.Instance.IsServer)
+				if (ENABLE_ARCORE_CLOUD_SHARED)
+				{
+					if (YourNetworkTools.Instance.IsServer)
+					{
+						m_enableSetUpAnchor = true;
+					}
+				}
+				else
 				{
 					m_enableSetUpAnchor = true;
-				}
+				}				
 			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_LOCAL)
 			{
-				INetworkVariable objData = (INetworkVariable)_list[0];
+				if (!ENABLE_ARCORE_CLOUD_SHARED) return;
 
-				if (objData.Name == NAME_CLOUD_ANCHOR_ID)
+				if (!YourNetworkTools.Instance.IsServer)
 				{
-					m_hasBeenInitialized = true;
-					m_networkCloudId = (NetworkString)objData;
-#if UNITY_EDITOR
-					m_lastResolvedAnchor = new XPAnchor();
-					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
-#else
-					ResolveAnchorFromId((string)m_networkCloudId.GetValue());
+					INetworkVariable objData = (INetworkVariable)_list[0];
+					bool check = false;
+					if (objData.Name == NAME_CLOUD_ANCHOR_ID)
+					{
+						m_networkCloudId = (NetworkString)objData;
+						check = true;
+					}
+					if (objData.Name == NAME_CLOUD_VECTOR_BASE)
+					{
+						m_networkVectorBaseServer = (NetworkVector3)objData;
+						check = true;
+					}
+					if (objData.Name == NAME_CLOUD_ANCHOR_POSITION)
+					{
+						m_networkAnchorBaseServer = (NetworkVector3)objData;
+						check = true;
+					}
+					if (check)
+					{
+						if ((m_networkCloudId != null) && (m_networkVectorBaseServer != null) && (m_networkAnchorBaseServer!=null))
+						{
+							Debug.Log("**************************START JOINING PROCESS**************************");
+#if !UNITY_EDITOR
+						WaitForARCoreValid();
 #endif
+						}
+					}
+				}
+			}
+		}
+
+		// -------------------------------------------
+		/* 
+		* OnGUI
+		*/
+		void OnGUI()
+		{
+			if (!ENABLE_ARCORE_START_GAME_WORLD)
+			{
+				GUI.skin = SkinCloud;
+				if (m_positionARCorePlayer != null)
+				{
+					GUI.Label(new Rect(new Rect(0, 0, Screen.width, 50)),  "POS LOCAL=" + m_positionARCorePlayer.ToString() + "::POS GLOBAL=" + m_goReferencePose.transform.position.ToString());
 				}
 			}
 		}
@@ -430,11 +549,15 @@ namespace YourNetworkingTools
 			if (m_enableSetUpAnchor)
 			{
 #if UNITY_EDITOR
+				m_enableSetUpAnchor = false;
 				m_hasBeenInitialized = true;
 				m_lastPlacedAnchor = new Anchor();
 				m_networkCloudId = new NetworkString();
 				m_networkCloudId.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_ANCHOR_ID, "IdAnchorFake");
-				BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
+				m_networkVectorBaseServer = new NetworkVector3();
+				m_networkVectorBaseServer.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_VECTOR_BASE, new Vector3(1,2,3));
+				m_networkAnchorBaseServer = new NetworkVector3();
+				m_networkAnchorBaseServer.InitRemote(YourNetworkTools.Instance.GetUniversalNetworkID(), NAME_CLOUD_ANCHOR_POSITION, new Vector3(66,99,69));
 #else
 				if (m_lastPlacedAnchor != null)
 				{

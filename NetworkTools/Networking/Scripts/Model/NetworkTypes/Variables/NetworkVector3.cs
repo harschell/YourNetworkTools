@@ -82,9 +82,9 @@ namespace YourNetworkingTools
 					finalValue = (Vector3)_value;
 				}
 
-				if (finalValue != Vector3.zero)
+				if (!finalValue.Equals(Vector3.zero))
 				{
-					if (m_value != finalValue)
+					if (!m_value.Equals(finalValue))
 					{
 						m_value = finalValue;
 						DispatchNetworkVariableEvent(EVENT_NETWORKVARIABLE_UPDATED);
