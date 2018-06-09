@@ -76,7 +76,7 @@ namespace YourNetworkingTools
 			if (CommunicationsController.Instance.IsServer)
 			{
 				// IS SERVER: CREATE THE OBJECT
-				Debug.Log("**********NETWORK CUBE REQUESTED BY SERVER");
+				Debug.Log("**********NETWORK VARIABLE["+ m_assignedName + "," + m_namePrefabObject + "] REQUESTED BY SERVER");
 				NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_COMMUNICATIONSCONTROLLER_REQUEST_TO_CREATE_NETWORK_OBJECT,
 																NetworkEventController.CLASS_WORLDOBJECTCONTROLLER_NAME,
 																NetworkEventController.REGISTER_PREFABS_OBJECTS,
@@ -206,7 +206,7 @@ namespace YourNetworkingTools
 		{
 			if (AllowModification())
 			{
-				Debug.Log("SETTING NEW VALUE[" + _newValue.ToString() + "]");
+				// Debug.Log("SETTING NEW VALUE[" + _newValue.ToString() + "]");
 				m_networkObject.GetComponent<NetworkWorldObjectData>().SetScale(_newValue);
 			}
 			else
