@@ -8,7 +8,6 @@ using GoogleARCore.Examples.Common;
 using UnityEngine;
 using YourCommonTools;
 
-#if ENABLE_GOOGLE_ARCORE
 namespace YourNetworkingTools
 {
 	/******************************************
@@ -23,6 +22,7 @@ namespace YourNetworkingTools
 	 */
 	public class CloudGameAnchorController : MonoBehaviour
 	{
+#if ENABLE_GOOGLE_ARCORE
 		// ----------------------------------------------
 		// EVENTS
 		// ----------------------------------------------	
@@ -104,6 +104,28 @@ namespace YourNetworkingTools
 		{
 			Utilities.DebugLogError("CloudGameAnchorController::Awake");
 			NetworkEventController.Instance.NetworkEvent += new NetworkEventHandler(OnNetworkEvent);
+		}
+
+		// -------------------------------------------
+		/* 
+		* DisableARCore
+		*/
+		public void DisableARCore(bool _activation)
+		{
+			GameCamera.enabled = true;
+			FirstPersonCamera.enabled = false;
+			this.gameObject.SetActive(_activation);
+		}
+
+		// -------------------------------------------
+		/* 
+		* EnableARCore
+		*/
+		public void EnableARCore()
+		{
+			GameCamera.enabled = false;
+			FirstPersonCamera.enabled = true;
+			this.gameObject.SetActive(true);
 		}
 
 		// -------------------------------------------
@@ -377,43 +399,26 @@ namespace YourNetworkingTools
 		 */
 		private void UpdatePositionGameWorld()
 		{
-#if UNITY_EDITOR
-			if (!m_trackingStarted)
-			{
-				m_trackingStarted = true;
-				FirstPersonCamera.enabled = false;
-				FitToScanOverlay.SetActive(false);
-				if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
-				{
-					GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
-				}
-				BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
-			}
-#else
-			CalculatePositionGameWorld();
-#endif
-		}
-
-		// -------------------------------------------
-		/* 
-		 * CalculatePositionGameWorld
-		 */
-		private void CalculatePositionGameWorld()
-		{
+#if !UNITY_EDITOR
 			m_goReferencePose.transform.position = Frame.Pose.position;
 			m_positionARCorePlayer = m_goReferencePose.transform.localPosition;
-
+#else
+			m_positionARCorePlayer = Vector3.zero;
+#endif
 			if (!m_trackingStarted)
 			{
 				m_trackingStarted = true;
 				m_prevARPosePosition = Utilities.Clone(m_positionARCorePlayer);
 				if (ENABLE_ARCORE_START_GAME_WORLD)
-				{
+				{					
 					FirstPersonCamera.enabled = false;
+#if !UNITY_EDITOR
 					if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
 					{
 						GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
 					}
+#endif
+					GameCamera.enabled = true;
 					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
 				}
 				FitToScanOverlay.SetActive(false);
@@ -466,7 +471,9 @@ namespace YourNetworkingTools
 		 * OnNetworkEvent
 		 */
 		private void OnNetworkEvent(string _nameEvent, bool _isLocalEvent, int _networkOriginID, int _networkTargetID, object[] _list)
-		{			
+		{
+			if (!this.gameObject.activeSelf) return;
+
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_LOCAL_COMPLETED)
 			{
 				if (ENABLE_ARCORE_CLOUD_SHARED)
@@ -540,6 +547,8 @@ namespace YourNetworkingTools
 		*/
 		public void Update()
 		{
+			if (!this.gameObject.activeSelf) return;
+
 			UpdateApplicationLifecycle();
 
 			// UPDATE PLAYER POSITION IN THE GAME WORLD
@@ -576,6 +585,6 @@ namespace YourNetworkingTools
 #endif
 			}
 		}
-	}
-}
 #endif
+				}
+			}

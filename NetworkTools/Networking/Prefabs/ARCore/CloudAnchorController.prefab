@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ca0c6a3af6b4635b7e98c6ea0a0cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SessionConfig: {fileID: 11400000, guid: a121f8901c3214da99464f9976359de1, type: 2}
+  SessionConfig: {fileID: 11400000, guid: 5dda85bb4292f1f43b41fef12112c3b9, type: 2}
 --- !u!114 &114422626707832548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -406,8 +406,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b928c69d08d3b4448fe785ca3068880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkinCloud: {fileID: 11400000, guid: c8adc79d92250f042a1b06e039ce4a02, type: 2}
   FitToScanOverlay: {fileID: 1011145830133452}
-  FirstPersonCamera: {fileID: 0}
+  FirstPersonCamera: {fileID: 20038241103256024}
+  GameCamera: {fileID: 0}
+  ScaleVRWorldXZ: 4
+  ScaleVRWorldY: 2
   ARCoreRoot: {fileID: 1813801264257396}
 --- !u!114 &114691342972002194
 MonoBehaviour:
