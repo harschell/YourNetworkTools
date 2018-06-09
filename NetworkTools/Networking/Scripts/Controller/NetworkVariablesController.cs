@@ -154,6 +154,10 @@ namespace YourNetworkingTools
 				m_requestedDestroyEverything = true;
 				Destroy();
 			}
+			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED)
+			{
+				NetworkEventController.Instance.DispatchLocalEvent(NetworkVariable.EVENT_NETWORKVARIABLE_REQUEST_ALL);				
+			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_LOCAL)
 			{
 				INetworkVariable networkVariable = (INetworkVariable)_list[0];
@@ -164,11 +168,12 @@ namespace YourNetworkingTools
 				}
 			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE)
-			{
+			{				
 				int ownerVariable = int.Parse((string)_list[0]);
 				string nameVariable = (string)_list[1];
 				string valueVariable = (string)_list[2];
 				string typeVariable = (string)_list[3];
+				Debug.Log("EVENT_SYSTEM_VARIABLE_CREATE_REMOTE::nameVariable[" + nameVariable + "]=" + valueVariable);
 				if (GetNetworkVariable(nameVariable) == null)
 				{
 					INetworkVariable networkVariable = null;
@@ -177,6 +182,12 @@ namespace YourNetworkingTools
 						NetworkVector3 networkVector3 = new NetworkVector3();
 						networkVector3.InitLocal(ownerVariable, nameVariable, valueVariable);
 						networkVariable = networkVector3;
+					}
+					else if (NetworkQuaternion.GetTypeQuaternion().ToString() == typeVariable)
+					{
+						NetworkQuaternion networkQuaternion = new NetworkQuaternion();
+						networkQuaternion.InitLocal(ownerVariable, nameVariable, valueVariable);
+						networkVariable = networkQuaternion;
 					}
 					else if (NetworkInteger.GetTypeInteger().ToString() == typeVariable)
 					{

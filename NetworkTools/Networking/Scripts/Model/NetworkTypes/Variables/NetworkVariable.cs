@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using YourCommonTools;
 
 namespace YourNetworkingTools
 {
@@ -23,9 +24,10 @@ namespace YourNetworkingTools
 		// -----------------------------------------
 		// EVENTS
 		// -----------------------------------------
-		public const string EVENT_NETWORKVARIABLE_CREATE = "EVENT_NETWORKVARIABLE_CREATE";
-		public const string EVENT_NETWORKVARIABLE_UPDATED = "EVENT_NETWORKVARIABLE_UPDATED";
-		public const string EVENT_NETWORKVARIABLE_DELETE = "EVENT_NETWORKVARIABLE_DELETE";
+		public const string EVENT_NETWORKVARIABLE_CREATE		= "EVENT_NETWORKVARIABLE_CREATE";
+		public const string EVENT_NETWORKVARIABLE_UPDATED		= "EVENT_NETWORKVARIABLE_UPDATED";
+		public const string EVENT_NETWORKVARIABLE_DELETE		= "EVENT_NETWORKVARIABLE_DELETE";
+		public const string EVENT_NETWORKVARIABLE_REQUEST_ALL	= "EVENT_NETWORKVARIABLE_REQUEST_ALL";
 
 		// -----------------------------------------
 		// PRIVATE VARIABLES
@@ -93,6 +95,7 @@ namespace YourNetworkingTools
 			m_name = (string)_list[1];
 			UpdateValue(_list[2]);
 			NetworkEventController.Instance.NetworkEvent += OnNetworkEvent;
+			Utilities.DebugLogWarning("NetworkVariable::InitLocal::DISPATCH EVENT[EVENT_SYSTEM_VARIABLE_CREATE_LOCAL][" + m_name + "]");
 			NetworkEventController.Instance.DispatchLocalEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_LOCAL, this);
 		}
 
@@ -124,12 +127,13 @@ namespace YourNetworkingTools
 		*/
 		public virtual void OnNetworkEvent(string _nameEvent, bool _isLocalEvent, int _networkOriginID, int _networkTargetID, params object[] _list)
 		{
+			if (_nameEvent == EVENT_NETWORKVARIABLE_REQUEST_ALL)
+			{
+				NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE, m_owner.ToString(), m_name, GetValue().ToString(), GetTypeValueInString());
+			}
+
 			if (_networkOriginID == YourNetworkTools.Instance.GetUniversalNetworkID()) return;
 
-			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED)
-			{
-				NetworkEventController.Instance.DelayNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_CREATE_REMOTE, 2, m_owner.ToString(), m_name, GetValue().ToString(), GetTypeValueInString());
-			}
 			if (_nameEvent == NetworkEventController.EVENT_SYSTEM_VARIABLE_SET)
 			{
 				string nameVariable = (string)_list[0];

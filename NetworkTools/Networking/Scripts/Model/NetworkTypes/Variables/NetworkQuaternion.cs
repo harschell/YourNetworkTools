@@ -8,17 +8,17 @@ namespace YourNetworkingTools
 {
 	/******************************************
 	* 
-	* NetworkVector3
+	* NetworkQuaternion
 	* 
-	* An vector3 variable shared by all connected clients
+	* An Quaternion variable shared by all connected clients
 	* 
 	* @author Esteban Gallardo
 	*/
-	public class NetworkVector3 : NetworkVariable, INetworkVariable
+	public class NetworkQuaternion : NetworkVariable, INetworkVariable
 	{
 		public const char TOKEN_SEPARATOR = ',';
 
-		private Vector3 m_value = Vector3.zero;
+		private Quaternion m_value = Quaternion.identity;
 
 		// -------------------------------------------
 		/* 
@@ -37,15 +37,15 @@ namespace YourNetworkingTools
 		{
 			try
 			{
-				if (m_value != (Vector3)_value)
+				if (m_value != (Quaternion)_value)
 				{
-					UpdateValue((Vector3)_value);
-					NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_SET, m_name, m_value.x.ToString() + TOKEN_SEPARATOR + m_value.y.ToString() + TOKEN_SEPARATOR + m_value.z.ToString());
+					UpdateValue((Quaternion)_value);
+					NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_VARIABLE_SET, m_name, m_value.x.ToString() + TOKEN_SEPARATOR + m_value.y.ToString() + TOKEN_SEPARATOR + m_value.z.ToString() + TOKEN_SEPARATOR + m_value.w.ToString());
 				}
 			}
 			catch (Exception err)
 			{
-				Debug.LogError("NetworkFloat::SetValue::TYPE MISTMATCH::err=" + err.Message);
+				Debug.LogError("NetworkQuaternion::SetValue::TYPE MISTMATCH::err=" + err.Message);
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace YourNetworkingTools
 		{
 			try
 			{
-				Vector3 finalValue = Vector3.zero;
+				Quaternion finalValue = Quaternion.identity;
 				if (_value is string)
 				{
 					float valueEvaluated = -1;
@@ -76,13 +76,17 @@ namespace YourNetworkingTools
 					{
 						finalValue.z = valueEvaluated;
 					}
+					if (float.TryParse(valuesVector[3], out valueEvaluated))
+					{
+						finalValue.w = valueEvaluated;
+					}
 				}
-				if (_value is Vector3)
+				if (_value is Quaternion)
 				{
-					finalValue = (Vector3)_value;
+					finalValue = (Quaternion)_value;
 				}
 
-				if (!finalValue.Equals(Vector3.zero))
+				if (!finalValue.Equals(Quaternion.identity))
 				{
 					if (!m_value.Equals(finalValue))
 					{
@@ -93,7 +97,7 @@ namespace YourNetworkingTools
 			}
 			catch (Exception err)
 			{
-				Debug.LogError("NetworkFloat::UpdateValue::TYPE MISTMATCH::err=" + err.Message);
+				Debug.LogError("NetworkQuaternion::UpdateValue::TYPE MISTMATCH::err=" + err.Message);
 			}
 		}
 
@@ -112,7 +116,7 @@ namespace YourNetworkingTools
 		*/
 		public override string GetTypeValueInString()
 		{
-			return "UnityEngine.Vector3";
+			return "UnityEngine.Quaternion";
 		}
 
 		// -------------------------------------------
@@ -128,9 +132,9 @@ namespace YourNetworkingTools
 		/* 
 		* Get the type of the variable
 		*/
-		public static string GetTypeVector3()
-		{
-			return "UnityEngine.Vector3";
+		public static string GetTypeQuaternion()
+		{			
+			return "UnityEngine.Quaternion";
 		}
 
 		// -------------------------------------------
@@ -139,7 +143,7 @@ namespace YourNetworkingTools
 		*/
 		public override void RandomIncrease(int _value)
 		{
-			SetValue((Vector3)GetValue() + (((_value > 0) ? 1 : -1) * Vector3.one));
+			SetValue((Quaternion)GetValue());
 		}
 
 	}

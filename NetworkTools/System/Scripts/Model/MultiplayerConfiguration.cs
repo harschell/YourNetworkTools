@@ -36,6 +36,11 @@ namespace YourNetworkingTools
 
 		public const string EXTRA_DATA_COOCKIE = "EXTRA_DATA_COOCKIE";
 
+		public const string GOOGLE_ARCORE_COOCKIE = "GOOGLE_ARCORE_COOCKIE";
+
+		public const int GOOGLE_ARCORE_DISABLED = 0;
+		public const int GOOGLE_ARCORE_ENABLED = 1;
+
 		// -------------------------------------------
 		/* 
 		 * Will save the data for the game scene to load it
@@ -180,6 +185,24 @@ namespace YourNetworkingTools
 		{
 			return PlayerPrefs.GetInt(MACHINE_ID_HOST_ROOM_COOCKIE, _idMachineHostRoom);
 		}
+
+		// -------------------------------------------
+		/* 
+		 * Will save information about to enable or not ARCore
+		 */
+		public static void SaveGoogleARCore(int _enableGoogleARCore)
+		{
+			PlayerPrefs.SetInt(GOOGLE_ARCORE_COOCKIE, _enableGoogleARCore);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will load the information about to enable or not ARCore
+		 */
+		public static int LoadGoogleARCore(int _enableGoogleARCore)
+		{
+			return PlayerPrefs.GetInt(GOOGLE_ARCORE_COOCKIE, _enableGoogleARCore);
+		}		
 
 		// -------------------------------------------
 		/* 
