@@ -96,6 +96,14 @@ namespace YourNetworkingTools
 		private bool m_trackingStarted = false;
 		private Vector3 m_prevARPosePosition = Vector3.zero;
 
+		// ----------------------------------------------
+		// GETTERS/SETTERS
+		// ----------------------------------------------
+		public bool HasBeenInitialized
+		{
+			get { return m_hasBeenInitialized; }
+		}
+
 		// -------------------------------------------
 		/* 
 		 * Awake
