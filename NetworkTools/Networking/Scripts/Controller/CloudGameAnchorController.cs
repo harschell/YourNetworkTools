@@ -3,9 +3,9 @@ using System.Collections.Generic;
 #if ENABLE_GOOGLE_ARCORE
 using GoogleARCore;
 using GoogleARCore.CrossPlatform;
-using GoogleARCore.Examples.Common;
 #endif
 using UnityEngine;
+using UnityEngine.UI;
 using YourCommonTools;
 
 namespace YourNetworkingTools
@@ -72,6 +72,7 @@ namespace YourNetworkingTools
 		public GameObject ARCoreRoot; /// The root for ARCore-specific GameObjects in the scene.
 		public GameObject PlaneGenerator;
 		public GameObject PointViewer;
+		public Text TextMessage;
 
 		// ----------------------------------------------
 		// PRIVATE MEMBERS
@@ -169,6 +170,9 @@ namespace YourNetworkingTools
 				GameCamera.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			}
 			GameCamera.enabled = false;
+
+			LanguageController.Instance.Initialize();
+			TextMessage.text = LanguageController.Instance.GetText("arcore.message.to.synchronize");
 
 			ResetStatus();
 		}
