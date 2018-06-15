@@ -126,6 +126,7 @@ namespace YourNetworkingTools
 			GameCamera.enabled = true;
 			FirstPersonCamera.enabled = false;
 			FitToScanOverlay.SetActive(false);
+			TextMessage.gameObject.SetActive(false);
 			PointViewer.SetActive(false);
 			if (m_goReferenceAnchor!=null) m_goReferenceAnchor.GetComponent<Renderer>().enabled = false;
 			this.gameObject.SetActive(_activation);
@@ -140,6 +141,7 @@ namespace YourNetworkingTools
 			GameCamera.enabled = false;
 			FirstPersonCamera.enabled = true;
 			FitToScanOverlay.SetActive(true);
+			TextMessage.gameObject.SetActive(true);
 			PointViewer.SetActive(true);
 			this.gameObject.SetActive(true);
 		}
