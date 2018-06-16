@@ -3,9 +3,9 @@ using System.Collections.Generic;
 #if ENABLE_GOOGLE_ARCORE
 using GoogleARCore;
 using GoogleARCore.CrossPlatform;
-using GoogleARCore.Examples.Common;
 #endif
 using UnityEngine;
+using UnityEngine.UI;
 using YourCommonTools;
 
 namespace YourNetworkingTools
@@ -70,6 +70,9 @@ namespace YourNetworkingTools
 
 		[Header("ARCore")]
 		public GameObject ARCoreRoot; /// The root for ARCore-specific GameObjects in the scene.
+		public GameObject PlaneGenerator;
+		public GameObject PointViewer;
+		public Text TextMessage;
 
 		// ----------------------------------------------
 		// PRIVATE MEMBERS
@@ -122,6 +125,10 @@ namespace YourNetworkingTools
 		{
 			GameCamera.enabled = true;
 			FirstPersonCamera.enabled = false;
+			FitToScanOverlay.SetActive(false);
+			TextMessage.gameObject.SetActive(false);
+			PointViewer.SetActive(false);
+			if (m_goReferenceAnchor!=null) m_goReferenceAnchor.GetComponent<Renderer>().enabled = false;
 			this.gameObject.SetActive(_activation);
 		}
 
@@ -133,6 +140,9 @@ namespace YourNetworkingTools
 		{
 			GameCamera.enabled = false;
 			FirstPersonCamera.enabled = true;
+			FitToScanOverlay.SetActive(true);
+			TextMessage.gameObject.SetActive(true);
+			PointViewer.SetActive(true);
 			this.gameObject.SetActive(true);
 		}
 
@@ -153,10 +163,7 @@ namespace YourNetworkingTools
 
 			if (m_enableImageDetection)
 			{
-				if (GameObject.FindObjectOfType<DetectedPlaneGenerator>() != null)
-				{
-					GameObject.FindObjectOfType<DetectedPlaneGenerator>().gameObject.SetActive(false);
-				}
+				PlaneGenerator.SetActive(false);
 			}
 
 			if (GameCamera.gameObject.GetComponent<Rigidbody>() != null)
@@ -165,6 +172,9 @@ namespace YourNetworkingTools
 				GameCamera.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			}
 			GameCamera.enabled = false;
+
+			LanguageController.Instance.Initialize();
+			TextMessage.text = LanguageController.Instance.GetText("arcore.message.to.synchronize");
 
 			ResetStatus();
 		}
@@ -419,17 +429,20 @@ namespace YourNetworkingTools
 				m_prevARPosePosition = Utilities.Clone(m_positionARCorePlayer);
 				if (ENABLE_ARCORE_START_GAME_WORLD)
 				{					
-					FirstPersonCamera.enabled = false;
+					FirstPersonCamera.enabled = false;					
 #if !UNITY_EDITOR
-					if (GameObject.FindObjectOfType<ARCoreBackgroundRenderer>() != null)
+					if (FirstPersonCamera.GetComponent<ARCoreBackgroundRenderer>() != null)
 					{
-						GameObject.FindObjectOfType<ARCoreBackgroundRenderer>().enabled = false;
-					}
+						FirstPersonCamera.GetComponent<ARCoreBackgroundRenderer>().enabled = false;
+					}	
+					PointViewer.SetActive(false);
 #endif
+					if (m_goReferenceAnchor != null) m_goReferenceAnchor.GetComponent<Renderer>().enabled = false;
 					GameCamera.enabled = true;
 					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
 				}
 				FitToScanOverlay.SetActive(false);
+				TextMessage.gameObject.SetActive(false);
 			}
 		}
 
@@ -539,14 +552,13 @@ namespace YourNetworkingTools
 		*/
 		void OnGUI()
 		{
-			if (!ENABLE_ARCORE_START_GAME_WORLD)
+			/*
+			GUI.skin = SkinCloud;
+			if (m_positionARCorePlayer != null)
 			{
-				GUI.skin = SkinCloud;
-				if (m_positionARCorePlayer != null)
-				{
-					GUI.Label(new Rect(new Rect(0, 0, Screen.width, 50)),  "POS LOCAL=" + m_positionARCorePlayer.ToString() + "::POS GLOBAL=" + m_goReferencePose.transform.position.ToString());
-				}
+				GUI.Label(new Rect(new Rect(0, 0, 1000, 50)),  "AR=" + m_positionARCorePlayer.ToString() + "::REF=" + m_goReferencePose.transform.position.ToString());
 			}
+			*/
 		}
 
 		// -------------------------------------------

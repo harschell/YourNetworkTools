@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 4323727580479598}
   - component: {fileID: 33028502461620464}
   - component: {fileID: 23605271579943904}
-  - component: {fileID: 114199232866497682}
+  - component: {fileID: 114109417475093076}
   m_Layer: 0
   m_Name: Point Cloud
   m_TagString: Untagged
@@ -110,7 +110,24 @@ GameObject:
   - component: {fileID: 114691342972002194}
   m_Layer: 0
   m_Name: First Person Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1697468764586946
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224481307827379922}
+  - component: {fileID: 222217057518574508}
+  - component: {fileID: 114469207050647812}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +156,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4127636189722442}
-  - component: {fileID: 114422626707832548}
+  - component: {fileID: 114008425242733834}
   m_Layer: 0
   m_Name: Plane Generator
   m_TagString: Untagged
@@ -255,7 +272,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294966783
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -309,7 +326,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1449584331991102}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114199232866497682
+--- !u!114 &114008425242733834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1963091487287154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c669a4cc43174caea1a3748b76f2652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DetectedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
+    type: 2}
+--- !u!114 &114109417475093076
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -350,7 +380,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 02bd6f3d1516e42af87ba5dd2d38f60c, type: 3}
+  m_Texture: {fileID: 2800000, guid: a01b9e1158539bf41bc800cc56f07727, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -368,20 +398,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ca0c6a3af6b4635b7e98c6ea0a0cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SessionConfig: {fileID: 11400000, guid: 5dda85bb4292f1f43b41fef12112c3b9, type: 2}
---- !u!114 &114422626707832548
+  SessionConfig: {fileID: 11400000, guid: a4161d64a18b6854cbe37e6dae1d7275, type: 2}
+--- !u!114 &114469207050647812
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1963091487287154}
+  m_GameObject: {fileID: 1697468764586946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c669a4cc43174caea1a3748b76f2652, type: 3}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DetectedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
-    type: 2}
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 80
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 104
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'First, look slowly around to get enough points of reference
+
+
+    Second, fit the image you are scanning in this frame'
 --- !u!114 &114513731986719466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -413,6 +466,9 @@ MonoBehaviour:
   ScaleVRWorldXZ: 4
   ScaleVRWorldY: 2
   ARCoreRoot: {fileID: 1813801264257396}
+  PlaneGenerator: {fileID: 1963091487287154}
+  PointViewer: {fileID: 1449584331991102}
+  TextMessage: {fileID: 114469207050647812}
 --- !u!114 &114691342972002194
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -478,6 +534,12 @@ MonoBehaviour:
   m_TrackingType: 0
   m_UpdateType: 2
   m_UseRelativeTransform: 1
+--- !u!222 &222217057518574508
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697468764586946}
 --- !u!222 &222844511331535280
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -504,6 +566,24 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!224 &224481307827379922
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697468764586946}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224677040893817694}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 3.3, y: 34}
+  m_SizeDelta: {x: 683.9, y: 925.7}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224677040893817694
 RectTransform:
   m_ObjectHideFlags: 1
@@ -515,6 +595,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 224951378633345458}
+  - {fileID: 224481307827379922}
   m_Father: {fileID: 4012627303555770}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
