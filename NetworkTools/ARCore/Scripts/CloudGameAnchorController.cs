@@ -429,7 +429,7 @@ namespace YourNetworkingTools
 				m_prevARPosePosition = Utilities.Clone(m_positionARCorePlayer);
 				if (ENABLE_ARCORE_START_GAME_WORLD)
 				{					
-					FirstPersonCamera.enabled = false;
+					FirstPersonCamera.enabled = false;					
 #if !UNITY_EDITOR
 					if (FirstPersonCamera.GetComponent<ARCoreBackgroundRenderer>() != null)
 					{
@@ -442,6 +442,7 @@ namespace YourNetworkingTools
 					BasicSystemEventController.Instance.DispatchBasicSystemEvent(EVENT_CLOUDGAMEANCHOR_SETUP_ANCHOR, true);
 				}
 				FitToScanOverlay.SetActive(false);
+				TextMessage.gameObject.SetActive(false);
 			}
 		}
 
