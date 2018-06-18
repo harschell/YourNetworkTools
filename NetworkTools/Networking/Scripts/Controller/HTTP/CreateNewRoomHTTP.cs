@@ -12,11 +12,9 @@ namespace YourNetworkingTools
 	{
 		public const string EVENT_CLIENT_HTTP_NEW_ROOM_CREATED = "EVENT_CLIENT_HTTP_NEW_ROOM_CREATED";
 
-		private string m_urlRequest = "https://www.yourvrexperience.com/yournetworkingtools/CreateNewRoomHTTP.php";
-
 		public string UrlRequest
 		{
-			get { return m_urlRequest; }
+			get { return MultiplayerConfiguration.BalanceLoaderLoadCreateRoomPHP(); }
 		}
 
 		public string Build(params object[] _list)

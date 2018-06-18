@@ -15,8 +15,8 @@ public class ServerGame extends Thread {
 	public static final String TOKEN_SEPARATOR_PARTY    		= "@"; 
 	public static final String TOKEN_SEPARATOR_PLAYERS_IDS		= ","; 
 
-	public static final String URL_FREE_HOST = "https://www.yourvrexperience.com/yournetworkingtools/FreeHostRoomHTTP.php?";
-	public static final String URL_COMPLETED_GAME = "https://www.yourvrexperience.com/yournetworkingtools/CompletedRoomHTTP.php?";
+	public static final String URL_FREE_HOST = "http://localhost:8080/yournetworkingtools/FreeHostRoomHTTP.php?";
+	public static final String URL_COMPLETED_GAME = "http://localhost:8080/yournetworkingtools/CompletedRoomHTTP.php?";
 	
 	private boolean m_isRunning = false;
 	private ServerSocket m_serverSocket;
