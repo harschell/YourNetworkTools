@@ -26,12 +26,12 @@ namespace YourNetworkingTools
 		public const int PORT_SERVER_ADDRESS = 8745;
 
 		public const string BALANCE_LOADER_CREATE_NEW_ROOM = "http://localhost:8080/yournetworkingtools/CreateNewRoomHTTP.php";
-		public const string BALANCE_LOADER_GET_LIST_ROOMS = "http://localhost:8080/yournetworkingtools/GetListRoomsHTTP.php";
+        public const string BALANCE_LOADER_GET_LIST_ROOMS = "http://localhost:8080/yournetworkingtools/GetListRoomsHTTP.php";
 
 		public const string IP_ADDRESS_COOCKIE = "IP_ADDRESS_COOCKIE";
 		public const string PORT_ADDRESS_COOCKIE = "PORT_ADDRESS_COOCKIE";
 		public const string CREATE_ROOM_COOCKIE = "CREATE_ROOM_COOCKIE";
-		public const string LIST_ROOMS_COOCKIE = "LIST_ROOMS_COOCKIE";
+        public const string LIST_ROOMS_COOCKIE = "LIST_ROOMS_COOCKIE";
 		public const string ROOM_NUMBER_COOCKIE = "ROOM_NUMBER_COOCKIE";
 		public const string MACHINE_ID_HOST_ROOM_COOCKIE = "MACHINE_ID_HOST_ROOM_COOCKIE";
 
@@ -43,8 +43,13 @@ namespace YourNetworkingTools
 
 		public const string GOOGLE_ARCORE_COOCKIE = "GOOGLE_ARCORE_COOCKIE";
 
+		public const string DIRECTOR_MODE_COOCKIE = "DIRECTOR_MODE_COOCKIE";
+
 		public const int GOOGLE_ARCORE_DISABLED = 0;
 		public const int GOOGLE_ARCORE_ENABLED = 1;
+
+		public const int DIRECTOR_MODE_DISABLED = 0;
+		public const int DIRECTOR_MODE_ENABLED = 1;
 
 		// -------------------------------------------
 		/* 
@@ -98,43 +103,6 @@ namespace YourNetworkingTools
 		public static int LoadPortServer()
 		{
 			return PlayerPrefs.GetInt(PORT_ADDRESS_COOCKIE, PORT_SERVER_ADDRESS);
-		}
-
-
-		// -------------------------------------------
-		/* 
-		 * Will save balance loader create room PHP url
-		 */
-		public static void BalanceLoaderSaveCreateRoomPHP(string _createRoomPHP)
-		{
-			PlayerPrefs.SetString(CREATE_ROOM_COOCKIE, _createRoomPHP);
-		}
-
-		// -------------------------------------------
-		/* 
-		 * Will load balance loader create room PHP url
-		 */
-		public static string BalanceLoaderLoadCreateRoomPHP()
-		{
-			return PlayerPrefs.GetString(CREATE_ROOM_COOCKIE, BALANCE_LOADER_CREATE_NEW_ROOM);
-		}
-
-		// -------------------------------------------
-		/* 
-		 * Will save balance loader list rooms PHP url
-		 */
-		public static void BalanceLoaderSaveListRoomsPHP(string _listRoomsPHP)
-		{
-			PlayerPrefs.SetString(LIST_ROOMS_COOCKIE, _listRoomsPHP);
-		}
-
-		// -------------------------------------------
-		/* 
-		 * Will load balance loader list rooms PHP url
-		 */
-		public static string BalanceLoaderLoadListRoomsPHP()
-		{
-			return PlayerPrefs.GetString(LIST_ROOMS_COOCKIE, BALANCE_LOADER_GET_LIST_ROOMS);
 		}
 
 		// -------------------------------------------
@@ -263,6 +231,63 @@ namespace YourNetworkingTools
 		{
 			return PlayerPrefs.GetString(EXTRA_DATA_COOCKIE, "");
 		}
+
+		// -------------------------------------------
+		/* 
+		 * Will save the director mode activation
+		 */
+		public static void SaveDirectorMode(int _directorMode)
+		{
+			PlayerPrefs.SetInt(DIRECTOR_MODE_COOCKIE, _directorMode);
+		}
+
+		// -------------------------------------------
+		/* 
+		 * Will load the director mode activation
+		 */
+		public static int LoadDirectorMode(int _directorMode)
+		{
+			return PlayerPrefs.GetInt(DIRECTOR_MODE_COOCKIE, _directorMode);
+		}
+
+
+        // -------------------------------------------
+        /* 
+         * Will save balance loader create room PHP url
+         */
+        public static void BalanceLoaderSaveCreateRoomPHP(string _createRoomPHP)
+        {
+            PlayerPrefs.SetString(CREATE_ROOM_COOCKIE, _createRoomPHP);
+        }
+
+        // -------------------------------------------
+        /* 
+         * Will load balance loader create room PHP url
+         */
+        public static string BalanceLoaderLoadCreateRoomPHP()
+        {
+            return PlayerPrefs.GetString(CREATE_ROOM_COOCKIE, BALANCE_LOADER_CREATE_NEW_ROOM);
+        }
+
+        // -------------------------------------------
+        /* 
+         * Will save balance loader list rooms PHP url
+         */
+        public static void BalanceLoaderSaveListRoomsPHP(string _listRoomsPHP)
+        {
+            PlayerPrefs.SetString(LIST_ROOMS_COOCKIE, _listRoomsPHP);
+        }
+
+        // -------------------------------------------
+        /* 
+         * Will load balance loader list rooms PHP url
+         */
+        public static string BalanceLoaderLoadListRoomsPHP()
+        {
+            return PlayerPrefs.GetString(LIST_ROOMS_COOCKIE, BALANCE_LOADER_GET_LIST_ROOMS);
+        }
+
+		
 	}
 }
 

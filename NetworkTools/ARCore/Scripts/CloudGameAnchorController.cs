@@ -22,7 +22,7 @@ namespace YourNetworkingTools
 	 */
 	public class CloudGameAnchorController : MonoBehaviour
 	{
-#if ENABLE_GOOGLE_ARCORE
+
 		// ----------------------------------------------
 		// EVENTS
 		// ----------------------------------------------	
@@ -50,6 +50,7 @@ namespace YourNetworkingTools
 			}
 		}
 
+#if ENABLE_GOOGLE_ARCORE
 		// ----------------------------------------------
 		// CONSTANTS
 		// ----------------------------------------------	
@@ -79,6 +80,7 @@ namespace YourNetworkingTools
 		// ----------------------------------------------
 		private bool m_IsQuitting = false;
 		private bool m_enableImageDetection = false;
+		private bool m_isRunning = false;
 		private bool m_hasBeenInitialized = false;
 
 		// ANCHORS		
@@ -115,6 +117,7 @@ namespace YourNetworkingTools
 		{
 			Utilities.DebugLogError("CloudGameAnchorController::Awake");
 			NetworkEventController.Instance.NetworkEvent += new NetworkEventHandler(OnNetworkEvent);
+			DisableARCore(true);
 		}
 
 		// -------------------------------------------
@@ -148,9 +151,9 @@ namespace YourNetworkingTools
 
 		// -------------------------------------------
 		/* 
-		* Start
+		* Initialize
 		*/
-		public void Start()
+		public void Initialize()
 		{
 			if (GameObject.FindObjectOfType<ARCoreSession>().SessionConfig.PlaneFindingMode == DetectedPlaneFindingMode.Disabled)
 			{
@@ -177,6 +180,8 @@ namespace YourNetworkingTools
 			TextMessage.text = LanguageController.Instance.GetText("arcore.message.to.synchronize");
 
 			ResetStatus();
+
+			m_isRunning = true;
 		}
 
 		// -------------------------------------------
@@ -567,7 +572,7 @@ namespace YourNetworkingTools
 		*/
 		public void Update()
 		{
-			if (!this.gameObject.activeSelf) return;
+			if (!m_isRunning) return;
 
 			UpdateApplicationLifecycle();
 
