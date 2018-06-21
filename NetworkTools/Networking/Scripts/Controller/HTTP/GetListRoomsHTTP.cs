@@ -14,11 +14,9 @@ namespace YourNetworkingTools
 
 		public const string EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS = "EVENT_CLIENT_HTTP_LIST_OF_GAME_ROOMS";
 
-		private string m_urlRequest = "https://www.yourvrexperience.com/yournetworkingtools/GetListRoomsHTTP.php";
-
 		public string UrlRequest
 		{
-			get { return m_urlRequest; }
+			get { return MultiplayerConfiguration.BalanceLoaderLoadListRoomsPHP(); }
 		}
 
 		public string Build(params object[] _list)

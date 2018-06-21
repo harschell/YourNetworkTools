@@ -3,10 +3,10 @@
 	header('Content-type: text/html; charset=utf-8');
 		 
 	// Connecting, selecting database
-    $LINK_DATABASE = mysqli_connect("mysql.yourvrexperience.com", "username_db", "password_db")
+    $LINK_DATABASE = mysqli_connect("localhost", "root", "")
        or die("Could not connect");
     // print "Connected successfully<p>";
-    mysqli_select_db($LINK_DATABASE, "yournettools_db") or die("Database Error::Could not select database)");
+    mysqli_select_db($LINK_DATABASE, "yournetworktools") or die("Database Error::Could not select database)");
 
 	// RESPONSES WILL INCLUDE SPECIAL CHARACTERS BECAUSE THEY CONTAIN USERS' WORDS
 	mysqli_query ($LINK_DATABASE, "set character_set_client='utf8'"); 
