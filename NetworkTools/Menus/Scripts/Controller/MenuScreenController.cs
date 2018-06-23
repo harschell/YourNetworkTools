@@ -59,6 +59,12 @@ namespace YourNetworkingTools
 		[Tooltip("Name of the game options screen")]
 		public string ScreenGameOptions = "";
 
+        [Tooltip("The IP address of the server")]
+        public string ServerIPAdress = "";
+
+        [Tooltip("The IP address of the server")]
+        public int ServerPortNumber = -1;
+
         [Tooltip("Image used by ARCore to set the anchor")]
         public Sprite ScanImageARCore;
 
@@ -104,7 +110,10 @@ namespace YourNetworkingTools
 			LanguageController.Instance.Initialize();
 			SoundsController.Instance.Initialize();
 
-			UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
+            if (ServerIPAdress.Length > 0) MultiplayerConfiguration.SaveIPAddressServer(ServerIPAdress);
+            if (ServerPortNumber != -1) MultiplayerConfiguration.SavePortServer(ServerPortNumber);
+
+            UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
 #if UNITY_EDITOR
             CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
