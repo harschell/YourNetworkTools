@@ -59,10 +59,13 @@ namespace YourNetworkingTools
 		[Tooltip("Name of the game options screen")]
 		public string ScreenGameOptions = "";
 
-		// ----------------------------------------------
-		// PUBLIC MEMBERS
-		// ----------------------------------------------
-		public Sprite IconApp;
+        [Tooltip("Image used by ARCore to set the anchor")]
+        public Sprite ScanImageARCore;
+
+        // ----------------------------------------------
+        // PUBLIC MEMBERS
+        // ----------------------------------------------
+        public Sprite IconApp;
 		public Sprite LogoApp;
 
 		// ----------------------------------------------

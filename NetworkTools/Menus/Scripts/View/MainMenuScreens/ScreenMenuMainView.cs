@@ -59,9 +59,16 @@ namespace YourNetworkingTools
 
 			GameObject instructionsGame = m_container.Find("Button_Instructions").gameObject;
 			instructionsGame.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.main.menu.instructions.game");
-			instructionsGame.GetComponent<Button>().onClick.AddListener(InstructionsGamePressed);
+			instructionsGame.GetComponent<Button>().onClick.AddListener(InstructionsGame);
 
-			m_container.Find("Button_Exit").GetComponent<Button>().onClick.AddListener(ExitPressed);
+            if (m_container.Find("Button_ImageARCore") != null)
+            {
+                GameObject scanAnchorImageARCoreGame = m_container.Find("Button_ImageARCore").gameObject;
+                scanAnchorImageARCoreGame.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.main.menu.arcore.image");
+                scanAnchorImageARCoreGame.GetComponent<Button>().onClick.AddListener(ImageScanARCore);
+            }
+
+            m_container.Find("Button_Exit").GetComponent<Button>().onClick.AddListener(ExitPressed);
 
 			SoundsController.Instance.PlayLoopSound(SoundsConfiguration.SOUND_MAIN_MENU);
 
@@ -115,7 +122,7 @@ namespace YourNetworkingTools
 		/* 
 		 * InstructionsGamePressed
 		 */
-		private void InstructionsGamePressed()
+		private void InstructionsGame()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			List<PageInformation> pages = new List<PageInformation>();
@@ -126,12 +133,23 @@ namespace YourNetworkingTools
 			MenuScreenController.Instance.CreateNewScreen(ScreenInformationView.SCREEN_INFORMATION_IMAGE, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, pages);
 		}
 
+        // -------------------------------------------
+        /* 
+		 * ImageScanARCore
+		 */
+        private void ImageScanARCore()
+        {
+            SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
+            List<PageInformation> pages = new List<PageInformation>();
+            pages.Add(new PageInformation(LanguageController.Instance.GetText("screen.arcore.scan.title"), LanguageController.Instance.GetText("screen.scan.image.arcore"), MenuScreenController.Instance.ScanImageARCore, ""));
+            MenuScreenController.Instance.CreateNewScreen(ScreenInformationView.SCREEN_INFORMATION_IMAGE, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, pages);
+        }        
 
-		// -------------------------------------------
-		/* 
+        // -------------------------------------------
+        /* 
 		 * Exit button pressed
 		 */
-		private void ExitPressed()
+        private void ExitPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_CONFIRMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.warning"), LanguageController.Instance.GetText("message.do.you.want.exit"), null, SUB_EVENT_SCREENMAIN_CONFIRMATION_EXIT_APP);
