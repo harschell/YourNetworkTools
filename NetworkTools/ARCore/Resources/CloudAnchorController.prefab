@@ -299,7 +299,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: fb4fbd1b92e244df2bc6f43deb7a57a2, type: 2}
+  - {fileID: 2100000, guid: d9dea94e8b184b14fb827fdd1d899640, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c669a4cc43174caea1a3748b76f2652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DetectedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
+  DetectedPlanePrefab: {fileID: 1654175882956584, guid: 6720ceaf90a50ca409dabf857fc699ab,
     type: 2}
 --- !u!114 &114109417475093076
 MonoBehaviour:
@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ca0c6a3af6b4635b7e98c6ea0a0cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SessionConfig: {fileID: 11400000, guid: a4161d64a18b6854cbe37e6dae1d7275, type: 2}
+  SessionConfig: {fileID: 0}
 --- !u!114 &114469207050647812
 MonoBehaviour:
   m_ObjectHideFlags: 1

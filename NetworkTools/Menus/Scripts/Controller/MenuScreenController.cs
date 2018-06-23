@@ -107,12 +107,12 @@ namespace YourNetworkingTools
 			UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
 #if UNITY_EDITOR
-			CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
-			// CreateNewScreen(ScreenSplashView.SCREEN_NAME, ScreenTypePreviousActionEnum.DESTROY_ALL_SCREENS, true);
+            CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            // CreateNewScreen(ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
 #else
 		CreateNewScreen(ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);        
 #endif
-		}
+        }
 
 		// -------------------------------------------
 		/* 
