@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ca0c6a3af6b4635b7e98c6ea0a0cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SessionConfig: {fileID: 0}
+  SessionConfig: {fileID: 11400000, guid: 5dda85bb4292f1f43b41fef12112c3b9, type: 2}
 --- !u!114 &114469207050647812
 MonoBehaviour:
   m_ObjectHideFlags: 1
