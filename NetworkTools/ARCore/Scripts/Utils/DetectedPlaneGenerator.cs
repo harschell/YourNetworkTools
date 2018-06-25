@@ -18,6 +18,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if ENABLE_GOOGLE_ARCORE
 namespace YourNetworkingTools
 {
     using System.Collections.Generic;
@@ -64,3 +65,4 @@ namespace YourNetworkingTools
         }
     }
 }
+#endif
