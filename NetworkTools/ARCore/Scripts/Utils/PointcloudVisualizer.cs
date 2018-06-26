@@ -17,6 +17,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if ENABLE_GOOGLE_ARCORE
 namespace YourNetworkingTools
 {
     using GoogleARCore;
@@ -70,3 +71,4 @@ namespace YourNetworkingTools
         }
     }
 }
+#endif
