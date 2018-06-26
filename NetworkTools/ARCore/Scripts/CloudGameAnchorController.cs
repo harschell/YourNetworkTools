@@ -176,8 +176,11 @@ namespace YourNetworkingTools
 			}
 			GameCamera.enabled = false;
 
-			LanguageController.Instance.Initialize();
-			TextMessage.text = LanguageController.Instance.GetText("arcore.message.to.synchronize");
+            if (GameObject.FindObjectOfType<LanguageController>() != null)
+            {
+                LanguageController.Instance.Initialize();
+                TextMessage.text = LanguageController.Instance.GetText("arcore.message.to.synchronize");
+            }
 
 			ResetStatus();
 
