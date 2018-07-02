@@ -1,2 +1,2 @@
-java -cp ServerYourNetworkTools.jar Main.Server localhost 8745 false true
+java -cp ServerYourNetworkTools.jar Main.Server localhost 8892 false true
 pause

@@ -21,10 +21,15 @@ namespace YourNetworkingTools
 	{
 		public const string SCREEN_NAME = "SCREEN_CREATE_ROOM";
 
-		// ----------------------------------------------
-		// PRIVATE MEMBERS
-		// ----------------------------------------------	
-		private GameObject m_root;
+        // ----------------------------------------------
+        // EVENTS
+        // ----------------------------------------------	
+        public const string EVENT_SCREENCREATEROOM_CREATE_RANDOM_NAME = "EVENT_SCREENCREATEROOM_CREATE_RANDOM_NAME";
+
+        // ----------------------------------------------
+        // PRIVATE MEMBERS
+        // ----------------------------------------------	
+        private GameObject m_root;
 		private Transform m_container;
 
 		// -------------------------------------------
@@ -85,7 +90,7 @@ namespace YourNetworkingTools
 			string roomName = m_container.Find("RoomName").GetComponent<InputField>().text;
 			if (roomName.Length < 5)
 			{
-				MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.lobby.no.name.in.create.room"), null, "");
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_INFORMATION_SCREEN,ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.lobby.no.name.in.create.room"), null, "");
 			}
 			else
 			{
@@ -96,7 +101,7 @@ namespace YourNetworkingTools
 				}
 				else
 				{
-					MenuScreenController.Instance.CreateNewScreen(ScreenMenuNumberPlayersView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuNumberPlayersView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 				}
 			}
 			Destroy();
@@ -109,7 +114,7 @@ namespace YourNetworkingTools
 		private void BackPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMainLobbyView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+			UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMainLobbyView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -124,6 +129,10 @@ namespace YourNetworkingTools
 			{
 				BackPressed();
 			}
-		}
-	}
+            if (_nameEvent == EVENT_SCREENCREATEROOM_CREATE_RANDOM_NAME)
+            {
+                m_container.Find("RoomName").GetComponent<InputField>().text = "NameRoom" + UnityEngine.Random.Range(1000, 100000);
+            }
+        }
+    }
 }

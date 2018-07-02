@@ -58,12 +58,25 @@ namespace YourNetworkingTools
 
         // -------------------------------------------
         /* 
+		 * Destroy
+		 */
+        public override bool Destroy()
+        {
+            if (base.Destroy()) return true;
+            UIEventController.Instance.UIEvent -= OnMenuEvent;
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN, ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false);
+            return false;
+        }
+
+        // -------------------------------------------
+        /* 
 		 * Constructor
 		 */
         IEnumerator ShowSplashDelay()
         {
             yield return new WaitForSeconds(5);
-            MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            Destroy();
         }
 
         // -------------------------------------------
@@ -72,7 +85,7 @@ namespace YourNetworkingTools
 		 */
         private void PlayGame()
         {
-            MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            Destroy();
         }
 
         // -------------------------------------------

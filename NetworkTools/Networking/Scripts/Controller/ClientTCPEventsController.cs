@@ -360,7 +360,7 @@ namespace YourNetworkingTools
 				{
 					if (ClientNewConnection(networkIDPlayer))
 					{
-						NetworkEventController.Instance.DispatchNetworkEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, m_uniqueNetworkID.ToString());
+						NetworkEventController.Instance.DelayNetworkEvent(NetworkEventController.EVENT_SYSTEM_INITIALITZATION_REMOTE_COMPLETED, 0.2f, m_uniqueNetworkID.ToString());
 					}
 				}
 			}
