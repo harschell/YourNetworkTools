@@ -108,8 +108,17 @@ public class ClientConnection  {
 			int dataLength = BytesToIntegerLE(sizeEventBytes);
 			byte[] packetData = new byte[dataLength];
 			m_din.read(packetData, 0, dataLength);
-			_packet.write(packetData);
-			return typeData;
+			if ((dataLength > 0) && (dataLength < 2000))
+			{
+				_packet.write(packetData);
+				return typeData;
+			}
+			else
+			{
+				System.out.println("ClientConnection::ReadPacket::typeData="+typeData);
+				System.out.println("ClientConnection::ReadPacket::dataLength="+dataLength);
+				return -1;	
+			}			
 		}
 		catch (Exception err)
 		{

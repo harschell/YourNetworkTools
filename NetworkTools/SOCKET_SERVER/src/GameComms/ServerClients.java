@@ -166,7 +166,14 @@ public class ServerClients extends Thread {
 				if (clientConnection.IsThereDataAvailable())
 				{
 					ByteArrayOutputStream packet = new ByteArrayOutputStream();
-					if (clientConnection.ReadPacket(packet) == ClientConnection.MESSAGE_EVENT)
+					int typeEventReceived = clientConnection.ReadPacket(packet);
+					if (typeEventReceived == -1)
+					{
+						DeleteClient(clientConnection, false);
+						return null;
+					}
+					else
+					if (typeEventReceived == ClientConnection.MESSAGE_EVENT)
 					{
 						String messageBroadcast = clientConnection.ReadEvent(packet.toByteArray());
 						if (messageBroadcast != null)
