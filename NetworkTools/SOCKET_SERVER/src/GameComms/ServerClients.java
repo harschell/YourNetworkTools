@@ -86,14 +86,17 @@ public class ServerClients extends Thread {
 		return false;
 	}
 
-	private boolean DeleteClient(ClientConnection _clientClosed) 
+	private boolean DeleteClient(ClientConnection _clientClosed, boolean _sendEvent) 
 	{
 		for (int i = 0; i < m_listClients.size(); i++)
         {
 			ClientConnection clientSocket = m_listClients.elementAt(i);
 			if (clientSocket == _clientClosed)
 			{
-				BasicController.getInstance().DispatchMyEvent(EVENT_SERVERCLIENTS_DELETE_CLIENT, clientSocket.GetLocalID());
+				if (_sendEvent)
+				{
+					BasicController.getInstance().DispatchMyEvent(EVENT_SERVERCLIENTS_DELETE_CLIENT, clientSocket.GetLocalID());
+				}
 				m_listClients.removeElementAt(i);
 				return true;
 			}
@@ -163,7 +166,14 @@ public class ServerClients extends Thread {
 				if (clientConnection.IsThereDataAvailable())
 				{
 					ByteArrayOutputStream packet = new ByteArrayOutputStream();
-					if (clientConnection.ReadPacket(packet) == ClientConnection.MESSAGE_EVENT)
+					int typeEventReceived = clientConnection.ReadPacket(packet);
+					if (typeEventReceived == -1)
+					{
+						DeleteClient(clientConnection, false);
+						return null;
+					}
+					else
+					if (typeEventReceived == ClientConnection.MESSAGE_EVENT)
 					{
 						String messageBroadcast = clientConnection.ReadEvent(packet.toByteArray());
 						if (messageBroadcast != null)
@@ -175,6 +185,7 @@ public class ServerClients extends Thread {
 				}				
 			} catch (Exception err)
 			{
+				DeleteClient(clientConnection, false);
 				if (ServerGame.EnableLogMessages)
 				{
 					System.out.println("ServerClient::ReadMessage:Exception="+err.getMessage());	
@@ -223,7 +234,7 @@ public class ServerClients extends Thread {
 			{
 				if (!clientSocket.TestAlive())
 				{
-					if (DeleteClient(clientSocket))
+					if (DeleteClient(clientSocket, true))
 					{
 						i--;
 						if (ServerGame.EnableLogMessages) System.out.println("*****************************DELETING CLIENT["+i+"]");
@@ -278,7 +289,7 @@ public class ServerClients extends Thread {
 				if (ServerGame.EnableLogMessages) System.out.println("+++++++++++++++++++++++++++++JOINING ROOM["+roomNumber+"]");
 			}
 			serverRoom.AddNewClient(m_currentConnection.GetSocket());
-			DeleteClient(m_currentConnection);
+			DeleteClient(m_currentConnection, true);
 			BasicController.getInstance().DispatchMyEvent(EVENT_CLIENT_TCP_ROOM_ID, m_currentConnection.GetLocalID(), roomNumber,  roomName, serverRoom.GetTotalNumberPlayers());
 			if (roomNumber != -1)
 			{

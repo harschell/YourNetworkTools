@@ -435,6 +435,7 @@ namespace YourNetworkingTools
 		 */
 		IEnumerator LoadScene()
 		{
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_LOAD_NEW_SCENE);
 			yield return new WaitForSeconds(0.1f);
 			SceneManager.LoadScene(m_targetScene);
 		}
