@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YourCommonTools;
+#if ENABLE_YOURVRUI
+using YourVRUI;
+#endif
 
 namespace YourNetworkingTools
 {
@@ -68,6 +71,12 @@ namespace YourNetworkingTools
         [Tooltip("Image used by ARCore to set the anchor")]
         public Sprite ScanImageARCore;
 
+        [Tooltip("Main camera used to display the menus in 2D")]
+        public GameObject MainCamera2D;
+
+        [Tooltip("Components to display the menus in VR")]
+        public GameObject VRComponents;
+
         // ----------------------------------------------
         // PUBLIC MEMBERS
         // ----------------------------------------------
@@ -116,10 +125,10 @@ namespace YourNetworkingTools
             UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
 #if UNITY_EDITOR
-            CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
-            // CreateNewScreen(ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            // UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
 #else
-		CreateNewScreen(ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);        
+		UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);        
 #endif
         }
 
@@ -149,44 +158,119 @@ namespace YourNetworkingTools
 		 */
 		protected override void OnUIEvent(string _nameEvent, params object[] _list)
 		{
-			base.OnUIEvent(_nameEvent, _list);
+#if ENABLE_YOURVRUI
+            ProcessConnectionEvents(_nameEvent, _list);
 
-			if (_nameEvent == ClientTCPEventsController.EVENT_CLIENT_TCP_CONNECTED_ROOM)
-			{
-				NetworkEventController.Instance.MenuController_SaveNumberOfPlayers((int)_list[0]);
-				CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
-				NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
-			}
-			if (_nameEvent == EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE)
-			{
-				CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
-			}
-			if (_nameEvent == CreateNewRoomHTTP.EVENT_CLIENT_HTTP_NEW_ROOM_CREATED)
-			{
-				// CREATE ROOM IN LOBBY
-				UIEventController.Instance.DispatchUIEvent(ScreenController.EVENT_FORCE_DESTRUCTION_POPUP);
-				if (_list.Length == 4)
-				{
-					NetworkEventController.Instance.MenuController_SaveRoomNumberInServer((int)_list[0]);
-					NetworkEventController.Instance.MenuController_SaveIPAddressServer((string)_list[1]);
-					NetworkEventController.Instance.MenuController_SavePortServer((int)_list[2]);
-					NetworkEventController.Instance.MenuController_SaveMachineIDServer((int)_list[3]);
-					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
-					NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
-				}
-				else
-				{
-					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
-					CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.room.not.created.right"), null, "");
-				}
-			}
-		}
+            ProcessVRUIScreens(_nameEvent, _list);
+#else
+            base.OnUIEvent(_nameEvent, _list);
 
-		// -------------------------------------------
-		/* 
+            ProcessConnectionEvents(_nameEvent, _list);
+#endif
+        }
+
+        // -------------------------------------------
+        /* 
+		 * Process connection events
+		 */
+        protected void ProcessConnectionEvents(string _nameEvent, params object[] _list)
+        {
+            if (_nameEvent == ClientTCPEventsController.EVENT_CLIENT_TCP_CONNECTED_ROOM)
+            {
+                NetworkEventController.Instance.MenuController_SaveNumberOfPlayers((int)_list[0]);
+                UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+                NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
+            }
+            if (_nameEvent == EVENT_MENUEVENTCONTROLLER_SHOW_LOADING_MESSAGE)
+            {
+                UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+            }
+            if (_nameEvent == CreateNewRoomHTTP.EVENT_CLIENT_HTTP_NEW_ROOM_CREATED)
+            {
+                // CREATE ROOM IN LOBBY
+                UIEventController.Instance.DispatchUIEvent(ScreenController.EVENT_FORCE_DESTRUCTION_POPUP);
+                if (_list.Length == 4)
+                {
+                    NetworkEventController.Instance.MenuController_SaveRoomNumberInServer((int)_list[0]);
+                    NetworkEventController.Instance.MenuController_SaveIPAddressServer((string)_list[1]);
+                    NetworkEventController.Instance.MenuController_SavePortServer((int)_list[2]);
+                    NetworkEventController.Instance.MenuController_SaveMachineIDServer((int)_list[3]);
+                    UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+                    NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
+                }
+                else
+                {
+                    UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
+                    CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.room.not.created.right"), null, "");
+                }
+            }
+        }
+
+        // -------------------------------------------
+        /* 
+		 * Process optional VR menus
+		 */
+        protected void ProcessVRUIScreens(string _nameEvent, params object[] _list)
+        {
+#if ENABLE_YOURVRUI
+            if (YourVRUIScreenController.Instance == null)
+            {
+                ProcessScreenEvents(_nameEvent, _list);
+            }
+            else
+            {
+                if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN)
+                {
+                    if (_list.Length > 2)
+                    {
+                        if ((bool)_list[2])
+                        {
+                            YourVRUIScreenController.Instance.DestroyScreens();
+                        }
+                        else
+                        {
+                            YourVRUIScreenController.Instance.EnableScreens = true;
+                        }
+                    }
+                    List<PageInformation> pages = null;
+                    if (_list.Length > 3)
+                    {
+                        pages = (List<PageInformation>)_list[3];
+                    }
+                    YourVRUIScreenController.Instance.CreateScreenLinkedToCamera(GetScreenPrefabByName((string)_list[0]), pages, 1.5f, -1, false, -1, (UIScreenTypePreviousAction)_list[1]);
+                    if ((string)_list[0] == ScreenCreateRoomView.SCREEN_NAME)
+                    {
+                        UIEventController.Instance.DispatchUIEvent(ScreenCreateRoomView.EVENT_SCREENCREATEROOM_CREATE_RANDOM_NAME);
+                    }
+                }
+                if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_OPEN_INFORMATION_SCREEN)
+                {
+                    string nameScreen = (string)_list[0];
+                    UIScreenTypePreviousAction previousAction = (UIScreenTypePreviousAction)_list[1];
+                    string title = (string)_list[2];
+                    string description = (string)_list[3];
+                    Sprite image = (Sprite)_list[4];
+                    string eventData = (string)_list[5];
+                    List<PageInformation> pages = new List<PageInformation>();
+                    pages.Add(new PageInformation(title, description, image, eventData, "", ""));
+                    YourVRUIScreenController.Instance.CreateScreenLinkedToCamera(GetScreenPrefabByName((string)_list[0]), pages, 1.5f, -1, false, -1, previousAction);
+                }
+                if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_LOAD_NEW_SCENE)
+                {
+                    if (YourVRUIScreenController.Instance != null)
+                    {
+                        YourVRUIScreenController.Instance.Destroy();
+                    }
+                }
+            }
+#endif
+        }
+
+        // -------------------------------------------
+        /* 
 		 * Create the room in server
 		 */
-		public void CreateRoomInServer(int _finalNumberOfPlayers, string _extraData)
+        public void CreateRoomInServer(int _finalNumberOfPlayers, string _extraData)
 		{
 			// NUMBER OF PLAYERS
 			int finalNumberOfPlayers = _finalNumberOfPlayers;
@@ -207,13 +291,13 @@ namespace YourNetworkingTools
 				}
 				else
 				{
-					if (ScreenGameOptions.Length > 0)
+                    if (ScreenGameOptions.Length > 0)
 					{
-						CreateNewScreen(ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+						UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					}
 					else
 					{
-						CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+						UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 						NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
 					}
 				}
@@ -251,7 +335,7 @@ namespace YourNetworkingTools
 			NetworkEventController.Instance.MenuController_SaveNumberOfPlayers(m_numberOfPlayers);
 			if (ScreenGameOptions.Length > 0)
 			{
-				CreateNewScreen(ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 			}
 			else
 			{
@@ -269,15 +353,15 @@ namespace YourNetworkingTools
 			{
 				if (_checkScreenGameOptions && (MenuScreenController.Instance.ScreenGameOptions.Length > 0))
 				{
-					MenuScreenController.Instance.CreateNewScreen(MenuScreenController.Instance.ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,MenuScreenController.Instance.ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 				}
 				else
 				{
-					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					MultiplayerConfiguration.SaveExtraData(m_extraData);
 					if (!YourNetworkTools.GetIsLocalGame())
-					{						
-						JoinARoomInServer();
+					{
+                        JoinARoomInServer();
 					}
 					else
 					{
@@ -301,7 +385,7 @@ namespace YourNetworkingTools
 				else
 				{
 					MultiplayerConfiguration.SaveExtraData(m_extraData);
-					CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 					NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
 				}
 			}
@@ -318,7 +402,7 @@ namespace YourNetworkingTools
 			{
 				// JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
-				CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 				NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
 #else
 				NetworkEventController.Instance.MenuController_JoinRoomOfLobby(MultiplayerConfiguration.LoadRoomNumberInServer(-1), "null", "extraData");
@@ -328,7 +412,7 @@ namespace YourNetworkingTools
 			{
 				// JOIN ROOM IN FACEBOOK
 #if ENABLE_BALANCE_LOADER
-				CreateNewScreen(ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenLoadingView.SCREEN_NAME, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, false, null);
 				NetworkEventController.Instance.MenuController_LoadGameScene(TargetGameScene);
 #else
 				NetworkEventController.Instance.MenuController_JoinRoomForFriends(MultiplayerConfiguration.LoadRoomNumberInServer(-1), "null", "extraData");

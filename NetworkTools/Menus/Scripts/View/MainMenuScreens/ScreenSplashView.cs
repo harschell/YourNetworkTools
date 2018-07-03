@@ -19,6 +19,8 @@ namespace YourNetworkingTools
 
         private Transform m_container;
 
+        private float m_timerToVRMenus = 5.9f;
+
         // -------------------------------------------
         /* 
 		 * Constructor
@@ -58,12 +60,28 @@ namespace YourNetworkingTools
 
         // -------------------------------------------
         /* 
+		 * Destroy
+		 */
+        public override bool Destroy()
+        {
+            if (base.Destroy()) return true;
+            UIEventController.Instance.UIEvent -= OnMenuEvent;
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_DESTROY_SCREEN, this.gameObject);
+            if (m_timerToVRMenus > 0)
+            {
+                UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN, ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false);
+            }
+            return false;
+        }
+
+        // -------------------------------------------
+        /* 
 		 * Constructor
 		 */
         IEnumerator ShowSplashDelay()
         {
             yield return new WaitForSeconds(5);
-            MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            Destroy();
         }
 
         // -------------------------------------------
@@ -72,7 +90,7 @@ namespace YourNetworkingTools
 		 */
         private void PlayGame()
         {
-            MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            Destroy();
         }
 
         // -------------------------------------------
@@ -92,5 +110,28 @@ namespace YourNetworkingTools
 		{
 			return this.gameObject;
 		}
-	}
+
+        // -------------------------------------------
+        /* 
+		 * Update
+		 */
+        public void Update()
+        {
+            if ((MenuScreenController.Instance.VRComponents != null) && (MenuScreenController.Instance.MainCamera2D != null))
+            {
+                m_timerToVRMenus -= Time.deltaTime;
+                if (m_timerToVRMenus > 0)
+                {
+                    m_container.Find("Button_Play/Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.splash.timer.2d.game", (int)m_timerToVRMenus);
+                }
+                else
+                {
+                    Destroy();
+                    MenuScreenController.Instance.MainCamera2D.SetActive(false);
+                    MenuScreenController.Instance.VRComponents.SetActive(true);
+                    UIEventController.Instance.DelayUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN, 0.2f, ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false);
+                }
+            }
+        }
+    }
 }

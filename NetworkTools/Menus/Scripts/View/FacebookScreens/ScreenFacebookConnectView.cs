@@ -122,7 +122,7 @@ namespace YourNetworkingTools
 		private void BackPressed()
 		{
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
-			MenuScreenController.Instance.CreateNewScreen(ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+			UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 		}
 
 		// -------------------------------------------
@@ -140,7 +140,7 @@ namespace YourNetworkingTools
 					PlayerPrefs.SetInt(USER_FACEBOOK_CONNECTED_COOCKIE, 1);
 					// NO CONNECT TCP, GO TO MAIN FACEBOOK
 #if ENABLE_BALANCE_LOADER
-					MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenFacebookMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 #else
 					m_textDescription.text = LanguageController.Instance.GetText("message.facebook.connecting.to.server");
 					NetworkEventController.Instance.MenuController_InitialitzationSocket(-1, 0);
@@ -152,12 +152,12 @@ namespace YourNetworkingTools
 					m_textDescription.text = LanguageController.Instance.GetText("message.facebook.description.connect.for.friends");
 					m_connectionFacebookButton.SetActive(true);
 					m_buttonBack.gameObject.SetActive(true);
-					MenuScreenController.Instance.CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.facebook.connection.error"), null, "");
+					UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_INFORMATION_SCREEN,ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.facebook.connection.error"), null, "");
 				}
 			}
 			if (_nameEvent == ClientTCPEventsController.EVENT_CLIENT_TCP_ESTABLISH_NETWORK_ID)
 			{
-				MenuScreenController.Instance.CreateNewScreen(ScreenFacebookMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenFacebookMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
 			}
 			if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_ANDROID_BACK_BUTTON)
 			{
