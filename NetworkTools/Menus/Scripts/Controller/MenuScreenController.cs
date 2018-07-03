@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using YourCommonTools;
+#if ENABLE_YOURVRUI
+using YourVRUI;
+#endif
 
 namespace YourNetworkingTools
 {
@@ -155,9 +158,15 @@ namespace YourNetworkingTools
 		 */
 		protected override void OnUIEvent(string _nameEvent, params object[] _list)
 		{
-			base.OnUIEvent(_nameEvent, _list);
+#if ENABLE_YOURVRUI
+            ProcessConnectionEvents(_nameEvent, _list);
+
+            ProcessVRUIScreens(_nameEvent, _list);
+#else
+            base.OnUIEvent(_nameEvent, _list);
 
             ProcessConnectionEvents(_nameEvent, _list);
+#endif
         }
 
         // -------------------------------------------
@@ -195,6 +204,66 @@ namespace YourNetworkingTools
                     CreateNewInformationScreen(ScreenInformationView.SCREEN_INFORMATION, UIScreenTypePreviousAction.KEEP_CURRENT_SCREEN, LanguageController.Instance.GetText("message.error"), LanguageController.Instance.GetText("screen.room.not.created.right"), null, "");
                 }
             }
+        }
+
+        // -------------------------------------------
+        /* 
+		 * Process optional VR menus
+		 */
+        protected void ProcessVRUIScreens(string _nameEvent, params object[] _list)
+        {
+#if ENABLE_YOURVRUI
+            if (YourVRUIScreenController.Instance == null)
+            {
+                ProcessScreenEvents(_nameEvent, _list);
+            }
+            else
+            {
+                if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN)
+                {
+                    if (_list.Length > 2)
+                    {
+                        if ((bool)_list[2])
+                        {
+                            YourVRUIScreenController.Instance.DestroyScreens();
+                        }
+                        else
+                        {
+                            YourVRUIScreenController.Instance.EnableScreens = true;
+                        }
+                    }
+                    List<PageInformation> pages = null;
+                    if (_list.Length > 3)
+                    {
+                        pages = (List<PageInformation>)_list[3];
+                    }
+                    YourVRUIScreenController.Instance.CreateScreenLinkedToCamera(GetScreenPrefabByName((string)_list[0]), pages, 1.5f, -1, false, -1, (UIScreenTypePreviousAction)_list[1]);
+                    if ((string)_list[0] == ScreenCreateRoomView.SCREEN_NAME)
+                    {
+                        UIEventController.Instance.DispatchUIEvent(ScreenCreateRoomView.EVENT_SCREENCREATEROOM_CREATE_RANDOM_NAME);
+                    }
+                }
+                if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_OPEN_INFORMATION_SCREEN)
+                {
+                    string nameScreen = (string)_list[0];
+                    UIScreenTypePreviousAction previousAction = (UIScreenTypePreviousAction)_list[1];
+                    string title = (string)_list[2];
+                    string description = (string)_list[3];
+                    Sprite image = (Sprite)_list[4];
+                    string eventData = (string)_list[5];
+                    List<PageInformation> pages = new List<PageInformation>();
+                    pages.Add(new PageInformation(title, description, image, eventData, "", ""));
+                    YourVRUIScreenController.Instance.CreateScreenLinkedToCamera(GetScreenPrefabByName((string)_list[0]), pages, 1.5f, -1, false, -1, previousAction);
+                }
+                if (_nameEvent == UIEventController.EVENT_SCREENMANAGER_LOAD_NEW_SCENE)
+                {
+                    if (YourVRUIScreenController.Instance != null)
+                    {
+                        YourVRUIScreenController.Instance.Destroy();
+                    }
+                }
+            }
+#endif
         }
 
         // -------------------------------------------
