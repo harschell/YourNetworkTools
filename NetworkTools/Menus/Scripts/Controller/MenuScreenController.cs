@@ -68,6 +68,12 @@ namespace YourNetworkingTools
         [Tooltip("Image used by ARCore to set the anchor")]
         public Sprite ScanImageARCore;
 
+        [Tooltip("Main camera used to display the menus in 2D")]
+        public GameObject MainCamera2D;
+
+        [Tooltip("Components to display the menus in VR")]
+        public GameObject VRComponents;
+
         // ----------------------------------------------
         // PUBLIC MEMBERS
         // ----------------------------------------------
@@ -116,8 +122,8 @@ namespace YourNetworkingTools
             UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
 #if UNITY_EDITOR
-            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
-            // UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            // UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
 #else
 		UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);        
 #endif
