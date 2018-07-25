@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 223229485714980314}
   - component: {fileID: 114318334060952436}
   - component: {fileID: 114951535808611532}
-  - component: {fileID: 114549372423981902}
+  - component: {fileID: 114064006516866794}
   m_Layer: 5
   m_Name: SCREEN_INFORMATION_IMAGE
   m_TagString: Untagged
@@ -221,6 +221,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114064006516866794
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1933072593454806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5cd12fc56c193449170aa22e4a4a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectorGraphic: {fileID: 0}
 --- !u!114 &114147720169440042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -500,18 +512,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114549372423981902
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1933072593454806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc7b3f33de044fe4fa1e8f9079860509, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectorGraphic: {fileID: 0}
 --- !u!114 &114578745886243938
 MonoBehaviour:
   m_ObjectHideFlags: 1
