@@ -48,6 +48,9 @@ public class ClientConnection  {
 	private long m_timeAcum = 0;
 	private int m_counterDisconnect = -11;
 	private long last_time = 0;
+	
+	private int m_typeData = -1;
+	private int m_dataLength = 0;
 
 	// ----------------------------------------------
 	// FUNCTIONS
@@ -102,23 +105,36 @@ public class ClientConnection  {
 	{
 		try 
 		{
-			int typeData = m_din.readByte();
-			byte[] sizeEventBytes = new byte[4];
-			int totalBytesRead = m_din.read(sizeEventBytes, 0, 4);
-			int dataLength = BytesToIntegerLE(sizeEventBytes);
-			byte[] packetData = new byte[dataLength];
-			m_din.read(packetData, 0, dataLength);
-			if ((dataLength > 0) && (dataLength < 2000))
+			if (m_dataLength == 0)
 			{
-				_packet.write(packetData);
-				return typeData;
+				m_typeData = m_din.readByte();
+				byte[] sizeEventBytes = new byte[4];
+				int totalBytesRead = m_din.read(sizeEventBytes, 0, 4);
+				m_dataLength = BytesToIntegerLE(sizeEventBytes);
+			}
+			if (m_dataLength - NumberDataAvailable() <= 0)
+			{
+				byte[] packetData = new byte[m_dataLength];
+				m_din.read(packetData, 0, m_dataLength);
+				if ((m_dataLength > 0) && (m_dataLength < 200000))
+				{
+					_packet.write(packetData);
+					m_dataLength = 0;
+					return m_typeData;
+				}
+				else
+				{
+					System.out.println("ClientConnection::ReadPacket::ERROR PACKET TO BIG::typeData="+m_typeData);
+					System.out.println("ClientConnection::ReadPacket::ERROR PACKET TO BIG::dataLength="+m_dataLength);
+					m_dataLength = 0;
+					return -1;
+				}			
 			}
 			else
 			{
-				System.out.println("ClientConnection::ReadPacket::typeData="+typeData);
-				System.out.println("ClientConnection::ReadPacket::dataLength="+dataLength);
-				return -1;	
-			}			
+				if (ServerGame.EnableLogMessages) System.out.println("ClientConnection::ReadPacket::STILL WAITING FOR DATA["+m_dataLength+"]::DataAvailable()="+NumberDataAvailable());
+				return -1;
+			}
 		}
 		catch (Exception err)
 		{
