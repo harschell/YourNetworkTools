@@ -810,7 +810,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: DO NOT SHOUT ME!! I'M JUST BLIND!!
+  m_Text: Your Network Tools
 --- !u!114 &114907987902936250
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -864,6 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978eb27f85f838e4abc762da73827dc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectorGraphic: {fileID: 0}
 --- !u!114 &114969710831981858
 MonoBehaviour:
   m_ObjectHideFlags: 1
