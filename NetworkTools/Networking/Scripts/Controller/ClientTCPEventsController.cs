@@ -125,7 +125,7 @@ namespace YourNetworkingTools
 		/* 
 		 * Set up the connection with the server
 		 */
-		public void Initialitzation(string _host, int _port, int _room, int _hostRoomID)
+		public void Initialitzation(string _host, int _port, int _room, int _hostRoomID, int _bufferReceive = 65536, int _timeoutReceive = 0, int _bufferSend = 65536, int _timeoutSend = 0)
 		{
 			if (m_socketConnected)
 			{
@@ -141,7 +141,11 @@ namespace YourNetworkingTools
 				m_host = _host;
 				m_port = _port;
 				m_mySocket = new TcpClient(m_host, m_port);
-				m_theStream = m_mySocket.GetStream();
+                m_mySocket.SendBufferSize = _bufferSend;
+                m_mySocket.ReceiveBufferSize = _bufferReceive;
+                m_mySocket.ReceiveTimeout = _timeoutReceive;
+                m_mySocket.SendTimeout = _timeoutSend;
+                m_theStream = m_mySocket.GetStream();
 				m_theWriter = new StreamWriter(m_theStream);
 				m_theReader = new StreamReader(m_theStream);
 				m_binWriter = new BinaryWriter(m_theStream);
