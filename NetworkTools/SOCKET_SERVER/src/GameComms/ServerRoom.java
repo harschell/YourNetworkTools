@@ -343,7 +343,6 @@ public class ServerRoom extends Thread {
 							break;		
 
 						default:
-							clientConnection.ClearAllData();
 							break;
 					}
 				}				

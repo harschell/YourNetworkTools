@@ -169,10 +169,10 @@ namespace YourNetworkingTools
 			else
 			{
 				// CONNECT TO THE SERVER
-				ClientTCPEventsController.Instance.Initialitzation(MultiplayerConfiguration.LoadIPAddressServer(), MultiplayerConfiguration.LoadPortServer(), MultiplayerConfiguration.LoadRoomNumberInServer(0), MultiplayerConfiguration.LoadMachineIDServer(0));
+				ClientTCPEventsController.Instance.Initialitzation(MultiplayerConfiguration.LoadIPAddressServer(), MultiplayerConfiguration.LoadPortServer(), MultiplayerConfiguration.LoadRoomNumberInServer(0), MultiplayerConfiguration.LoadMachineIDServer(0), MultiplayerConfiguration.LoadBufferSizeReceive(), MultiplayerConfiguration.LoadTimeoutReceive(), MultiplayerConfiguration.LoadBufferSizeSend(), MultiplayerConfiguration.LoadTimeoutSend());
 
-				// NETWORK VARIABLES MANAGER
-				Utilities.AddChild(transform, NetworkVariablesManager);
+                // NETWORK VARIABLES MANAGER
+                Utilities.AddChild(transform, NetworkVariablesManager);
 
 				// ADD NETWORK IDENTIFICATION TO THE GAME OBJECTS
 				for (int i = 0; i < GameObjects.Length; i++)
@@ -225,11 +225,27 @@ namespace YourNetworkingTools
 			}
 		}
 
-		// -------------------------------------------
-		/* 
+        // -------------------------------------------
+        /* 
+		 * Returns the network identificator of the server
+		 */
+        public int GetServerNetworkID()
+        {
+            if (IsLocalGame)
+            {
+                return 0;
+            }
+            else
+            {
+                return ClientTCPEventsController.Instance.ServerNetworkID;
+            }
+        }
+
+        // -------------------------------------------
+        /* 
 		 * Get the prefab by name
 		 */
-		private GameObject GetPrefabByName(string _prefabName)
+        private GameObject GetPrefabByName(string _prefabName)
 		{
 			for (int i = 0; i < GameObjects.Length; i++)
 			{

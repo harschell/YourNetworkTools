@@ -48,7 +48,10 @@ namespace YourNetworkingTools
 			m_container.Find("Description").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.player.number.description");
 
 			m_container.Find("PlayerValue").GetComponent<InputField>().text = "2";
-		}
+#if ENABLE_OCULUS
+            m_container.Find("PlayerValue").GetComponent<InputField>().text = "1";
+#endif
+        }
 
 
 		// -------------------------------------------

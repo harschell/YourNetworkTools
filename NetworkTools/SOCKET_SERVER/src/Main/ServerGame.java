@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.Vector;
+import java.nio.ByteOrder;
 
 import GameComms.*;
 
