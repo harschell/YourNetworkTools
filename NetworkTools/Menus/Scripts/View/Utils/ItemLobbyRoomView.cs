@@ -31,11 +31,12 @@ namespace YourNetworkingTools
 		private Image m_background;
 		private bool m_selected = false;
 		private GameObject m_selector;
+        private string m_extraData;
 
-		// ----------------------------------------------
-		// GETTERS/SETTERS
-		// ----------------------------------------------	
-		public int Room
+        // ----------------------------------------------
+        // GETTERS/SETTERS
+        // ----------------------------------------------	
+        public int Room
 		{
 			get { return m_room; }
 		}
@@ -63,12 +64,16 @@ namespace YourNetworkingTools
 				}
 			}
 		}
+        public string ExtraData
+        {
+            get { return m_extraData; }
+        }
 
 		// -------------------------------------------
 		/* 
 		 * Initialization
 		 */
-		public void Initialization(int _room, string _facebookName, string _ipAddress, int _port)
+		public void Initialization(int _room, string _facebookName, string _ipAddress, int _port, string _extraData)
 		{
 			m_room = _room;
 			m_ipAddress = _ipAddress;
@@ -77,7 +82,8 @@ namespace YourNetworkingTools
 			m_background = transform.GetComponent<Image>();
 			transform.GetComponent<Button>().onClick.AddListener(ButtonPressed);
 			m_text.text = _facebookName;
-		}
+            m_extraData = _extraData;
+        }
 
 		// -------------------------------------------
 		/* 

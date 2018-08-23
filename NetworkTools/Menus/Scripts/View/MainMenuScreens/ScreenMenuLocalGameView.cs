@@ -87,7 +87,7 @@ namespace YourNetworkingTools
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
 			if (MenuScreenController.Instance.ForceFixedPlayers != -1)
 			{
-				MenuScreenController.Instance.CreateRoomInServer(MenuScreenController.Instance.ForceFixedPlayers, "extraData");
+				MenuScreenController.Instance.CreateRoomInServer(MenuScreenController.Instance.ForceFixedPlayers, MultiplayerConfiguration.LoadExtraData());
 			}
 			else
 			{

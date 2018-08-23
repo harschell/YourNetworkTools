@@ -98,11 +98,11 @@ namespace YourNetworkingTools
 			{
 				ItemMultiTextEntry room = _rooms[i];
 				GameObject instance = Utilities.AddChild(m_grid.transform, RoomLobbyItemPrefab);
-				// JOIN ROOM IN LOBBY
+                // JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
-				instance.GetComponent<ItemLobbyRoomView>().Initialization(int.Parse(room.Items[0]), room.Items[1], room.Items[2], int.Parse(room.Items[3]));
+				instance.GetComponent<ItemLobbyRoomView>().Initialization(int.Parse(room.Items[0]), room.Items[1], room.Items[2], int.Parse(room.Items[3]), room.Items[4]);
 #else
-				instance.GetComponent<ItemLobbyRoomView>().Initialization(int.Parse(room.Items[1]), room.Items[2], MultiplayerConfiguration.SOCKET_SERVER_ADDRESS, MultiplayerConfiguration.PORT_SERVER_ADDRESS);
+                instance.GetComponent<ItemLobbyRoomView>().Initialization(int.Parse(room.Items[1]), room.Items[2], MultiplayerConfiguration.SOCKET_SERVER_ADDRESS, MultiplayerConfiguration.PORT_SERVER_ADDRESS, room.Items[3]);
 #endif
 				m_rooms.Add(instance.GetComponent<ItemLobbyRoomView>());
 			}
@@ -136,12 +136,14 @@ namespace YourNetworkingTools
 			if (roomSelected != null)
 			{
 				NetworkEventController.Instance.MenuController_SaveRoomNumberInServer(roomSelected.Room);
-				// JOIN ROOM IN LOBBY
+                MultiplayerConfiguration.SaveExtraData(roomSelected.ExtraData);
+
+                // JOIN ROOM IN LOBBY
 #if ENABLE_BALANCE_LOADER
 				NetworkEventController.Instance.MenuController_SaveIPAddressServer(roomSelected.IPAddress);
 				NetworkEventController.Instance.MenuController_SavePortServer(roomSelected.Port);
 #endif
-				JoinGamePressed();
+                JoinGamePressed();
 			}
 			else
 			{
