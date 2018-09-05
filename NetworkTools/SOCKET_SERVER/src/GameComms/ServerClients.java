@@ -146,8 +146,17 @@ public class ServerClients extends Thread {
 		{
 			for (int i = 0; i < m_listClients.size(); i++)
 			{
-				ClientConnection clientConnection = m_listClients.elementAt(i);
-				clientConnection.SendEvent(_message);
+				try 
+				{
+					ClientConnection clientConnection = m_listClients.elementAt(i);
+					clientConnection.SendEvent(_message);
+				} catch (Exception err)
+				{
+					if (ServerGame.EnableLogMessages)
+					{
+						System.out.println("BroadCastMessage::SendEvent:: EXCEPTION="+err.getMessage());	
+					}
+				}
 			}
 			if (ServerGame.EnableLogMessages)
 			{
@@ -305,7 +314,7 @@ public class ServerClients extends Thread {
 		{
 			try 
         	{
-				wait(100);
+				wait(10);
         	} catch (Exception err) {};
 			
 			try 
