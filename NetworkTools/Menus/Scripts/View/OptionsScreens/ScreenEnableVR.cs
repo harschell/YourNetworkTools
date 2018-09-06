@@ -50,7 +50,7 @@ namespace YourNetworkingTools
 			playWithGyroscopeGame.transform.Find("Text").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.play.with.gyroscope");
 			playWithGyroscopeGame.GetComponent<Button>().onClick.AddListener(PlayWithGyroscopePressed);
 
-			UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);
+            UIEventController.Instance.UIEvent += new UIEventHandler(OnMenuEvent);
 		}
 
 		// -------------------------------------------
@@ -85,7 +85,7 @@ namespace YourNetworkingTools
 			SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
             CardboardLoaderVR.SaveEnableCardboard(true);
 #if ENABLE_GOOGLE_ARCORE
-            if (!MenuScreenController.Instance.AskToEnableBackgroundARCore)
+            if (!MenuScreenController.Instance.AskToEnableBackgroundARCore || (MultiplayerConfiguration.LoadGoogleARCore(-1) != MultiplayerConfiguration.GOOGLE_ARCORE_ENABLED))
             {
                 MenuScreenController.Instance.CreateOrJoinRoomInServer(false);
                 Destroy();
@@ -111,7 +111,7 @@ namespace YourNetworkingTools
             SoundsController.Instance.PlaySingleSound(SoundsConfiguration.SOUND_SELECTION_FX);
             CardboardLoaderVR.SaveEnableCardboard(false);
 #if ENABLE_GOOGLE_ARCORE
-            if (!MenuScreenController.Instance.AskToEnableBackgroundARCore)
+            if (!MenuScreenController.Instance.AskToEnableBackgroundARCore || (MultiplayerConfiguration.LoadGoogleARCore(-1) != MultiplayerConfiguration.GOOGLE_ARCORE_ENABLED))
             {
                 MenuScreenController.Instance.CreateOrJoinRoomInServer(false);
                 Destroy();
