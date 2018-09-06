@@ -77,6 +77,9 @@ namespace YourNetworkingTools
         [Tooltip("Components to display the menus in VR")]
         public GameObject VRComponents;
 
+        [Tooltip("Allow the option to enable AR or VR gaming")]
+        public bool AskToEnableBackgroundARCore = false;
+
         // ----------------------------------------------
         // PUBLIC MEMBERS
         // ----------------------------------------------

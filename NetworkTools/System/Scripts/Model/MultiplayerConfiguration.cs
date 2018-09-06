@@ -42,6 +42,7 @@ namespace YourNetworkingTools
         public const string EXTRA_DATA_COOCKIE = "EXTRA_DATA_COOCKIE";
 
         public const string GOOGLE_ARCORE_COOCKIE = "GOOGLE_ARCORE_COOCKIE";
+        public const string AR_ENABLE_BACKGROUND = "AR_ENABLE_BACKGROUND";
 
         public const string DIRECTOR_MODE_COOCKIE = "DIRECTOR_MODE_COOCKIE";
 
@@ -364,6 +365,26 @@ namespace YourNetworkingTools
         {
             return PlayerPrefs.GetInt(TIMEOUT_SEND_COOCKIE, 0);
         }
+
+        // -------------------------------------------
+        /* 
+		 * Enable the background for VR or disable for AR
+		 */
+        public static void SaveEnableBackground(bool _enableBackground)
+        {
+            PlayerPrefs.SetInt(AR_ENABLE_BACKGROUND, (_enableBackground ? 1 : 0));
+        }
+
+        // -------------------------------------------
+        /* 
+		 * Load enable the background for VR or disable for AR
+		 */
+        public static bool LoadEnableBackground()
+        {
+            return PlayerPrefs.GetInt(AR_ENABLE_BACKGROUND, -1) == 1;
+        }
+
+
     }
 }
 
