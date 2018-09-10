@@ -51,6 +51,9 @@ namespace YourNetworkingTools
         public const string TIMEOUT_SEND_COOCKIE = "TIMEOUT_SEND_COOCKIE";
         public const string TIMEOUT_RECEIVE_COOCKIE = "TIMEOUT_RECEIVE_COOCKIE";
 
+        public const string HUMAN_NAME = "HUMAN_";
+        public const string DIRECTOR_NAME = "HUMAN_DIRECTOR_";        
+
         public const int GOOGLE_ARCORE_DISABLED = 0;
         public const int GOOGLE_ARCORE_ENABLED = 1;
 
