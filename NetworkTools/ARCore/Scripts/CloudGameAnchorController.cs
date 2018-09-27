@@ -74,11 +74,12 @@ namespace YourNetworkingTools
 		public GameObject PlaneGenerator;
 		public GameObject PointViewer;
 		public Text TextMessage;
+        public bool EnableAnchorImage = true;
 
-		// ----------------------------------------------
-		// PRIVATE MEMBERS
-		// ----------------------------------------------
-		private bool m_IsQuitting = false;
+        // ----------------------------------------------
+        // PRIVATE MEMBERS
+        // ----------------------------------------------
+        private bool m_IsQuitting = false;
 		private bool m_enableImageDetection = false;
 		private bool m_isRunning = false;
 		private bool m_hasBeenInitialized = false;
@@ -100,6 +101,7 @@ namespace YourNetworkingTools
 		// PLAYER TRACKING
 		private bool m_trackingStarted = false;
 		private Vector3 m_prevARPosePosition = Vector3.zero;
+        private float m_delayToStabilize = 4;
 
 		// ----------------------------------------------
 		// GETTERS/SETTERS
@@ -328,13 +330,13 @@ namespace YourNetworkingTools
 					m_goReferenceAnchor = GameObject.CreatePrimitive(PrimitiveType.Cube);
 					m_goReferenceAnchor.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 					m_goReferenceAnchor.transform.position = _position;
-					m_goReferenceAnchor.transform.parent = _parent;
+					if (_parent != null) m_goReferenceAnchor.transform.parent = _parent;
 				}
 			}
 
 			m_goReferencePose = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			m_goReferencePose.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-			m_goReferencePose.transform.parent = _parent;
+            if (_parent != null) m_goReferencePose.transform.parent = _parent;
 		}
 
 		// -------------------------------------------
@@ -415,15 +417,22 @@ namespace YourNetworkingTools
 #if UNITY_EDITOR
 			return m_hasBeenInitialized;
 #else
-			return m_hasBeenInitialized || (m_lastPlacedAnchor != null) || (m_lastResolvedAnchor != null);
+            if (EnableAnchorImage)
+            {
+			    return m_hasBeenInitialized || (m_lastPlacedAnchor != null) || (m_lastResolvedAnchor != null);
+            }
+            else
+            {
+                return m_hasBeenInitialized;
+            }
 #endif
-		}
+        }
 
-		// -------------------------------------------
-		/* 
+        // -------------------------------------------
+        /* 
 		 * UpdatePositionGameWorld
 		 */
-		private void UpdatePositionGameWorld()
+        private void UpdatePositionGameWorld()
 		{
 #if !UNITY_EDITOR
 			m_goReferencePose.transform.position = Frame.Pose.position;
@@ -431,7 +440,21 @@ namespace YourNetworkingTools
 #else
 			m_positionARCorePlayer = Vector3.zero;
 #endif
-			if (!m_trackingStarted)
+            bool runTrackingStartedCheck = false;
+            if (!EnableAnchorImage)
+            {
+                m_delayToStabilize -= Time.deltaTime;
+                if (m_delayToStabilize < 0)
+                {
+                    runTrackingStartedCheck = true;
+                }
+            }
+            else
+            {
+                runTrackingStartedCheck = true;
+            }
+
+            if (!m_trackingStarted && runTrackingStartedCheck)
 			{
 				m_trackingStarted = true;
 				m_prevARPosePosition = Utilities.Clone(m_positionARCorePlayer);
@@ -569,11 +592,25 @@ namespace YourNetworkingTools
 			*/
 		}
 
-		// -------------------------------------------
-		/* 
+        // -------------------------------------------
+        /* 
+		* InitWithoutAnchorImage
+		*/
+        private void InitWithoutAnchorImage()
+        {
+            PlaceCubeReferenceAnchor(Vector3.zero, null);
+
+            // (HOSTING) SAVE CLOUD ANCHOR
+            HostLastPlacedAnchor();
+
+            m_hasBeenInitialized = true;
+        }
+
+        // -------------------------------------------
+        /* 
 		* Update
 		*/
-		public void Update()
+        public void Update()
 		{
 			if (!m_isRunning) return;
 
@@ -601,18 +638,25 @@ namespace YourNetworkingTools
 					return;
 				}
 
-				// SET THE ANCHOR ONE TIME
-				if (m_enableImageDetection)
-				{
-					AnchorByImage();
-				}
-				else
-				{
-					AnchorByPlane();
-				}
+                if (!EnableAnchorImage)
+                {
+                    InitWithoutAnchorImage();
+                }
+                else
+                {
+                    // SET THE ANCHOR ONE TIME
+                    if (m_enableImageDetection)
+                    {
+                        AnchorByImage();
+                    }
+                    else
+                    {
+                        AnchorByPlane();
+                    }
+                }
 #endif
-			}
-		}
+            }
+        }
 #endif
         }
     }
