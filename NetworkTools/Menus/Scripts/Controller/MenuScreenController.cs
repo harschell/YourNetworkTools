@@ -130,8 +130,8 @@ namespace YourNetworkingTools
             UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
 #if UNITY_EDITOR
-            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
-            // UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            // UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
 #else
 		UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);        
 #endif
@@ -318,7 +318,7 @@ namespace YourNetworkingTools
 		/* 
 		 * Will create the game or it will load a custom game screen
 		 */
-		public void LoadCustomGameScreenOrCreateGame(bool _isFriendsRoom, int _numberOfPlayers, string _friends, List<string> _friendsIDs)
+		public void LoadCustomGameScreenOrCreateGame(bool _isFriendsRoom, int _numberOfPlayers, string _friends, List<string> _friendsIDs, bool _loadNextScreen = true)
 		{
 			m_isFriendsRoom = _isFriendsRoom;
 			m_numberOfPlayers = _numberOfPlayers;
@@ -338,15 +338,18 @@ namespace YourNetworkingTools
 			}
 
 			NetworkEventController.Instance.MenuController_SaveNumberOfPlayers(m_numberOfPlayers);
-			if (ScreenGameOptions.Length > 0)
-			{
-				UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
-			}
-			else
-			{
-				CreateOrJoinRoomInServer(false);
-			}
-		}
+            if (_loadNextScreen)
+            {
+                if (ScreenGameOptions.Length > 0)
+                {
+                    UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN, ScreenGameOptions, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, false, null);
+                }
+                else
+                {
+                    CreateOrJoinRoomInServer(false);
+                }
+            }
+        }
 
 		// -------------------------------------------
 		/* 
