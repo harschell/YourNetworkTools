@@ -129,19 +129,34 @@ namespace YourNetworkingTools
 
             UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
+#if ENABLE_WORLDSENSE
+            MenuScreenController.Instance.MainCamera2D.SetActive(false);
+            MenuScreenController.Instance.VRComponents.SetActive(true);
+            Invoke("StartSplashScreen", 0.2f);
+#else
+            StartSplashScreen();
+#endif
+        }
+
+        // -------------------------------------------
+        /* 
+		 * StartSplashScreen
+		 */
+        public void StartSplashScreen()
+        {
 #if UNITY_EDITOR
             // UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenMenuMainView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
-            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
+            UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN, ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);
 #else
 		UIEventController.Instance.DispatchUIEvent(UIEventController.EVENT_SCREENMANAGER_OPEN_GENERIC_SCREEN,ScreenSplashView.SCREEN_NAME, UIScreenTypePreviousAction.DESTROY_ALL_SCREENS, true);        
 #endif
         }
 
-		// -------------------------------------------
-		/* 
+        // -------------------------------------------
+        /* 
 		 * Destroy all references
 		 */
-		void OnDestroy()
+        void OnDestroy()
 		{
 			Destroy();
 		}
