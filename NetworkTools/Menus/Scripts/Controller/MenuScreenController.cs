@@ -187,6 +187,16 @@ namespace YourNetworkingTools
 
             ProcessConnectionEvents(_nameEvent, _list);
 #endif
+
+            if (_nameEvent == EVENT_APP_LOST_FOCUS)
+            {
+#if ENABLE_WORLDSENSE
+                if ((bool)_list[0])
+                {
+                    Application.Quit();
+                }
+#endif
+            }
         }
 
         // -------------------------------------------
