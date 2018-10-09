@@ -48,17 +48,17 @@ namespace YourNetworkingTools
 			m_container.Find("Description").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.player.number.description");
 
 			m_container.Find("PlayerValue").GetComponent<InputField>().text = "2";
-#if ENABLE_OCULUS
+#if ENABLE_OCULUS || ENABLE_WORLDSENSE
             m_container.Find("PlayerValue").GetComponent<InputField>().text = "1";
 #endif
         }
 
 
-		// -------------------------------------------
-		/* 
+        // -------------------------------------------
+        /* 
 		 * GetGameObject
 		 */
-		public GameObject GetGameObject()
+        public GameObject GetGameObject()
 		{
 			return this.gameObject;
 		}
