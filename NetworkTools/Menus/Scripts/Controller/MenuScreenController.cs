@@ -190,7 +190,7 @@ namespace YourNetworkingTools
 
             if (_nameEvent == EVENT_APP_LOST_FOCUS)
             {
-#if ENABLE_WORLDSENSE
+#if ENABLE_WORLDSENSE || ENABLE_OCULUS
                 if ((bool)_list[0])
                 {
                     Application.Quit();
