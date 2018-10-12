@@ -129,7 +129,9 @@ namespace YourNetworkingTools
 
             UIEventController.Instance.UIEvent += new UIEventHandler(OnUIEvent);
 
-#if ENABLE_WORLDSENSE
+#if ENABLE_WORLDSENSE || ENABLE_OCULUS
+            KeysEventInputController.Instance.EnableActionOnMouseDown = false;
+
             MenuScreenController.Instance.MainCamera2D.SetActive(false);
             MenuScreenController.Instance.VRComponents.SetActive(true);
             Invoke("StartSplashScreen", 0.2f);

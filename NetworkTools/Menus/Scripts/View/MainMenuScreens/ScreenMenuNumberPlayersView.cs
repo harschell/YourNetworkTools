@@ -21,19 +21,52 @@ namespace YourNetworkingTools
 	{
 		public const string SCREEN_NAME = "SCREEN_PLAYER_NUMBER";
 
-		// ----------------------------------------------
-		// PRIVATE MEMBERS
-		// ----------------------------------------------	
-		private GameObject m_root;
+        // ----------------------------------------------
+        // PUBLIC MEMBERS
+        // ----------------------------------------------	
+        public int MaximumNumberOfPlayers = 6;
+
+        // ----------------------------------------------
+        // PRIVATE MEMBERS
+        // ----------------------------------------------	
+        private GameObject m_root;
 		private Transform m_container;
 
 		private int m_finalNumberOfPlayers;
 
-		// -------------------------------------------
-		/* 
+        // ----------------------------------------------
+        // GETTERS/SETTERS
+        // ----------------------------------------------	
+        public int FinalNumberOfPlayers
+        {
+            get
+            {
+                string numberOfPlayers = m_container.Find("PlayerValue").GetComponent<InputField>().text;
+
+                // NUMBER OF PLAYERS
+                m_finalNumberOfPlayers = -1;
+                if (!int.TryParse(numberOfPlayers, out m_finalNumberOfPlayers))
+                {
+                    m_finalNumberOfPlayers = -1;
+                }
+
+                return m_finalNumberOfPlayers;
+            }
+            set
+            {
+                if ((value > 0) && (value <= MaximumNumberOfPlayers))
+                {
+                    m_finalNumberOfPlayers = value;
+                    m_container.Find("PlayerValue").GetComponent<InputField>().text = m_finalNumberOfPlayers.ToString();
+                }
+            }
+        }
+
+        // -------------------------------------------
+        /* 
 		 * Constructor
 		 */
-		public override void Initialize(params object[] _list)
+        public override void Initialize(params object[] _list)
 		{
 			base.Initialize(_list);
 
@@ -47,12 +80,39 @@ namespace YourNetworkingTools
 
 			m_container.Find("Description").GetComponent<Text>().text = LanguageController.Instance.GetText("screen.player.number.description");
 
-			m_container.Find("PlayerValue").GetComponent<InputField>().text = "2";
+            if (m_container.Find("Button_Plus") != null)
+            {
+                m_container.Find("Button_Plus").GetComponent<Button>().onClick.AddListener(IncreasePlayerNumber);
+            }
+
+            if (m_container.Find("Button_Minus") != null)
+            {
+                m_container.Find("Button_Minus").GetComponent<Button>().onClick.AddListener(DecreasePlayerNumber);
+            }
+
+            m_container.Find("PlayerValue").GetComponent<InputField>().text = "2";
 #if ENABLE_OCULUS || ENABLE_WORLDSENSE
             m_container.Find("PlayerValue").GetComponent<InputField>().text = "1";
 #endif
         }
 
+        // -------------------------------------------
+        /* 
+		 * DecreasePlayerNumber
+		 */
+        private void DecreasePlayerNumber()
+        {
+            FinalNumberOfPlayers = FinalNumberOfPlayers - 1;
+        }
+
+        // -------------------------------------------
+        /* 
+		 * IncreasePlayerNumber
+		 */
+        private void IncreasePlayerNumber()
+        {
+            FinalNumberOfPlayers = FinalNumberOfPlayers + 1;
+        }
 
         // -------------------------------------------
         /* 
